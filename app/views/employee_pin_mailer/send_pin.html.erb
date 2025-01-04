@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Seu PIN de Acesso</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .container {
+      width: 80%;
+      margin: auto;
+      overflow: hidden;
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      color: #333;
+    }
+    p {
+      margin: 0 0 10px;
+      color: #666;
+    }
+    .highlight {
+      font-weight: bold;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p>Olá <%= @employee.name %>,</p>
+
+    <p>Seu PIN de acesso é: <span class="highlight"><%= @pin %></span></p>
+
+    <p>Por favor, mantenha este PIN seguro e não compartilhe com ninguém.</p>
+
+    <p>Atenciosamente,</p>
+    <p>Sua equipe</p>
+  </div>
+</body>
+</html>

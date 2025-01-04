@@ -1,0 +1,147 @@
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <ol class="breadcrumb">
+                    <li class="active">
+                        <h1><i class="fas fa-bell"></i> Meus Alertas</h1>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%= form_with model: @email_setting, url: update_email_setting_email_setting_path(@email_setting), local: true do |form| %>
+  <% if @email_setting.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@email_setting.errors.count, "error") %> impedem esta configuração de ser salva:</h2>
+      <ul>
+        <% @email_setting.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-md-8 mb-4">
+      <div class="card mb-4">
+        <div class="card-header py-3">
+          <h5 class="mb-0">Configurar envio de email</h5>
+        </div>
+        <div class="card-body">
+          <!-- Campos do formulário -->
+          <div class="form-outline mb-4">
+            <%= form.label :address, 'Endereço', class: "form-label" %>
+            <%= form.text_field :address, id: 'form7Example1', class: 'form-control', value: @email_setting.address %>
+          </div>
+
+          <div class="form-outline mb-4">
+            <%= form.label :port, 'Porta', class: "form-label" %>
+            <%= form.text_field :port, id: 'form7Example2', class: 'form-control', value: @email_setting.port %>
+          </div>
+
+          <div class="form-outline mb-4">
+            <%= form.label :user_name, 'Usuário', class: "form-label" %>
+            <%= form.text_field :user_name, id: 'form7Example4', class: 'form-control', value: @email_setting.user_name %>
+          </div>
+
+          <div class="form-outline mb-4">
+            <%= form.label :password, 'Senha', class: "form-label" %>
+            <%= form.text_field :password, id: 'form7Example5', class: 'form-control', value: @email_setting.password %>
+          </div>
+
+          <div class="form-outline mb-4">
+            <%= form.label :authentication, 'Autenticação ', class: "form-label" %>
+            <%= form.text_field :authentication, id: 'form7Example6', class: 'form-control', value: @email_setting.authentication %>
+          </div>
+
+          <div class="form-outline mb-4">
+            <%= form.label :enable_starttls_auto, 'Enable StartTLS Auto', class: "form-label" %>
+            <%= form.text_field :enable_starttls_auto, id: 'form7Example7', class: 'form-control', value: @email_setting.enable_starttls_auto %>
+          </div>
+
+          <div class="form-outline mb-4">
+            <%= form.label :tls, 'TLS', class: "form-label" %>
+            <%= form.text_field :tls, id: 'form7Example3', class: 'form-control', value: @email_setting.tls %>
+          </div>
+
+          <div class="d-flex">
+            <div class="form-group mr-2">
+              <%= form.submit 'Salvar Configuração de Email', class: 'btn btn-primary' %>
+            </div>
+            <div class="form-group">
+              <%= link_to "Voltar", root_path, class: 'btn btn-success' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+
+<%= form_with model: @sendsms, 
+              url: @sendsms.persisted? ? update_sendsms_email_setting_path(@sendsms) : create_sendsms_email_settings_path, 
+              local: true do |form| %>
+  <!-- Incluindo o hidden_field para enviar o ID quando for necessário -->
+  <%= form.hidden_field :id if @sendsms.persisted? %>
+  
+  <% if @sendsms.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@sendsms.errors.count, "erro") %> impediram o salvamento:</h2>
+      <ul>
+        <% @sendsms.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-md-8 mb-4">
+      <div class="card mb-4">
+        <div class="card-header py-3">
+          <h5 class="mb-0">Configurar envio de SMS</h5>
+        </div>
+        <div class="card-body">
+          <!-- Campo URL -->
+          <div class="form-outline mb-4">
+            <%= form.label :url, 'URL', class: "form-label" %>
+            <%= form.text_field :url, id: 'form7Example1', class: 'form-control', value: @sendsms.url %>
+          </div>
+          <!-- Campo Usuário -->
+          <div class="form-outline mb-4">
+            <%= form.label :user, 'Usuário', class: "form-label" %>
+            <%= form.text_field :user, id: 'form7Example2', class: 'form-control', value: @sendsms.user %>
+          </div>
+          <!-- Campo Senha -->
+          <div class="form-outline mb-4">
+            <%= form.label :password, 'Senha', class: "form-label" %>
+            <%= form.text_field :password, id: 'form7Example4', class: 'form-control', value: @sendsms.password %>
+          </div>
+          <!-- Campo Hash Seguranca -->
+          <div class="form-outline mb-4">
+            <%= form.label :hashSeguranca, 'Hash de Seguranca', class: "form-label" %>
+            <%= form.text_field :hashSeguranca, id: 'form7Example4', class: 'form-control', value: @sendsms.hashSeguranca %>
+          </div>
+          <!-- Campo Mensagem -->
+          <div class="form-outline mb-4">
+            <%= form.label :msg, 'Mensagem', class: "form-label" %>
+            <%= form.text_field :msg, id: 'form7Example5', class: 'form-control', value: @sendsms.msg %>
+          </div>
+          <!-- Botões de ação -->
+          <div class="d-flex">
+            <div class="form-group mr-2">
+              <%= form.submit 'Salvar Configuração de SMS', class: 'btn btn-primary' %>
+            </div>
+            <div class="form-group">
+              <%= link_to "Voltar", root_path, class: 'btn btn-success' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

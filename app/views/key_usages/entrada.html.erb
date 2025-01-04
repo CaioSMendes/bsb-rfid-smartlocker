@@ -1,0 +1,67 @@
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <ol class="breadcrumb">
+          <li class="active">
+            <h1><i class="fas fa-history"></i> Histórico de Retiradas</h1>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12"> <!-- Garantir que a linha ocupe toda a largura disponível -->
+      <div class="right_col mt-3" role="main">
+        <div class="row">
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th><i class="fas fa-user"></i> Funcionário</th>
+                  <th><i class="fas fa-clipboard-check"></i> Ação</th>
+                  <th><i class="fas fa-lock"></i> Serial do Locker</th>
+                  <th><i class="fas fa-box-open"></i> Nome do Locker</th>
+                  <th><i class="fas fa-calendar-alt"></i> Data e Hora</th>
+                  <th><i class="fas fa-check-circle"></i> Status</th>
+                  <th><i class="fas fa-comment-dots"></i> Comentários</th>
+                  <th><i class="fas fa-exclamation-triangle"></i> Alerta</th> <!-- Nova coluna para o alerta -->
+                </tr>
+              </thead>
+              <tbody>
+                <% @logs_with_alert.each do |log_info| %> <!-- Usando a variável correta @logs_with_alert -->
+                  <tr>
+                    <td><%= log_info[:log].employee.name %> <%= log_info[:log].employee.lastname %></td>
+                    <td><%= log_info[:log].action %></td>
+                    <td><%= log_info[:log].key_id %></td>
+                    <td><%= log_info[:log].locker_name %></td>
+                    <td><%= log_info[:log].timestamp.strftime('%d/%m/%Y %H:%M:%S') %></td>
+                    <td><%= log_info[:log].status %></td>
+                    <td><%= log_info[:log].comments %></td>
+                    <td>
+                      <% if log_info[:alert] %>  <!-- Verifica se o alerta deve ser exibido -->
+                        <button class="btn btn-danger">Alerta: Devolução não realizada</button>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="text-center mt-3 d-flex justify-content-center">
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <%= will_paginate @logs, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+    </ul>
+  </nav>
+</div>

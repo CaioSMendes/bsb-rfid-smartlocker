@@ -1,0 +1,126 @@
+<p style="color: green"><%= notice %></p>
+
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <ol class="breadcrumb">
+          <li class="active">
+            <h1><i class="fas fa-box"></i> Guarda Volumes</h1>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <% @keylocker.keylockerinfos.sort_by(&:posicion).each do |info| %>
+    <div class="col-sm-12 col-md-4 col-lg-3 mb-4">
+      <div class="card">
+        <!-- Imagem do Nicho -->
+        <img src="<%= image_url('porta-locker.jpg') %>" class="card-img-top" alt="Imagem do Nicho">
+
+        <div class="card-body">
+          <h3><strong>Porta Número:</strong> <%= info.posicion %></h3>
+          <p><strong>Proprietário:</strong> <%= @keylocker.owner %></p>
+          <p><strong>Nome do Locker:</strong> <%= @keylocker.nameDevice %></p>
+          <p>
+            <strong>Disponibilidade do Locker:</strong>
+            <% if info.empty == 0 && !@selected_niche %>
+              <!-- Passando o ID do nicho e PIN para a função JavaScript -->
+              <button id="button-<%= info.id %>" class="btn btn-success" onclick="selectNiche(<%= info.id %>, '<%= info.object %>', '<%= @pin %>')">
+                <i class="fas fa-check-circle"></i> Livre
+              </button>
+            <% else %>
+              <button class="btn btn-danger">
+                <i class="fas fa-times-circle"></i> Ocupado
+              </button>
+           <% end %>
+          </p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+
+<script>
+  // Variável para armazenar o estado de seleção
+  let nicheSelected = false;
+
+  function selectNiche(id, object) {
+    // Obtendo o pin e o serial da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const pin = urlParams.get('pin');  // Pega o valor de "pin" da URL
+    const serial = urlParams.get('serial');  // Pega o valor de "serial" da URL
+
+    // Verificando se o 'pin' e 'serial' existem na URL
+    if (!pin || !serial) {
+      alert('Pin ou serial não encontrados na URL');
+      return;
+    }
+
+    // Impede a seleção de mais de um nicho
+    if (nicheSelected) {
+      alert("Você já selecionou um nicho.");
+      return;
+    }
+
+    // Confirmação de ação do usuário
+    if (confirm("Tem certeza que deseja selecionar esse nicho?")) {
+      // Requisição AJAX para a ação select_niche
+      fetch('<%= access_auth_select_niche_path %>', {  // URL da rota definida no routes.rb
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': '<%= form_authenticity_token %>' // CSRF Token para proteger contra CSRF
+        },
+        body: JSON.stringify({
+          id: id,
+          object: object,
+          pin: pin,  // O pin agora vem da URL
+          serial: serial  // O serial também vem da URL
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message) {
+          alert(data.message); // Mensagem de sucesso
+
+          // Atualizando o status na página sem atualizar a página
+          const statusElement = document.getElementById(`status-${id}`);
+          if (statusElement) {
+            statusElement.textContent = `Agora ocupado por ${data.employee}`;
+            statusElement.style.color = 'green'; // Pode alterar a cor para verde ou outra
+          }
+
+          // Atualizando o botão para refletir o novo status
+          const buttonElement = document.getElementById(`button-${id}`);
+          if (buttonElement) {
+            buttonElement.textContent = "Nicho Ocupado";
+            buttonElement.disabled = true; // Desabilita o botão após a seleção
+          }
+
+          // Desabilita todos os outros botões após a seleção
+          const buttons = document.querySelectorAll(".btn-primary");
+          buttons.forEach(button => {
+            button.disabled = true; // Desabilita todos os outros botões de seleção
+          });
+
+          // Marca que um nicho foi selecionado
+          nicheSelected = true;
+
+          // Recarregando a página automaticamente após a atualização
+          location.reload();  // Recarrega a página
+        } else if (data.error) {
+          alert(data.error); // Mensagem de erro
+        }
+      })
+      .catch(error => {
+        console.error('Erro:', error);
+        alert('Houve um erro ao associar o nicho.');
+      });
+    }
+  }
+</script>

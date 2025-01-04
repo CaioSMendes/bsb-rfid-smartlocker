@@ -1,0 +1,16 @@
+<% if @keylocker %>
+  <h2>Verificar Entregador para o Serial: <%= @keylocker.serial %></h2>
+
+  <%= form_with url: deliverers_check_path, method: :get, local: true do |form| %>
+    <div class="form-group">
+      <%= form.label :identifier, "Email, Telefone ou CPF" %>
+      <%= form.text_field :identifier, class: 'form-control', placeholder: 'Insira email, telefone ou CPF' %>
+    </div>
+
+    <%= form.hidden_field :serial, value: @keylocker.serial %>
+
+    <%= form.submit "Verificar", class: 'btn btn-primary' %>
+  <% end %>
+<% else %>
+  <h2>Serial não encontrado.</h2>
+<% end %>

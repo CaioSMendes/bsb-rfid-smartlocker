@@ -1,0 +1,92 @@
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .logo {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .logo img {
+    max-width: 250px;
+    height: auto;
+  }
+
+  h2 {
+    text-align: center;
+  }
+
+  .field {
+    margin-bottom: 20px;
+  }
+
+  .field label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .field input[type="email"],
+  .field input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .actions {
+    text-align: center;
+  }
+
+
+  @media (max-width: 600px) {
+    .container {
+      padding: 10px;
+    }
+  }
+
+  .actions .cadastrar-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ff6400;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+</style>
+
+<div class="container">
+  <div class="logo">
+    <%= image_tag 'logoBsbRFID.png', alt: 'Brasilia RFID', class: 'logo-image' %>
+  </div>
+  <h2>Esqueci sua senha ?</h2>
+
+  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <div class="field">
+      <%= f.label :email %><br />
+      <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit "Enviar instruções de redefinição de senha", class: "cadastrar-button" %>
+    </div>
+  <% end %>
+
+  <%= render "devise/shared/links" %>
+</div>

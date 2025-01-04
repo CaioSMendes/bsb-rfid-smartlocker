@@ -1,0 +1,100 @@
+Como administrador quero ver todos meus lockers e admin eles
+- Ver
+- Editar
+- Excluir
+- Criar
+- bloquerar
+
+Como administrador quero ver todos meus users e admin eles
+- Ver
+- Editar
+- Excluir
+- Criar
+- Atribuir um locker e tirar atribuição
+
+Como administrador quero ver todos os locker dos meus cleinte e ver todos seus funcionarios
+
+
+Como administrador quero ver todos meus users e e ver todos os funcionarios deles e poder
+- Editar
+- Excluir
+
+------------------
+
+Como user quero admin meus func
+- Ver
+- Editar
+- Excluir
+- Criar
+- Desabilitar a qualquer momento
+
+Quero ver meu locker e as chaves que faltam
+- Ver
+
+Quero que toda vez que tiver uma trasanção dos func registrar o log
+- Quem abriu o armario e horas
+- Qual chave pegou
+- Que horas devolveu a chave ou se outra pessoa devolvel a chave
+- Se passar de certo horario alerta que tem que devolver a chave
+- Se passar do horario do fim de expediente MSG DE ADVERTENCIA
+
+Criar uma tabela aparte com ligação a tabela func na qaul gurado o registro
+dos dias que o func trabalha e horarios, quero outro campo na qual eu possa bloquerar
+ele na hora que eu quiser impedindo dele logar
+
+*Preciso criar os end points de cadastro dos func
+- Inicio do cadastro vai ser feito via sistema
+- No sistema vou disponibilizar um ID pra se inserido na maquina (PIN) - de A a D e 1 a 9
+- NO locker vou inserir o ID na qual no sistem me deu
+    - peço o ID
+    - peço um cartao RFID
+    - peço a senha
+    - Mando via API pro sistema e salvo se o PIN tiver certo
+    - Mando um status de ok ou erro
+
+
+
+
+    tabela Employee
+    - name
+    - lastname
+    - companyID
+    - phone
+    - function
+    - PIN
+    - pswdSmartlocker
+    - cardRFID
+    - status
+    
+    workday
+    - dayofweek
+    - start
+    - end
+    - holiday
+    
+    
+    Agora eu quero que somente meu user com com role user possa cadastrar 
+    um employe no meu banco quero que esse func seja criado com um scaffold 
+    para meu app e para minha API. Preciso saber também com administrador 
+    na minha index todos os meus users e func que estão ligados a ele
+
+
+
+
+<h1>Admin Dashboard</h1>
+
+<% @users.each do |user| %>
+  <h2>User: <%= user.email %></h2>
+
+  <% user.keylockers.each do |keylocker| %>
+    <h3>Keylocker: <%= keylocker.owner %></h3>
+
+    <% keylocker.employees.each do |employee| %>
+      <div>
+        <strong>Name:</strong> <%= employee.name %><br>
+        <strong>Lastname:</strong> <%= employee.lastname %><br>
+        <!-- Adicione mais campos conforme necessário -->
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

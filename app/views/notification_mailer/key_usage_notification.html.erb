@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Notificação de Uso de Chave</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .container {
+      width: 80%;
+      margin: auto;
+      overflow: hidden;
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      color: #333;
+    }
+    p {
+      margin: 0 0 10px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p>Olá <%= @employee.user.name %>,</p>
+
+    <p>Informamos que uma chave foi <%= @action %> na posição <%= @keylocker_info.posicion %> do Keylocker com serial <%= @keylocker_info.keylocker.serial %>.</p>
+    <p>Hora da ação: <%= @timestamp.strftime('%d/%m/%Y %H:%M:%S') %></p>
+
+    <p>Por favor, mantenha este e-mail para futuras referências.</p>
+
+    <p>Atenciosamente,</p>
+    <p>Sua equipe</p>
+  </div>
+</body>
+</html>

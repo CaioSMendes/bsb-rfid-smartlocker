@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "jquery-ui": "^1.13.2",
+    "popper.js": "^1.16.1",
+    "timepicker": "^1.14.1"
+  },
+  "packageManager": "yarn@1.22.19"
+}

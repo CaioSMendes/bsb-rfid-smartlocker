@@ -1,0 +1,95 @@
+<%= form_with(model: keylocker) do |form| %>
+  <% if keylocker.errors.any? %>
+    <div class="alert alert-danger">
+      <h2><%= pluralize(keylocker.errors.count, "error") %> prohibited this keylocker from being saved:</h2>
+      <ul>
+        <% keylocker.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-md-8 mb-4">
+      <div class="card mb-4">
+        <div class="card-header py-3">
+          <h5 class="mb-0">Cadastrar um novo locker</h5>
+        </div>
+        <div class="card-body">
+          <!-- Text input para Proprietário do Locker -->
+          <div class="form-outline mb-4">
+            <%= form.label :owner, 'Proprietário do Locker', class: "form-label" %>
+            <%= form.text_field :owner, id: 'form7Example1', class: 'form-control' %>
+          </div>
+
+          <!-- Text input para Nome do Locker -->
+          <div class="form-outline mb-4">
+            <%= form.label :lockertype, "Tipo de Armário", class: "form-label" %>
+            <%= form.select :lockertype, ['Armário  de chaves', 'Armário de encomendas', 'Guarda Volume'], prompt: "Selecione o tipo de armário", id: 'form7Example2', class: 'form-control' %>
+          </div>
+
+          <!-- Text input para Nome do Locker -->
+          <div class="form-outline mb-4">
+            <%= form.label :nameDevice, 'Nome do Locker', class: "form-label" %>
+            <%= form.text_field :nameDevice, id: 'form7Example2', class: 'form-control' %>
+          </div>
+
+          <!-- Text input para CNPJ ou CPF -->
+          <div class="form-outline mb-4">
+            <%= form.label :cnpjCpf, 'CNPJ ou CPF', class: "form-label" %>
+            <%= form.text_field :cnpjCpf, id: 'form7Example3', class: 'form-control' %>
+          </div>
+
+          <!-- Text input para Quantidade de Nichos -->
+          <div class="form-outline mb-4">
+            <%= form.label :qtd, 'Quantidade de Nichos', class: "form-label" %>
+            <%= form.text_field :qtd, id: 'form7Example4', class: 'form-control', oninput: 'updateNiches()' %>
+          </div>
+
+          <!-- Placeholder para Nested Attributes de Keylockerinfos -->
+          <div id="keylockerinfos-container"></div>
+
+          <!-- Botões de Ação -->
+          <div class="d-flex">
+            <div class="form-group mr-2">
+              <%= form.submit 'Cadastrar Locker', class: 'btn btn-primary' %>
+            </div>
+            <div class="form-group">
+              <%= link_to "Voltar", keylockers_path, class: 'btn btn-success' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<script>
+function updateNiches() {
+  var qtd = document.getElementById('form7Example4').value;
+  var container = document.getElementById('keylockerinfos-container');
+
+  // Limpa o container atual
+  container.innerHTML = '';
+
+  // Cria os campos com base na quantidade
+  for (var i = 0; i < qtd; i++) {
+    var nestedFields = `
+      <div class="nested-fields">
+       <div class="form-group mb-4">
+          <label for="keylockerinfos_${i}_posicion">Posição: ${i + 1}</label>
+          <input type="hidden" name="keylocker[keylockerinfos_attributes][${i}][posicion]" 
+            id="keylockerinfos_${i}_posicion" 
+            value="${i + 1}" />
+        </div>
+        <div class="form-group mb-4">
+          <label for="keylockerinfos_${i}_object">Descrição da Posição: ${i + 1}</label>
+          <input type="text" name="keylocker[keylockerinfos_attributes][${i}][object]" id="keylockerinfos_${i}_object" class="form-control">
+        </div>
+      </div>
+    `;
+    container.insertAdjacentHTML('beforeend', nestedFields);
+  }
+}
+</script>

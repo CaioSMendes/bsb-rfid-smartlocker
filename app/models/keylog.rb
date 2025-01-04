@@ -1,0 +1,2 @@
+class Keylog < ApplicationRecord
+end

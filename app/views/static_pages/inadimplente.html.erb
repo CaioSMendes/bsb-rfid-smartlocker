@@ -1,0 +1,53 @@
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <ol class="breadcrumb">
+                    <li class="active">
+                        <h1><i class="fas fa-money"></i> Situação Financeira</h1>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p>Entre em contato para regularizar sua situação.</p>
+
+
+<!-- Adicione isso ao final do seu inadimplente.html.erb -->
+    <!-- Button que acionará o modal (remova isso) -->
+    <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#inadimplenteModal">
+      Mostrar Modal
+    </button> -->
+    
+    <!-- Modal com data-bs-show para abrir automaticamente -->
+    <div class="modal fade" id="inadimplenteModal" tabindex="-1" aria-labelledby="inadimplenteModalLabel" aria-hidden="true" data-bs-show="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="inadimplenteModalLabel">Situação Financeira</h5>
+          </div>
+          <div class="modal-body">
+            <h1>Você está inadimplente!</h1>
+            <p>Entre em contato para regularizar sua situação.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var inadimplenteModal = new bootstrap.Modal(document.getElementById('inadimplenteModal'), {});
+    
+        // Abre o modal automaticamente ao carregar a página
+        inadimplenteModal.show();
+    
+        // Fecha o modal após 5000 milissegundos (5 segundos)
+        setTimeout(function() {
+          inadimplenteModal.hide();
+        }, 5000);
+      });
+    </script>
+    
+    

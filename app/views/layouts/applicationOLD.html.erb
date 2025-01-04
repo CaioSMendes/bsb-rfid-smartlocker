@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Smartlocker</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/public/css/style.css">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <%= stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" %>
+    
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+  <div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar" class="active">
+        <h1><a href="index.html" class="logo">M.</a></h1>
+        <ul class="list-unstyled components mb-5">
+           
+            <li class="active">
+              <%= link_to root_path do %>
+                <span class="fa fa-home"></span> Home
+              <% end %>
+            </li>
+            
+            <li class="active">
+              <%= link_to keylockers_path do %>
+                <span class="fas fa-box"></span> Meus Lockers
+              <% end %>
+            </li>
+
+            <li class="active">
+              <%= link_to user_lockers_path do %>
+                <span class="fa fa-user-plus"></span> Atribuir Lockers
+              <% end %>
+            </li>
+
+            <li class="active">
+              <%= link_to manager_users_index_path do %>
+                <span class="fa fa-user"></span> Donos de Lockers
+              <% end %>
+            </li>
+
+            <li class="active">
+              <%= link_to employees_path do %>
+                <span class="fa fa-user-tie"></span> Meus Funcionários
+              <% end %>
+            </li>
+
+            <li class="active">
+              <%= link_to history_entries_path do %>
+                <span class="fa fa-history"></span> Histórico
+              <% end %>
+            </li>
+        </ul>
+        <div class="footer">
+            <p>
+                Copyright &copy; All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
+            </p>
+        </div>
+    </nav>
+
+    
+
+    <div id="content" class="p-4 p-md-5">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary-orange">
+                    <i class="fa fa-bars"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-envelope"></i> Notificação
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#">Opção 1</a>
+                                <a class="dropdown-item" href="#">Opção 2</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Outra Opção</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user"></i> John Smith </a>
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="#">
+                                  <i class="fa fa-fw fa-user"></i> Perfil
+                              </a>
+      
+                              <a class="dropdown-item" href="#">
+                                  <i class="fa fa-fw fa-envelope"></i> Inbox
+                              </a>
+                              
+                              <%= link_to edit_user_registration_path, class: 'dropdown-item' do %>
+                                  <i class="fa fa-fw fa-gear"></i>
+                                  Settings
+                              <% end %> 
+      
+                              <div class="dropdown-divider"></div>
+                              <%= link_to destroy_user_session_path, method: :delete, class: 'dropdown-item' do %>
+                                  <i class="fa fa-fw fa-power-off"></i>                           
+                                  Log Out
+                              <% end %>  
+      
+                          </div> 
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <%= yield %>
+    </div>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

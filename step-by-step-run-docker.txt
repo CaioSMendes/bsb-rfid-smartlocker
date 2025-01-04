@@ -1,0 +1,55 @@
+1 - Criar a imagem do docker:
+    docker build -t smartlocker-app .
+
+2 - Subir a imagem do docker:
+docker tag smartlocker-app:latest caio96k/smartlocker-app
+
+3 - Subir a imagem do docker:
+docker push caio96k/smartlocker-app
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from ruby:3.1.2
+
+RUN apt update
+RUN apt upgrade -y
+RUN apt install lsb-base lsb-release
+
+# PostgresSQL
+# Create the file repository configuration:
+RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+# Import the repository signing key:
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+
+RUN apt update \
+    && apt install -y libpq-dev \
+                      vim \
+                      htop \
+                      postgresql-14
+
+RUN gem install pg
+
+ADD . /home/app/web
+WORKDIR /home/app/web
+
+#COPY Gemfile Gemfile.lock ./
+RUN gem install rails bundler
+#RUN bundle install
+
+RUN bundle install --jobs 5 --retry 5
+
+EXPOSE 3000
+CMD ["bash", "-c", "rm -f tmp/pids/server.pid && bundle exec rails db:create && bundle exec rails db:migrate && bundle exec rails db:seed && bundle exec rails s -b 0.0.0.0"]
+

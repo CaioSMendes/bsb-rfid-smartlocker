@@ -1,0 +1,210 @@
+<%= form_with(model: employee) do |form| %>
+  <% if employee.errors.any? %>
+    <div style="color: red">
+      <ul>
+        <% employee.errors.full_messages.each do |error_message| %>
+          <li><%= error_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-md-8 mb-4">
+      <div class="card mb-4">
+        <div class="card-header py-3">
+          <h5 class="mb-0">Cadastrar novo colaborador</h5>
+        </div>
+        <div class="card-body">
+          <!-- Campo para selecionar se o colaborador é entregador delivery -->
+          <div class="form-check mb-4">
+            <%= form.check_box :delivery, class: 'form-check-input', id: 'deliveryCheckbox' %>
+            <%= form.label :delivery, "Entregador Delivery", class: 'form-check-label' %>
+          </div>
+
+          <!-- Campos para nome, sobrenome -->
+          <div class="row mb-4">
+            <div class="col">
+              <div class="form-outline">
+                <%= form.label :name, "Nome", class: "form-label" %>
+                <%= form.text_field :name, id: 'form7Example1', class: 'form-control' %>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-outline">
+                <%= form.label :lastname, "Sobrenome", class: "form-label" %>
+                <%= form.text_field :lastname, id: 'form7Example2', class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <!-- Campo para o nome da empresa -->
+          <div class="form-outline mb-4" id="companyIDField">
+            <%= form.label :companyID, "Nome da Empresa", class: "form-label" %>
+            <%= form.text_field :companyID, id: 'form7Example3', class: 'form-control' %>
+          </div>
+
+          <!-- Campo para o email -->
+          <div class="form-outline mb-4">
+            <%= form.label :email, "Email", class: "form-label" %>
+            <%= form.text_field :email, id: 'form7Example3', class: 'form-control' %>
+          </div>
+
+          <!-- Campos para telefone e função -->
+          <div class="row mb-4" id="functionField">
+            <div class="col">
+              <div class="form-outline">
+                <%= form.label :phone, "Telefone", class: "form-label" %>
+                <%= form.text_field :phone, id: 'phoneNumberInput', class: 'form-control', oninput: "handleInputChange()" %>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="form-outline">
+                <%= form.label :function, "Cargo", class: "form-label" %>
+                <%= form.text_field :function, id: 'form7Example4', class: 'form-control' %>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="form-outline">
+                <%= form.label :cpf, "CPF", class: "form-label" %>
+                <%= form.text_field :cpf, id: 'form7Example4', class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <!-- Checkbox para limitar o acesso -->
+          <div class="form-check mb-4">
+            <%= form.check_box :enabled, class: 'form-check-input', id: 'enabledCheckbox' %>
+            <%= form.label :enabled, "Deseja habilitar o horário de trabalho?", class: 'form-check-label' %>
+          </div>
+
+          <!-- Campos de dias e horários (inicialmente ocultos) -->
+          <div id="workdaysFields" style="display: none;">
+            <%= form.fields_for :workdays do |workday_fields| %>
+              <div class="col">
+                <div class="form-outline">
+                  <%# Checkbox para os dias da semana %>
+                  <% dias_da_semana = {
+                    "Domingo" => :sunday,
+                    "Segunda-feira" => :monday,
+                    "Terça-feira" => :tuesday,
+                    "Quarta-feira" => :wednesday,
+                    "Quinta-feira" => :thursday,
+                    "Sexta-feira" => :friday,
+                    "Sábado" => :saturday
+                  } %>
+                  <% dias_da_semana.each do |dia_pt, dia_en| %>
+                    <div class="form-check">
+                      <%= workday_fields.check_box dia_en, class: "form-check-input" %>
+                      <%= workday_fields.label dia_en, dia_pt, class: "form-check-label" %>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+
+              <!-- Campos de hora de início e fim -->
+              <div class="row mb-4">
+                <div class="col">
+                  <div class="form-outline">
+                    <%= workday_fields.label :start, "Hora de Início", class: "form-label" %>
+                    <%= workday_fields.time_field :start, class: 'form-control' %>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-outline">
+                    <%= workday_fields.label :end, "Hora de Encerramento", class: "form-label" %>
+                    <%= workday_fields.time_field :end, class: 'form-control' %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Foto do colaborador -->
+          <div class="form-outline mb-4">
+            <%= form.label :profile_picture, "Foto do Colaborador", class: "form-label" %>
+            <%= form.file_field :profile_picture, id: 'form7Example7', class: 'form-control' %>
+          </div>
+
+          <!-- Botões de Submit e Back -->
+          <div class="d-flex">
+            <div class="form-group mr-2">
+              <%= form.submit 'Cadastrar Colaborador', class: 'btn btn-primary' %>
+            </div>
+
+            <div class="form-group">
+              <%= link_to "Voltar", employees_path, class: 'btn btn-success' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  const checkbox = document.getElementById('enabledCheckbox');
+  const workdaysFields = document.getElementById('workdaysFields');
+
+  // Exibe ou oculta os campos de trabalho com base no estado inicial do checkbox
+  if (checkbox.checked) {
+    workdaysFields.style.display = 'block';
+  } else {
+    workdaysFields.style.display = 'none';
+  }
+
+  // Quando o checkbox for alterado
+  checkbox.addEventListener('change', function() {
+    if (checkbox.checked) {
+      workdaysFields.style.display = 'block';
+    } else {
+      workdaysFields.style.display = 'none';
+      // Limpa os campos quando ocultados
+      const inputs = workdaysFields.querySelectorAll('input');
+      inputs.forEach(input => input.value = '');
+    }
+  });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Obtém os elementos da página
+    const deliveryCheckbox = document.getElementById('deliveryCheckbox');
+    const companyIDField = document.getElementById('companyIDField');
+    const functionField = document.getElementById('functionField');
+
+    // Função para esconder ou mostrar os campos
+    function toggleFields() {
+        if (deliveryCheckbox.checked) {
+            // Esconde os campos
+            companyIDField.style.display = 'none';
+            functionField.style.display = 'none';
+        } else {
+            // Mostra os campos
+            companyIDField.style.display = 'block';
+            functionField.style.display = 'block';
+        }
+    }
+
+    // Inicializa o estado com base na caixa de seleção "Entregador Delivery"
+    toggleFields();
+
+    // Adiciona um ouvinte de evento para quando a caixa for alterada
+    deliveryCheckbox.addEventListener('change', toggleFields);
+});
+
+  function formatPhoneNumber(phone) {
+    const phoneDigits = phone.replace(/\D/g, '');
+    const formattedPhone = `${phoneDigits.slice(0, 2)}-${phoneDigits.slice(2, 11)}`;
+    return formattedPhone;
+  }
+
+  function handleInputChange() {
+    const inputElement = document.getElementById('phoneNumberInput');
+    const formattedPhoneNumber = formatPhoneNumber(inputElement.value);
+    console.log(formattedPhoneNumber);
+  }
+</script>

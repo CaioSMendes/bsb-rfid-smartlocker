@@ -1,0 +1,39 @@
+pt:
+  date:
+    day_names:
+      - Domingo
+      - Segunda
+      - Terça
+      - Quarta
+      - Quinta
+      - Sexta
+      - Sábado
+  time:
+    formats:
+      default: "%d/%m/%Y %H:%M"
+      short: "%H:%M"
+      long: "%d de %B de %Y %H:%M"
+
+  activerecord:
+    errors:
+      models:
+        keylocker:
+          attributes:
+            owner:
+              taken: "já está em uso"
+        key_usage:
+          attributes:
+            employee:
+              required: "Funcionário é obrigatório"
+            employee_id:
+              blank: "O campo Employee ID não pode estar em branco"
+            keylocker:
+              required: "Keylocker é obrigatório"
+            keys:
+              required: "Chaves são obrigatórias"
+            status:
+              required: "Status é obrigatório"
+            action_time:
+              required: "Hora da ação é obrigatória"
+    messages:
+      record_invalid: "O registro não é válido"

@@ -1,0 +1,79 @@
+<div id="<%= dom_id employee %>">
+  <p>
+    <% if employee.profile_picture.attached? %>
+    <%= image_tag employee.profile_picture %>
+    <% else %>
+      <p>Nenhuma imagem disponível</p>
+    <% end %>
+  </p>
+
+  <p>
+    <strong>Nome:</strong>
+    <%= employee.name %> <%= employee.lastname %>
+  </p>
+
+  <p>
+    <strong>Empresa:</strong>
+    <%= employee.companyID %>
+  </p>
+
+  <p>
+    <strong>Telefone:</strong>
+    <%= employee.phone %>
+  </p>
+
+  <p>
+    <strong>Cargo:</strong>
+    <%= employee.function %>
+  </p>
+
+  <p>
+    <strong>Código Pin:</strong>
+    <%= employee.PIN %>
+  </p>
+
+  <p>
+    <strong>Senha Locker:</strong>
+    <%= employee.pswdSmartlocker %>
+  </p>
+
+  <p>
+    <strong>ID Card:</strong>
+    <%= employee.cardRFID %>
+  </p>
+
+  <p>
+    <strong>Status:</strong>
+    <%= employee.status %>
+  </p>
+
+  <% employee.workdays.each do |workday| %>
+
+  <p>
+    <strong>Dias de trabalho:</strong>
+    <% days_of_week = JSON.parse(workday.dayofweek) rescue [] %>
+    <ul>
+      <% days_of_week.each do |day| %>
+        <li><%= day %></li>
+      <% end %>
+    </ul>
+  </p>
+
+  <p>
+    <strong>Hora de inicio</strong>
+    <%= workday.start.strftime("%H:%M") %>
+  </p>
+
+
+  <p>
+    <strong>Hora de termino:</strong>
+    <%= workday.end.strftime("%H:%M") %>
+  </p>
+
+  <p>
+    <strong>Trabalha no Feriado</strong>
+    <%= workday.holiday ? 'Sim' : 'Não' %>
+  </p>
+
+  <% end %>
+</div>

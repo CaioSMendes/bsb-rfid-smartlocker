@@ -1,0 +1,164 @@
+<p style="color: green"><%= notice %></p>
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <ol class="breadcrumb">
+                    <li class="active">
+                        <h1><i class="fas fa-user"></i> Donos de Lockers</h1>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">  
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Perfil</th>
+          <th>Situação Financeira</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+            <tr>
+                <td><%= user.email %></td> 
+                <td>
+                    <button id="toggle-role-btn-<%= user.id %>" class="btn <%= user.role == 'admin' ? 'btn-success' : 'btn-primary' %>" data-user-id="<%= user.id %>" data-confirm="Are you sure?">
+                        <i id="role-icon-<%= user.id %>" class="<%= user.role == 'admin' ? 'fas fa-user-tie' : 'fas fa-user' %>"></i> <%= user.role %>
+                    </button>
+                </td>
+                <td>
+                  <button id="toggle-finance-btn-<%= user.id %>" class="btn <%= user.finance == 'adimplente' ? 'btn-success' : 'btn-warning' %>" data-user-id="<%= user.id %>" data-confirm="Are you sure?">
+                    <i id="finance-icon-<%= user.id %>" class="<%= user.finance == 'adimplente' ? 'fas fa-check' : 'fas fa-exclamation-triangle' %>"></i> <%= user.finance %>
+                  </button>
+                </td>
+                <td>
+                <%= button_to manager_user_path(user), method: :delete, class: 'btn btn-danger delete-user-btn', data: { confirm: 'Tem certeza que deseja excluir este usuário?' } do %>
+                    <i class="fas fa-trash"></i> Excluir
+                    <% end %>
+                </td>
+            </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="text-center mt-3 d-flex justify-content-center">
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <%= will_paginate @users, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+    </ul>
+  </nav>
+</div>
+
+
+<script>
+  $(document).ready(function() {
+    $('[id^=toggle-role-btn]').on('click', function(e) {
+      e.preventDefault();
+
+      var userId = $(this).data('user-id');
+      var button = $('#toggle-role-btn-' + userId);
+      var icon = $('#role-icon-' + userId);
+
+      if (userId == <%= current_user.id %>) {
+        console.error('Você não pode alterar sua própria role.');
+        return;
+      }
+
+      var confirmationMessage = 'Tem certeza de que deseja alterar o perfil do usuário?';
+
+      // Adiciona a confirmação antes de realizar a alteração
+      if (confirm(confirmationMessage)) {
+        $.ajax({
+          url: '/manager_users/' + userId + '/toggle_role',
+          method: 'PATCH',
+          success: function(data) {
+            // Verifica se as variáveis estão definidas antes de manipulá-las
+            if (button.length > 0 && icon.length > 0) {
+              button.removeClass();
+              button.addClass(data.new_role === 'admin' ? 'btn btn-success' : 'btn btn-primary');
+
+              icon.removeClass();
+              icon.addClass(data.new_role === 'admin' ? 'fas fa-user-tie' : 'fas fa-user');
+
+              button.html(icon.prop('outerHTML') + ' ' + data.new_role);
+            }
+          },
+          error: function(error) {
+            console.error('Erro ao alternar a role:', error);
+          }
+        });
+      }
+    });
+  });
+</script>
+
+<script>
+$(document).ready(function() {
+  $('button[id^="toggle-finance-btn"]').on('click', function() {
+    var userId = $(this).data('user-id');
+    var financeBtn = $('#toggle-finance-btn-' + userId);
+
+    // Verifica se o usuário está tentando alterar o próprio status financeiro
+    if (userId == <%= current_user.id %>) {
+      console.error('Você não pode alterar seu próprio status financeiro.');
+      return;
+    }
+
+    // Exibe um diálogo de confirmação
+    var confirmed = window.confirm('Tem certeza de que deseja alterar o status financeiro?');
+
+    if (confirmed) {
+      $.ajax({
+        url: '/manager_users/' + userId + '/toggle_finance',
+        type: 'PATCH',
+        dataType: 'json',
+        success: function(data) {
+          var financeIcon = $('#finance-icon-' + userId);
+
+          if (data.finance == 'adimplente') {
+            financeIcon.removeClass('fas fa-exclamation-triangle').addClass('fas fa-check');
+            financeBtn.removeClass('btn-warning').addClass('btn-success');
+            financeBtn.html('<i class="fas fa-check"></i> Adimplente');
+          } else {
+            financeIcon.removeClass('fas fa-check').addClass('fas fa-exclamation-triangle');
+            financeBtn.removeClass('btn-success').addClass('btn-warning');
+            financeBtn.html('<i class="fas fa-exclamation-triangle"></i> Inadimplente');
+          }
+
+          financeBtn.attr('data-original-title', 'Are you sure?');
+          financeBtn.attr('data-confirm', 'Are you sure?');
+        },
+        error: function(error) {
+          console.error('Erro ao atualizar o status financeiro:', error);
+        }
+      });
+    }
+  });
+});
+</script>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var deleteButtons = document.querySelectorAll('.delete-user-btn');
+
+    deleteButtons.forEach(function(button) {
+      button.addEventListener('click', function(event) {
+        var confirmed = confirm('Tem certeza que deseja excluir este usuário?');
+
+        if (!confirmed) {
+          event.preventDefault();
+        }
+      });
+    });
+  });
+</script>

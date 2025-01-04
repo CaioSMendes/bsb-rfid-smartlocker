@@ -1,0 +1,53 @@
+<h1>Cadastrar Entregador</h1>
+
+<%= form_with(model: @deliverer, local: true) do |form| %>
+  <% if @deliverer.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@deliverer.errors.count, "error") %> proibiu este entregador de ser salvo:</h2>
+      <ul>
+        <% @deliverer.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :lastname %>
+    <%= form.text_field :lastname %>
+  </div>
+
+  <div class="field">
+    <%= form.label :phone %>
+    <%= form.text_field :phone %>
+  </div>
+
+  <div class="field">
+    <%= form.label :email %>
+    <%= form.text_field :email %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cpf %>
+    <%= form.text_field :cpf %>
+  </div>
+
+  <div class="field">
+    <%= form.label :password %>
+    <%= form.text_field :password %>
+  </div>
+
+  <div class="field">
+    <%= form.label :keylocker_id %>
+    <%= form.collection_select :keylocker_id, @keylockers, :id, :nameDevice %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Cadastrar" %>
+  </div>
+<% end %>

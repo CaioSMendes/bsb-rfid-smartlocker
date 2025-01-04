@@ -1,0 +1,123 @@
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <ol class="breadcrumb">
+                    <li class="active">
+                        <h1><i class="fas fa-user-tie"></i> Dados do Usuário</h1>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 col-lg-9"> 
+            <div class="right_col mt-3" role="main">
+                <div class="row">
+
+                    <p>
+                        <strong>Perfil de usuário:</strong>
+                        <% if current_user.role == 'user' %>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-user"></i> Usuário
+                            </button>
+                            <% elsif current_user.role == 'admin' %>
+                            <button class="btn btn-success">
+                                <i class="fas fa-user-tie"></i> Administrador
+                            </button>
+                        <% end %>
+                    </p>
+            
+                    <p>
+                        <strong>Nome:</strong>
+                        <%= current_user.name %> <%= current_user.lastname %>
+                    </p>
+            
+                    <p>
+                        <strong>Nome da Empresa:</strong>
+                        <%= current_user.nameCompany %> 
+                    </p>
+            
+                    <p>
+                        <strong>CNPJ:</strong>
+                        <%= current_user.cnpj %>
+                    </p>
+            
+                    <p>
+                        <strong>Email:</strong>
+                        <%= current_user.email %>
+                    </p>
+            
+                    <p>
+                        <strong>Status Financeiro:</strong>
+                        <% if current_user.finance == 'adimplente' %>
+                            <button class="btn btn-success">
+                                <i class="fas fa-check"></i> Adimplente
+                            </button>
+                            <% elsif current_user.finance == 'inadimplente' %>
+                            <button class="btn btn-warning">
+                                <i class="fas fa-exclamation-triangle"></i> Inadimplente
+                            </button>
+                        <% end %>
+                    </p>
+            
+                    <p>
+                        <strong>Celular:</strong>
+                        <%= current_user.phone %>
+                    </p>
+            
+                    <p>
+                        <strong>Código Postal:</strong>
+                        <%= current_user.zip_code %>
+                    </p>
+            
+                    <p>
+                        <strong>Rua:</strong>
+                        <%= current_user.street %>
+                    </p>
+            
+                    <p>
+                        <strong>Cidade:</strong>
+                        <%= current_user.city %>
+                    </p>
+            
+                    <p>
+                        <strong>Estado:</strong>
+                        <%= current_user.state %>
+                    </p>
+            
+                    <p>
+                        <strong>Bairro:</strong>
+                        <%= current_user.neighborhood %>
+                    </p>
+            
+                    <p>
+                        <strong>Complemento:</strong>
+                        <%= current_user.complement %>
+                    </p>
+            
+                    <p>
+                        <strong>Criado em:</strong>
+                        <%= current_user.created_at.strftime('%d/%m/%Y - %H:%M:%S') %>
+                    </p>
+            
+                    <p>
+                        <strong>Última alteração:</strong>
+                        <%= current_user.updated_at.strftime('%d/%m/%Y - %H:%M:%S') %>
+                    </p>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

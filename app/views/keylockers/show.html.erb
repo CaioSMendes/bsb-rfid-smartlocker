@@ -1,0 +1,106 @@
+<p class="alert alert-success"><%= notice %></p>
+
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <ol class="breadcrumb">
+          <li class="active">
+            <h1><i class="fas fa-box"></i> Meus Lockers</h1>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <!-- Coluna da imagem -->
+    <div class="col-md-3">
+      <% if @keylocker.lockertype == 'Guarda Volume' %>
+        <%= image_tag 'armario-volume.jpg', class: 'card-img-top', alt: 'Guarda Volume' %>
+      <% elsif @keylocker.lockertype == 'Armário de Encomendas' %>
+        <%= image_tag 'armario-encomenda.jpg', class: 'card-img-top', alt: 'Armário de Encomendas' %>
+      <% elsif @keylocker.lockertype == 'Armário de Chaves' %>
+        <%= image_tag 'locker.jpg', class: 'card-img-top', alt: 'Armário de Chaves' %>
+      <% else %>
+        <%= image_tag 'locker.jpg', class: 'card-img-top', alt: 'Locker Padrão' %>
+      <% end %>
+    </div>
+
+    <!-- Coluna dos detalhes -->
+    <div class="col-md-9">
+      <div class="card p-4 mb-4">
+        <h3>Detalhes do Locker</h3>
+        <% @users.each do |user| %> <!-- Itera sobre os usuários associados -->
+          <p><strong>Nome:</strong> <%= user.name %> <%= user.lastname %></p>
+          <p><strong>Email:</strong> <%= user.email %></p>
+        <% end %>
+        <p><strong>Tipo do locker:</strong> <%= @keylocker.lockertype %></p>
+        <p><strong>Proprietário:</strong> <%= @keylocker.owner %></p>
+        <p><strong>Nome do dispositivo:</strong> <%= @keylocker.nameDevice %></p>
+        <p><strong>CNPJ ou CPF:</strong> <%= @keylocker.cnpjCpf %></p>
+        <p><strong>Serial:</strong> <%= @keylocker.serial %></p>
+        <p><strong>Quantidade de Nicho:</strong> <%= @keylocker.qtd %></p>
+        <p>
+          <strong>Status:</strong>
+          <button class="btn <%= @keylocker.status == 'bloqueado' ? 'btn-danger' : 'btn-primary' %>">
+            <i class="fas <%= @keylocker.status == 'bloqueado' ? 'fa-lock' : 'fa-unlock' %>"></i>
+            <%= @keylocker.status.capitalize %>
+          </button>
+        </p>
+      </div>
+
+      <!-- Botões de ações -->
+      <div class="btn-group mb-4">
+        <%= link_to edit_keylocker_path(@keylocker), class: "btn btn-primary mr-2" do %>
+          <i class="fas fa-edit"></i> Editar
+        <% end %>
+
+        <%= link_to keylockers_path, class: "btn btn-secondary mr-2" do %>
+          <i class="fas fa-arrow-left"></i> Voltar
+        <% end %>
+
+        <%= button_to @keylocker, method: :delete, data: { confirm: "Tem certeza?" }, class: "btn btn-danger mr-2" do %>
+          <i class="fas fa-trash-alt"></i> Excluir
+        <% end %>
+
+        <%= link_to generate_qr_keylocker_path(@keylocker), target: '_blank', class: 'btn btn-success' do %>
+          <i class="fa fa-qrcode"></i> Gerar QR Code
+        <% end %>
+
+        <%= link_to generate_qr_delivery_keylocker_path(@keylocker), target: '_blank', class: 'btn btn-primary' do %>
+          <i class="fa fa-qrcode"></i> Gerar QR Code Delivery
+        <% end %>
+      </div>
+
+      <!-- Detalhes dos nichos -->
+      <h3 class="mb-4">Detalhes dos Nichos</h3>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th>#</th>
+              <th>Objeto</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @keylocker.keylockerinfos.each_with_index do |info, index| %>
+              <tr>
+                <td><strong><%= index + 1 %></strong></td>
+                <td><%= info.object.presence || "Nenhum objeto" %></td>
+                <td>
+                  <span class="badge <%= info.empty == 1 ? 'badge-danger' : 'badge-success' %>">
+                    <%= info.empty == 1 ? 'Ocupado' : 'Livre' %>
+                  </span>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

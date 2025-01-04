@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  lastname: MyString
+  companyID: MyString
+  phone: MyString
+  function: MyString
+  PIN: MyString
+  pswdSmartlocker: MyString
+  cardRFID: MyString
+  status: MyString
+
+two:
+  name: MyString
+  lastname: MyString
+  companyID: MyString
+  phone: MyString
+  function: MyString
+  PIN: MyString
+  pswdSmartlocker: MyString
+  cardRFID: MyString
+  status: MyString
