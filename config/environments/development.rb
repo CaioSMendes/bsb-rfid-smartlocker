@@ -19,7 +19,8 @@ Rails.application.configure do
   #config.hosts << "ba8e-2804-d59-aa22-7600-ad53-b829-2020-548e.ngrok-free.app"
   #config.hosts << "42f9f99a57d66b105e0dc165c6d28fba.serveo.net"
   #config.hosts << "yellow-eggs-lie.loca.lt"
-  config.hosts << /[a-f0-9]+\.serveo\.net/ #ISSO FUNCIONA
+  #config.hosts << /[a-f0-9]+\.serveo\.net/ #ISSO FUNCIONA
+  config.hosts << "brasiliarfid.com.br"
 
   
   # Enable/disable caching. By default caching is disabled.
