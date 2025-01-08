@@ -17,14 +17,14 @@ RUN bundle install
 COPY . .
 
 # Copiar o entrypoint.sh e dar permissões de execução
-COPY entrypoint.sh /usr/bin/entrypoint.sh
-RUN chmod +x /usr/bin/entrypoint.sh
-
-# Definir o entrypoint para o script
-ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+COPY start.sh /usr/bin/start.sh
+RUN chmod +x /usr/bin/start.sh
 
 # Expôr a porta que o Rails usará
 EXPOSE 3000
+
+# Definir o entrypoint para o script
+ENTRYPOINT ["/usr/bin/start.sh"]
 
 # Rodar o servidor do Rails
 CMD ["bash", "-c", "rm -f tmp/pids/server.pid && rails server -b 0.0.0.0"]

@@ -26,6 +26,7 @@ services:
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - FIRST_TIME_SETUP=true # Adicionando a variável de ambiente para configuração inicial
+    entrypoint: /usr/bin/start.sh
 
 volumes:
   postgres:
