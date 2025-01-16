@@ -10,7 +10,7 @@ bundle check || bundle install
 # Verifica se o setup inicial deve ser executado
 if [ "$FIRST_TIME_SETUP" = "true" ]; then
   echo "Executando a configuração inicial: db:create, db:migrate, db:seed"
-  bundle exec rails db:create db:migrate db:seed || true
+  bundle exec rails db:drop db:create db:migrate db:seed || true
 else
   echo "Pulado a configuração inicial."
   
