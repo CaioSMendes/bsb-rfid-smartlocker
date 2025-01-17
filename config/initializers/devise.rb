@@ -25,6 +25,7 @@ Devise.setup do |config|
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
   config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
+  Rails.application.config.session_store :cookie_store, key: '_your_app_session', secure: Rails.env.production?
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
