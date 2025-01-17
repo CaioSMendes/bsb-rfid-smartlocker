@@ -12,7 +12,6 @@ Rails.application.configure do
   # Rake tasks automatically ignore this option for performance.
   config.eager_load = true
   config.hosts << "smartlocker.brasiliarfid.com.br"
-  config.force_ssl = true
 
 
   #config.force_ssl = true
