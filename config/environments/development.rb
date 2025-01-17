@@ -20,7 +20,9 @@ Rails.application.configure do
   #config.hosts << "42f9f99a57d66b105e0dc165c6d28fba.serveo.net"
   #config.hosts << "yellow-eggs-lie.loca.lt"
   #config.hosts << /[a-f0-9]+\.serveo\.net/ #ISSO FUNCIONA
-  config.hosts << "smartlocker.brasiliarfid.com.br"  
+  config.hosts << "smartlocker.brasiliarfid.com.br"
+  config.action_controller.forgery_protection_origin_check = false
+
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
   if Rails.root.join("tmp/caching-dev.txt").exist?
