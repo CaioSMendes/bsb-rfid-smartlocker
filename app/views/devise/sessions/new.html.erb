@@ -165,23 +165,26 @@
         console.log(responseLog);
         saveLog(responseLog);
 
-        return response.json();
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Erro de autenticação.");
+        }
       })
       .then((data) => {
         const dataLog = `Dados retornados: ${JSON.stringify(data)}`;
         console.log(dataLog);
         saveLog(dataLog);
 
-        if (response.ok) {
-          alert("Login bem-sucedido!");
-        } else {
-          alert("Erro de autenticação. Verifique os dados e tente novamente.");
-        }
+        alert("Login bem-sucedido!");
+        // Navegação manual após sucesso
+        window.location.href = "/dashboard"; // Substitua pela URL desejada
       })
       .catch((error) => {
         const errorLog = `Erro na requisição: ${error.message}`;
         console.error(errorLog);
         saveLog(errorLog);
+        alert("Erro de autenticação. Verifique os dados e tente novamente.");
       });
   });
 
