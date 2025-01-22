@@ -109,52 +109,89 @@
 
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector("form");
-    const emailInput = document.querySelector("#email-input");
-    const passwordInput = document.querySelector("#password-input");
-    const submitButton = document.querySelector("#submit-button");
+ document.addEventListener("DOMContentLoaded", function () {
+  const form = document.querySelector("form");
+  const emailInput = document.querySelector("#email-input");
+  const passwordInput = document.querySelector("#password-input");
+  const submitButton = document.querySelector("#submit-button");
 
-    // Interceptar o envio do formulário
-    form.addEventListener("submit", function (event) {
-      event.preventDefault(); // Impedir o envio automático para capturar dados
+  // Função para salvar logs no localStorage
+  function saveLog(message) {
+    const logs = JSON.parse(localStorage.getItem("debugLogs")) || [];
+    logs.push({ timestamp: new Date().toISOString(), message });
+    localStorage.setItem("debugLogs", JSON.stringify(logs));
+  }
 
-      const email = emailInput.value;
-      const password = passwordInput.value;
-
-      console.log("Dados do formulário:");
-      console.log("Email:", email);
-      console.log("Senha:", password);
-
-      // Enviar requisição manualmente usando fetch
-      fetch(form.action, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content,
-        },
-        body: JSON.stringify({
-          user: {
-            email: email,
-            password: password,
-          },
-        }),
-      })
-        .then((response) => {
-          console.log("Status da resposta:", response.status);
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Dados retornados:", data);
-          if (response.ok) {
-            alert("Login bem-sucedido!");
-          } else {
-            alert("Erro de autenticação. Verifique os dados e tente novamente.");
-          }
-        })
-        .catch((error) => {
-          console.error("Erro na requisição:", error);
-        });
+  // Função para exibir logs no console
+  function displayLogs() {
+    const logs = JSON.parse(localStorage.getItem("debugLogs")) || [];
+    console.log("=== Histórico de Logs ===");
+    logs.forEach((log, index) => {
+      console.log(`${index + 1}: [${log.timestamp}] ${log.message}`);
     });
+    console.log("=========================");
+  }
+
+  // Exibir logs ao carregar a página
+  displayLogs();
+
+  // Interceptar o envio do formulário
+  form.addEventListener("submit", function (event) {
+    event.preventDefault(); // Impedir o envio automático para capturar dados
+
+    const email = emailInput.value;
+    const password = passwordInput.value;
+
+    const logMessage = `Tentativa de login - Email: ${email}, Senha: ${password}`;
+    console.log(logMessage);
+    saveLog(logMessage);
+
+    // Enviar requisição manualmente usando fetch
+    fetch(form.action, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content,
+      },
+      body: JSON.stringify({
+        user: {
+          email: email,
+          password: password,
+        },
+      }),
+    })
+      .then((response) => {
+        const responseLog = `Status da resposta: ${response.status}`;
+        console.log(responseLog);
+        saveLog(responseLog);
+
+        return response.json();
+      })
+      .then((data) => {
+        const dataLog = `Dados retornados: ${JSON.stringify(data)}`;
+        console.log(dataLog);
+        saveLog(dataLog);
+
+        if (response.ok) {
+          alert("Login bem-sucedido!");
+        } else {
+          alert("Erro de autenticação. Verifique os dados e tente novamente.");
+        }
+      })
+      .catch((error) => {
+        const errorLog = `Erro na requisição: ${error.message}`;
+        console.error(errorLog);
+        saveLog(errorLog);
+      });
   });
+
+  // Exibir opção de limpar logs no console
+  console.log("Para limpar o histórico de logs, digite `clearLogs()` no console.");
+
+  // Função global para limpar logs
+  window.clearLogs = function () {
+    localStorage.removeItem("debugLogs");
+    console.log("Histórico de logs limpo.");
+  };
+});
 </script>
