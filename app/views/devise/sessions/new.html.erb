@@ -97,5 +97,12 @@
       <%= f.submit "Entrar", class: "cadastrar-button" %>
     </div>
   <% end %>
+  <% if Rails.env.development? %>
+    <p>Estou no ambiente de desenvolvimento</p>
+  <% elsif Rails.env.test? %>
+    <p>Estou no ambiente de teste</p>
+  <% elsif Rails.env.production? %>
+    <p>Estou no ambiente de produção</p>
+  <% end %>
   <%= render "devise/shared/links" %>
 </div>
