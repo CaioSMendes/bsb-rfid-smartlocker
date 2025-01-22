@@ -109,7 +109,7 @@
 
 
 <script>
- document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
   const form = document.querySelector("form");
   const emailInput = document.querySelector("#email-input");
   const passwordInput = document.querySelector("#password-input");
@@ -176,8 +176,9 @@
         console.log(dataLog);
         saveLog(dataLog);
 
+        // Salvar mensagem de sucesso antes do redirecionamento
+        saveLog("Login bem-sucedido! Redirecionando...");
         alert("Login bem-sucedido!");
-        // Navegação manual após sucesso
         window.location.href = "/dashboard"; // Substitua pela URL desejada
       })
       .catch((error) => {
