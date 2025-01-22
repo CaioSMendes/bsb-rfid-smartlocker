@@ -106,3 +106,55 @@
   <% end %>
   <%= render "devise/shared/links" %>
 </div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form");
+    const emailInput = document.querySelector("#email-input");
+    const passwordInput = document.querySelector("#password-input");
+    const submitButton = document.querySelector("#submit-button");
+
+    // Interceptar o envio do formulário
+    form.addEventListener("submit", function (event) {
+      event.preventDefault(); // Impedir o envio automático para capturar dados
+
+      const email = emailInput.value;
+      const password = passwordInput.value;
+
+      console.log("Dados do formulário:");
+      console.log("Email:", email);
+      console.log("Senha:", password);
+
+      // Enviar requisição manualmente usando fetch
+      fetch(form.action, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content,
+        },
+        body: JSON.stringify({
+          user: {
+            email: email,
+            password: password,
+          },
+        }),
+      })
+        .then((response) => {
+          console.log("Status da resposta:", response.status);
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Dados retornados:", data);
+          if (response.ok) {
+            alert("Login bem-sucedido!");
+          } else {
+            alert("Erro de autenticação. Verifique os dados e tente novamente.");
+          }
+        })
+        .catch((error) => {
+          console.error("Erro na requisição:", error);
+        });
+    });
+  });
+</script>
