@@ -23,6 +23,7 @@ Rails.application.configure do
   config.hosts << "smartlocker.brasiliarfid.com.br"
   config.force_ssl = false
   Rails.application.routes.default_url_options = { protocol: 'https' }
+  config.middleware.insert_before 0, Rack::SSL
   Rails.application.config.session_store :cookie_store, key: 'smartlocker', domain: :all, tld_length: 2
 
   # Enable/disable caching. By default caching is disabled.
