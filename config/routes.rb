@@ -120,6 +120,7 @@ Rails.application.routes.draw do
       post 'control_exit_keypad', to: 'employees#control_exit_keypad'
       post 'control_locker_key', to: 'employees#control_locker_key'
       post '/check_access', to: 'employees#check_access'
+      get 'employees', to: 'employees#list_employees'
 
       resources :keylockers  # Ajuste para o novo nome do controlador
       #post '/auth/sign_in', to: 'authentication#sign_in'
