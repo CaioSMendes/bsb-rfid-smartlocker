@@ -10,8 +10,6 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=Admin123
       - POSTGRES_HOST=postgres
-    ports:
-      - "5432:5432"
   app:
     depends_on:
       - 'postgres'
