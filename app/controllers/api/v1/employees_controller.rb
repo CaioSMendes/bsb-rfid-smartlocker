@@ -3,8 +3,8 @@ I18n.locale = :pt
 module Api
   module V1
     class EmployeesController < ApplicationController
-      skip_before_action :verify_authenticity_token, only: [:check_access, :control_locker_key, :control_exit_keypad, :control_exit_card, :locker_security, :toggle_door, :employees_by_keylocker, :process_locker_code, :check_card_access, :check_keypad_access, :employees_by_keylocker_card,:information_locker, :esp8288params, :check_user]
-      skip_before_action :authenticate_user!, only: [:check_access, :control_locker_key, :control_exit_keypad, :control_exit_card, :locker_security, :toggle_door, :employees_by_keylocker, :process_locker_code, :check_card_access, :check_keypad_access, :employees_by_keylocker_card, :information_locker, :esp8288params, :check_user ]
+      skip_before_action :verify_authenticity_token, only: [:list_employees, :check_access, :control_locker_key, :control_exit_keypad, :control_exit_card, :locker_security, :toggle_door, :employees_by_keylocker, :process_locker_code, :check_card_access, :check_keypad_access, :employees_by_keylocker_card,:information_locker, :esp8288params, :check_user]
+      skip_before_action :authenticate_user!, only: [:list_employees, :check_access, :control_locker_key, :control_exit_keypad, :control_exit_card, :locker_security, :toggle_door, :employees_by_keylocker, :process_locker_code, :check_card_access, :check_keypad_access, :employees_by_keylocker_card, :information_locker, :esp8288params, :check_user ]
 
       # Define a localização padrão como português do Brasil
       before_action :set_locale
@@ -13,6 +13,20 @@ module Api
         @employees = Employee.all
         render json: @employees
       end
+
+      def list_employees
+        employees = Employee.all        
+        render json: {
+          status: "SUCCESS",
+          message: "Lista de todos os funcionários",
+          data: employees.as_json(only: [
+            :id, :name, :lastname, :companyID, :phone, :email, 
+            :function, :PIN, :cpf, :pswdSmartlocker, :cardRFID, 
+            :status, :delivery, :enabled, :created_at, :updated_at
+          ])
+        }, status: :ok
+      end
+
 
       def toggle_door
         keylocker = Keylocker.find_by(serial: params[:serial])
