@@ -21,7 +21,10 @@ Rails.application.routes.draw do
   resources :deliveries, only: [:new, :create, :index, :show]
   resources :deliverers, only: [:index, :show, :new, :create]
   resources :employees
-  devise_for :users
+  #devise_for :users
+  constraints :protocol => "https" do
+    devise_for :users
+  end
   resources :keylockers 
   #resources :email_settings
 
