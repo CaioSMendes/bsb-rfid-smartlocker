@@ -16,9 +16,7 @@
 #     # policy.report_uri "/csp-violation-report-endpoint"
 #   end
 Rails.application.config.content_security_policy do |policy|
-  policy.default_src :self, :https
-  policy.img_src     :self, :https, :data
-  policy.script_src  :self, :https
+  policy.script_src :self, :https, "'unsafe-inline'"
 end
 #
 #   # Generate session nonces for permitted importmap and inline scripts
