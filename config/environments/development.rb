@@ -21,6 +21,7 @@ Rails.application.configure do
   #config.hosts << "yellow-eggs-lie.loca.lt"
   #config.hosts << /[a-f0-9]+\.serveo\.net/ #ISSO FUNCIONA
   config.hosts << "smartlocker.brasiliarfid.com.br"
+  config.force_ssl = true
   Rails.application.config.session_store :cookie_store, key: 'smartlocker', domain: :all, tld_length: 2
 
   # Enable/disable caching. By default caching is disabled.
