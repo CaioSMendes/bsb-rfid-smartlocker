@@ -2,7 +2,7 @@
 module Users
     class SessionsController < Devise::SessionsController
       # Pule a verificação do CSRF para ações específicas
-      skip_before_action :verify_authenticity_token, only: [:create]
+      #skip_before_action :verify_authenticity_token, only: [:create]
   
       # Métodos padrão do Devise, se você precisar personalizar
       def new
