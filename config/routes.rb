@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'debug_logs/index'
   get 'email_settings/new'
   get 'email_settings/create'
   get 'static_pages/inadimplente'
@@ -17,6 +18,8 @@ Rails.application.routes.draw do
   post 'resend_pin', to: 'access_auth#resend_pin', as: 'resend_pin'
   post 'access_auth/select_niche', to: 'access_auth#select_niche', as: :access_auth_select_niche
   get 'deliverers/check', to: 'deliverers#check'
+  get 'debug_logs', to: 'debug_logs#show_logs', as: :debug_logs
+
 
   resources :deliveries, only: [:new, :create, :index, :show]
   resources :deliverers, only: [:index, :show, :new, :create]

@@ -1,0 +1,73 @@
+<h1>Debug de Logs da Autenticação</h1>
+
+<h2>Informações Gerais</h2>
+<ul>
+  <li><strong>IP:</strong> <%= @debug_data[:ip_address] %></li>
+  <li><strong>Host:</strong> <%= @debug_data[:host] %></li>
+  <li><strong>Agente do Usuário:</strong> <%= @debug_data[:user_agent] %></li>
+</ul>
+
+<h2>Dados da Sessão</h2>
+<pre><%= JSON.pretty_generate(@debug_data[:session_data]) %></pre>
+
+<h2>Parâmetros Recebidos</h2>
+<pre><%= JSON.pretty_generate(@debug_data[:params]) %></pre>
+
+<h2>Devise Debug Trace</h2>
+<pre><%= JSON.pretty_generate(@debug_data[:devise_trace]) %></pre>
+
+
+
+
+<h1 style="text-align: center; margin-bottom: 20px;">Debug de Logs da Autenticação</h1>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px;">
+
+  <!-- Informações Gerais -->
+  <div style="flex: 1 1 45%; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; padding: 15px;">
+    <h2>Informações Gerais</h2>
+    <ul>
+      <li><strong>IP:</strong> <%= @debug_data[:ip_address] %></li>
+      <li><strong>Host:</strong> <%= @debug_data[:host] %></li>
+      <li><strong>Agente do Usuário:</strong> <%= @debug_data[:user_agent] %></li>
+      <li><strong>Data e Hora:</strong> <%= Time.current.strftime('%d/%m/%Y %H:%M:%S') %></li>
+    </ul>
+  </div>
+
+  <!-- Status da Operação -->
+  <div style="flex: 1 1 45%; background: #e8f5e9; border: 1px solid #66bb6a; border-radius: 8px; padding: 15px;">
+    <h2>Status da Operação</h2>
+    <p>
+      <strong>Status:</strong> <%= @debug_data[:operation_status] || "N/A" %> <!-- Status dinâmico -->
+    </p>
+    <p>
+      <strong>Mensagem:</strong> 
+      <%= @debug_data[:operation_message] || "Nenhuma mensagem disponível" %>
+    </p>
+  </div>
+
+  <!-- Dados da Sessão -->
+  <div style="flex: 1 1 100%; background: #f4f4f4; border: 1px solid #ddd; border-radius: 8px; padding: 15px;">
+    <h2>Dados da Sessão</h2>
+    <pre style="background: #fff; padding: 10px; border: 1px solid #ccc; border-radius: 5px;"><%= JSON.pretty_generate(@debug_data[:session_data]) %></pre>
+  </div>
+
+  <!-- Parâmetros Recebidos -->
+  <div style="flex: 1 1 100%; background: #f4f4f4; border: 1px solid #ddd; border-radius: 8px; padding: 15px;">
+    <h2>Parâmetros Recebidos</h2>
+    <pre style="background: #fff; padding: 10px; border: 1px solid #ccc; border-radius: 5px;"><%= JSON.pretty_generate(@debug_data[:params]) %></pre>
+  </div>
+
+  <!-- Devise Debug Trace -->
+  <div style="flex: 1 1 100%; background: #f4f4f4; border: 1px solid #ddd; border-radius: 8px; padding: 15px;">
+    <h2>Devise Debug Trace</h2>
+    <pre style="background: #fff; padding: 10px; border: 1px solid #ccc; border-radius: 5px;"><%= JSON.pretty_generate(@debug_data[:devise_trace]) %></pre>
+  </div>
+
+  <!-- Logs Recentes -->
+  <div style="flex: 1 1 100%; background: #f4f4f4; border: 1px solid #ddd; border-radius: 8px; padding: 15px;">
+    <h2>Logs Recentes</h2>
+    <pre style="background: #fff; padding: 10px; border: 1px solid #ccc; border-radius: 5px;"><%= @debug_data[:logs].join("\n") %></pre>
+  </div>
+
+</div>

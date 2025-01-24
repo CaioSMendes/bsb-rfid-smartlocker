@@ -20,6 +20,7 @@ Rails.application.configure do
   #config.force_ssl = false
   #Rails.application.routes.default_url_options = { protocol: 'https' }
   #Rails.application.config.session_store :cookie_store, key: 'smartlocker', domain: :all, tld_length: 2
+  config.log_level = :debug
   ###########
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
