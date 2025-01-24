@@ -21,7 +21,10 @@ Rails.application.routes.draw do
   resources :deliveries, only: [:new, :create, :index, :show]
   resources :deliverers, only: [:index, :show, :new, :create]
   resources :employees
-  devise_for :users
+  #devise_for :users
+  devise_for :users, controllers: {
+    sessions: 'users/sessions' # Aponta para o controller personalizado
+  }
   resources :keylockers 
   #resources :email_settings
 
