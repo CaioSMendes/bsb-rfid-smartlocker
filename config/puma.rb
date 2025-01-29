@@ -16,7 +16,10 @@ worker_timeout 3600 if ENV.fetch("RAILS_ENV", "development") == "development"
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 #
 port ENV.fetch("PORT") { 3000 }
-#port ENV.fetch("PORT") { 8080 }
+ssl_bind '0.0.0.0', '3001', {
+  key: 'config/ssl/key.pem',
+  cert: 'config/ssl/cert.pem'
+} # HTTPS (seguro)
 # Specifies the `environment` that Puma will run in.
 #bind "tcp://172.30.248.95:3000" #WSL Ubuntu
 
