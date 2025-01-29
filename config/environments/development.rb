@@ -17,7 +17,7 @@ Rails.application.configure do
   # Enable server timing
   config.server_timing = true
   #config.hosts << "smartlocker.brasiliarfid.com.br"
-  config.hosts << "srv708192.hstgr.cloud"
+  config.hosts << "srv708192.hstgr.cloud:3000"
   #config.force_ssl = false
   #Rails.application.routes.default_url_options = { protocol: 'https' }
   #Rails.application.config.session_store :cookie_store, key: 'smartlocker', domain: :all, tld_length: 2
