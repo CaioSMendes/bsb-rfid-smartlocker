@@ -181,7 +181,6 @@ users_with_keylockers.each do |user|
       name: Faker::Name.first_name,
       lastname: Faker::Name.last_name,
       email: Faker::Internet.email,
-      enabled: Faker::Boolean.boolean,
       companyID: Faker::Company.brazilian_company_number,
       phone: Faker::PhoneNumber.phone_number,
       function: Faker::Job.title,
@@ -190,6 +189,8 @@ users_with_keylockers.each do |user|
       pswdSmartlocker: generate_pswdSmartlocker,
       cardRFID: Faker::Alphanumeric.alphanumeric(number: 10),
       status: ['active', 'inactive'].sample,
+      delivery: [true, false].sample,
+      enabled: [true, false].sample,
       user: user,
       profile_picture: nil,
       workdays_attributes: Array.new(Faker::Number.between(from: 1, to: 10)) do |i|
@@ -268,6 +269,21 @@ Keylocker.all.each do |keylocker|
   end
 end
 puts "Configuração de Logs criada com sucesso."
+
+10.times do
+  Deliverer.create(
+    name: Faker::Name.first_name,               # Nome aleatório
+    lastname: Faker::Name.last_name,             # Sobrenome aleatório
+    serial: Faker::Alphanumeric.alphanumeric(number: 10), # Serial aleatório (10 caracteres)
+    phone: Faker::PhoneNumber.cell_phone,       # Telefone aleatório
+    email: Faker::Internet.email,                # E-mail aleatório
+    cpf: Faker::Number.leading_zero_number(digits: 11),  # CPF aleatório com 11 dígitos
+    pin: Faker::Number.number(digits: 6),        # PIN aleatório com 6 dígitos
+    keylocker_id: rand(1..10),                   # ID de keylocker aleatório entre 1 e 10
+    enabled: Faker::Boolean.boolean             # Status habilitado (true ou false)
+  )
+end
+puts "Entregadores Delivery Criado com sucesso."
 
 
 # Exemplo de configuração de e-mail

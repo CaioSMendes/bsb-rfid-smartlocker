@@ -1,0 +1,38 @@
+<p>
+  <strong>Name:</strong>
+  <%= @deliverer.name %>
+</p>
+
+<p>
+  <strong>Lastname:</strong>
+  <%= @deliverer.lastname %>
+</p>
+
+<p>
+  <strong>Phone:</strong>
+  <%= @deliverer.formatted_phone %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @deliverer.email %>
+</p>
+
+<p>
+  <strong>Cpf:</strong>
+  <%= @deliverer.cpf %>
+</p>
+
+<p>
+  <strong>Keylocker:</strong>
+  <%= @deliverer.keylocker_id %>
+</p>
+
+<p>
+  <strong>Enabled:</strong>
+  <%= @deliverer.enabled ? 'Yes' : 'No' %>
+</p>
+
+<%= link_to 'Edit', edit_deliverer_path(@deliverer), class: "btn btn-primary" %>
+<%= link_to 'Back', deliverers_path, class: "btn btn-secondary" %>
+<%= button_to 'Delete', deliverer_path(@deliverer), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>

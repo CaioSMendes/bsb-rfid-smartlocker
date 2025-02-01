@@ -19,10 +19,14 @@ Rails.application.routes.draw do
   post 'access_auth/select_niche', to: 'access_auth#select_niche', as: :access_auth_select_niche
   get 'deliverers/check', to: 'deliverers#check'
   get 'debug_logs', to: 'debug_logs#show_logs', as: :debug_logs
+  post 'deliveries/search_employee_by_phone_or_email', to: 'deliveries#search_employee_by_phone_or_email', as: 'search_employee_by_phone_or_email_deliveries'
+  get 'deliverers/show_verification', to: 'deliverers#show_verification', as: 'show_verification'
+  post 'deliverers/verify_access', to: 'deliverers#verify_access', as: 'deliverers_verify_access'
 
-
-  resources :deliveries, only: [:new, :create, :index, :show]
-  resources :deliverers, only: [:index, :show, :new, :create]
+  resources :deliveries
+  resources :deliverers do
+    post :verify, on: :collection # Rota para o método 'verify' com o verbo POST
+  end  
   resources :employees
   #devise_for :users
   devise_for :users, controllers: {

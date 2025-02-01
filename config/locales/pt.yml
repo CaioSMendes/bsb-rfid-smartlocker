@@ -8,6 +8,11 @@ pt:
       - Quinta
       - Sexta
       - Sábado
+    order:
+      - :day
+      - :month
+      - :year
+
   time:
     formats:
       default: "%d/%m/%Y %H:%M"

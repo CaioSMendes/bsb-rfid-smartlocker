@@ -1,0 +1,60 @@
+<%= form_with(model: @deliverer, local: true) do |form| %>
+    <% if @deliverer.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@deliverer.errors.count, "error") %> proibiu este deliverer de ser salvo:</h2>
+  
+        <ul>
+          <% @deliverer.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  
+    <div class="form-group">
+      <%= form.label :name %>
+      <%= form.text_field :name, class: "form-control" %>
+    </div>
+  
+    <div class="form-group">
+      <%= form.label :lastname %>
+      <%= form.text_field :lastname, class: "form-control" %>
+    </div>
+  
+    <div class="form-group">
+      <%= form.label :phone %>
+      <%= form.text_field :phone, class: "form-control" %>
+    </div>
+  
+    <div class="form-group">
+      <%= form.label :email %>
+      <%= form.email_field :email, class: "form-control" %>
+    </div>
+  
+    <div class="form-group">
+      <%= form.label :cpf %>
+      <%= form.text_field :cpf, class: "form-control" %>
+    </div>
+  
+    <div class="form-group">
+      <%= form.label :password %>
+      <%= form.password_field :password, class: "form-control" %>
+    </div>
+
+    <%= form.hidden_field :serial, value: params[:serial] %>
+  
+    <div class="form-group">
+      <%= form.label :keylocker_id %>
+      <%= form.number_field :keylocker_id, class: "form-control" %>
+    </div>
+  
+    <div class="form-group">
+      <%= form.label :enabled %>
+      <%= form.check_box :enabled, class: "form-check-input" %>
+    </div>
+  
+    <div class="form-group">
+      <%= form.submit class: "btn btn-primary" %>
+    </div>
+  <% end %>
+  

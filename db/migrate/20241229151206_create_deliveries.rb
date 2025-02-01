@@ -6,6 +6,8 @@ class CreateDeliveries < ActiveRecord::Migration[7.0]
       t.bigint :employee_id
       t.datetime :delivery_date
       t.string :locker_code
+      t.string :full_address
+      t.string :image
 
       t.timestamps
     end

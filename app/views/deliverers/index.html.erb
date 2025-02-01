@@ -1,0 +1,33 @@
+<h1>Deliverers</h1>
+
+<%= link_to 'New Deliverer', new_deliverer_path, class: 'btn btn-success' %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Lastname</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Enabled</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @deliverers.each do |deliverer| %>
+      <tr>
+        <td><%= deliverer.name %></td>
+        <td><%= deliverer.lastname %></td>
+        <td><%= deliverer.email %></td>
+        <td><%= deliverer.phone %></td>
+        <td><%= deliverer.formatted_phone %></td>
+        <td><%= deliverer.enabled ? 'Yes' : 'No' %></td>
+        <td>
+          <%= link_to 'Show', deliverer_path(deliverer), class: 'btn btn-info' %>
+          <%= link_to 'Edit', edit_deliverer_path(deliverer), class: 'btn btn-warning' %>
+          <%= button_to 'Delete', deliverer_path(deliverer), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

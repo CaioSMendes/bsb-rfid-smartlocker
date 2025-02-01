@@ -44,11 +44,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_29_151206) do
 
   create_table "deliverers", force: :cascade do |t|
     t.string "name"
+    t.string "serial"
     t.string "lastname"
     t.string "phone"
     t.string "email"
     t.string "cpf"
-    t.string "password"
+    t.string "pin"
     t.bigint "keylocker_id"
     t.boolean "enabled"
     t.datetime "created_at", null: false
@@ -61,6 +62,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_29_151206) do
     t.bigint "employee_id"
     t.datetime "delivery_date"
     t.string "locker_code"
+    t.string "full_address"
+    t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

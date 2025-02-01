@@ -15,6 +15,6 @@
   <h2>Entregador Encontrado</h2>
   <p><strong>Nome:</strong> <%= @deliverer.name %> <%= @deliverer.lastname %></p>
   <p><strong>E-mail:</strong> <%= @deliverer.email %></p>
-  <p><strong>Telefone:</strong> <%= @deliverer.phone %></p>
+  <p><strong>Telefone:</strong> <%= @deliverer.formatted_phone %></p>
   <%= link_to 'Criar Encomenda', new_delivery_path %>
 <% end %>

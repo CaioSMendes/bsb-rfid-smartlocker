@@ -1,16 +1,125 @@
-<% if @keylocker %>
-  <h2>Verificar Entregador para o Serial: <%= @keylocker.serial %></h2>
+<style>
+  * {
+    box-sizing: border-box;
+  }
 
-  <%= form_with url: deliverers_check_path, method: :get, local: true do |form| %>
-    <div class="form-group">
-      <%= form.label :identifier, "Email, Telefone ou CPF" %>
-      <%= form.text_field :identifier, class: 'form-control', placeholder: 'Insira email, telefone ou CPF' %>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .container {
+    max-width: 400px;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+  }
+
+  .logo img {
+    max-width: 200px;
+    margin-bottom: 15px;
+  }
+
+  h1 {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 15px;
+  }
+
+  .form-group {
+    text-align: left;
+    margin-bottom: 15px;
+  }
+
+  .form-group label {
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .btn-orange {
+    background-color: #ff6600 !important;
+    border: none;
+    color: white !important;
+    font-size: 16px;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .btn-orange:hover {
+    background-color: #e65c00 !important;
+  }
+
+  .text-danger {
+    font-size: 14px;
+  }
+
+  .link-access {
+    display: block;
+    margin-top: 15px;
+    font-size: 14px;
+  }
+
+  @media (max-width: 600px) {
+    .container {
+      padding: 10px;
+    }
+  }
+</style>
+
+<div class="container">
+  <div class="card">
+    <div class="logo">
+      <%= image_tag 'logoBsbRFID.png', alt: 'Brasilia RFID' %>
     </div>
 
-    <%= form.hidden_field :serial, value: @keylocker.serial %>
+    <h1>Verificar Entregador</h1>
 
-    <%= form.submit "Verificar", class: 'btn btn-primary' %>
-  <% end %>
-<% else %>
-  <h2>Serial não encontrado.</h2>
-<% end %>
+    <% if @keylocker %>
+      <p><strong>Locker:</strong> <%= @keylocker.nameDevice %></p>
+      <p><strong>Serial:</strong> <%= @keylocker.serial %></p>
+      <%= form_with(model: @deliverer, url: deliverers_verify_access_path, method: :post) do |form| %>
+        <%= hidden_field_tag :serial, @keylocker.serial %>
+
+        <div class="form-group">
+          <%= form.label :identifier, "Email, Telefone ou CPF" %>
+          <%= form.text_field :identifier, class: 'form-control', placeholder: 'Insira email, telefone ou CPF' %>
+        </div>
+
+        <%= form.submit "Verificar Acesso", class: "btn btn-orange" %>
+      <% end %>
+
+      <%= link_to 'Ainda não tem acesso?', new_deliverer_path(serial: params[:serial]), class: "link-access" %>
+
+      <% if flash[:error] %>
+        <p class="text-danger"><%= flash[:error] %></p>
+      <% end %>
+
+    <% else %>
+      <p class="text-danger">Locker não encontrado.</p>
+    <% end %>
+  </div>
+</div>

@@ -1,5 +1,4 @@
-<h1>Cadastrar Entregador</h1>
-
+<h1>Cadastrar Novo Entregador</h1>
 <%= form_with(model: @deliverer, local: true) do |form| %>
   <% if @deliverer.errors.any? %>
     <div id="error_explanation">
@@ -38,16 +37,115 @@
   </div>
 
   <div class="field">
-    <%= form.label :password %>
-    <%= form.text_field :password %>
+    <%= form.label :pin %>
+    <%= form.text_field :pin %>
   </div>
 
-  <div class="field">
-    <%= form.label :keylocker_id %>
-    <%= form.collection_select :keylocker_id, @keylockers, :id, :nameDevice %>
-  </div>
+  <%= form.hidden_field :serial, value: params[:serial] %>
 
   <div class="actions">
     <%= form.submit "Cadastrar" %>
   </div>
 <% end %>
+
+
+
+
+
+
+
+
+
+
+
+<style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn-orange {
+            background-color: #ff6600 !important;
+            border: none;
+            color: white !important;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-orange:hover {
+            background-color: #e65c00 !important;
+        }
+        .text-orange {
+            color: #ff6600 !important;
+        }
+    </style>
+
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg p-4">
+                <h2 class="text-center text-orange mb-4">Cadastrar Novo Entregador</h2>
+                <div id="error-messages" class="alert alert-danger d-none"></div>
+                  <%= form_with(model: @deliverer, local: true) do |form| %>
+                    <div class="mb-3">
+                        <%= label_tag :name, 'Nome', class: 'form-label' %>
+                        <%= text_field_tag :name, nil, class: 'form-control', placeholder: 'Digite seu nome', required: true %>
+                    </div>
+                    <div class="mb-3">
+                        <%= label_tag :lastname, 'Sobrenome', class: 'form-label' %>
+                        <%= text_field_tag :lastname, nil, class: 'form-control', placeholder: 'Digite seu sobrenome', required: true %>
+                    </div>
+                    <div class="mb-3">
+                        <%= label_tag :phone, 'Telefone', class: 'form-label' %>
+                        <%= telephone_field_tag :phone, nil, class: 'form-control', placeholder: 'Digite seu telefone', required: true %>
+                    </div>
+                    <div class="mb-3">
+                        <%= label_tag :email, 'Email', class: 'form-label' %>
+                        <%= email_field_tag :email, nil, class: 'form-control', placeholder: 'Digite seu email', required: true %>
+                    </div>
+                    <div class="mb-3">
+                        <%= label_tag :cpf, 'CPF', class: 'form-label' %>
+                        <%= text_field_tag :cpf, nil, class: 'form-control', placeholder: 'Digite seu CPF', required: true %>
+                    </div>
+                    <input type="hidden" id="serial" value="SERIAL_AQUI">
+                    <div class="d-grid">
+                        <%= submit_tag 'Cadastrar', class: 'btn btn-orange btn-lg' %>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("register-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        let errors = [];
+        let name = document.getElementById("name").value.trim();
+        let lastname = document.getElementById("lastname").value.trim();
+        let phone = document.getElementById("phone").value.trim();
+        let email = document.getElementById("email").value.trim();
+        let cpf = document.getElementById("cpf").value.trim();
+
+        if (name === "") errors.push("O campo Nome é obrigatório.");
+        if (lastname === "") errors.push("O campo Sobrenome é obrigatório.");
+        if (phone === "") errors.push("O campo Telefone é obrigatório.");
+        if (email === "" || !email.includes("@")) errors.push("Email inválido.");
+        if (cpf === "" || cpf.length !== 11) errors.push("CPF inválido.");
+
+        let errorDiv = document.getElementById("error-messages");
+        if (errors.length > 0) {
+            errorDiv.innerHTML = errors.join("<br>");
+            errorDiv.classList.remove("d-none");
+        } else {
+            errorDiv.classList.add("d-none");
+            alert("Cadastro realizado com sucesso!");
+            document.getElementById("register-form").reset();
+        }
+    });
+</script>

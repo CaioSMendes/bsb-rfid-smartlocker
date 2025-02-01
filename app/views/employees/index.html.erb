@@ -35,11 +35,11 @@
                     <div class="text-center">
                       <p>
                         <% if employee.delivery %>
-                          <%= image_tag "entregador.jpg", size: '288x288', class: "img-fluid rounded" %>
+                          <%= image_tag "moto.jpg", size: '288x288', class: "img-fluid rounded" %>
                         <% elsif employee&.profile_picture&.attached? %>
                           <%= image_tag employee.profile_picture, size: '288x288', class: "img-fluid rounded" %>
                         <% else %>
-                          <%= image_tag "user.png", size: '288x288', class: "img-fluid rounded" %>
+                          <%= image_tag "user.jpg", size: '288x288', class: "img-fluid rounded" %>
                         <% end %>
                       </p>
                     </div>
@@ -49,9 +49,10 @@
                         <p>
                           <% if employee.delivery %>
                             <i class="fas fa-motorcycle" style="font-size: 24px; color: #007bff;"></i>
-                            <span style="font-size: 18px;">Entregador Delivery</span>
+                            <span style="font-size: 18px;"><strong>Entregador Delivery</strong></span>
                           <% else %>
-                            <span style="font-size: 18px;">Não</span>
+                              <i class="fa fa-user-tie" style="font-size: 24px; color: #007bff;"></i>
+                              <span style="font-size: 18px;"><strong>Usuário do Locker</strong></span>
                           <% end %>
                         </p>
 
@@ -82,14 +83,19 @@
 
                         <% if current_user.admin? %>
                             <p>
-                                <strong>Meus Lockers:</strong>
+                                <strong>Lockers que estou habilitado:</strong>
                                 <% if employee.keylockers.any? %>
                                     <ul>
                                     <% employee.keylockers.each do |keylocker| %>
-                                        <li>
-                                        <%= keylocker.nameDevice %> - <%= keylocker.status %>
-                                        </li>
-                                    <% end %>
+                                          <button class="btn 
+                                            <%= keylocker.status == "bloqueado" ? 'btn-danger' : 'btn-success' %> 
+                                            d-flex align-items-center">
+                                            <%= keylocker.nameDevice %> - <%= keylocker.status %> 
+                                            <%= keylocker.status == "bloqueado" ? 
+                                                content_tag(:i, "", class: "fas fa-lock ml-2") : 
+                                                content_tag(:i, "", class: "fas fa-unlock ml-2") %>
+                                          </button>
+                                      <% end %>
                                     </ul>
                                 <% else %>
                                     Nenhum locker associado a esse funcionário.

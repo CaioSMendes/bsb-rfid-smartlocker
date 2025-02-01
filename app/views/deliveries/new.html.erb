@@ -1,0 +1,45 @@
+<div id="step1">
+  <%= form_with url: search_employee_by_phone_or_email_deliveries_path, method: :post, remote: true, id: "employee_search_form" do %>
+    <div class="form-group">
+      <%= label_tag :query, "Funcionário (Telefone ou Email)" %>
+      <%= text_field_tag :query, nil, id: "employee_search", class: "form-control", placeholder: "Digite o telefone ou e-mail" %>
+      <%= submit_tag "Verificar", class: "btn btn-info", id: "verify_employee" %>
+    </div>
+  <% end %>
+
+  <div id="employee_error" class="text-danger" style="display: none;"></div>
+</div>
+
+<!-- Aqui o funcionário encontrado e o formulário de entrega aparecerão -->
+<div id="step2" style="display: none;"></div>
+
+
+<script>
+$(document).ready(function() {
+    $("#verify_employee").click(function(event) {
+      event.preventDefault();
+  
+      var query = $("#employee_search").val();
+  
+      // Pega o token CSRF da página
+      var csrfToken = $('meta[name="csrf-token"]').attr('content');
+  
+      $.ajax({
+        url: "/deliveries/search_employee_by_phone_or_email",
+        method: "POST",
+        data: { query: query },
+        headers: {
+          "X-CSRF-Token": csrfToken // Adiciona o token CSRF no cabeçalho da requisição
+        },
+        success: function(data) {
+          $("#step2").html(data);
+          $("#step1").hide();
+          $("#step2").show();
+        },
+        error: function() {
+          $("#employee_error").text("Funcionário não encontrado.").show();
+        }
+      });
+    });
+  });  
+</script>

@@ -53,25 +53,25 @@
       </div>
 
       <!-- Botões de ações -->
-      <div class="btn-group mb-4">
-        <%= link_to edit_keylocker_path(@keylocker), class: "btn btn-primary mr-2" do %>
+      <div class="d-flex gap-2 mb-4">
+        <%= link_to edit_keylocker_path(@keylocker), class: "btn btn-primary" do %>
           <i class="fas fa-edit"></i> Editar
         <% end %>
-
-        <%= link_to keylockers_path, class: "btn btn-secondary mr-2" do %>
+      
+        <%= link_to keylockers_path, class: "btn btn-secondary" do %>
           <i class="fas fa-arrow-left"></i> Voltar
         <% end %>
-
-        <%= button_to @keylocker, method: :delete, data: { confirm: "Tem certeza?" }, class: "btn btn-danger mr-2" do %>
+      
+        <%= button_to @keylocker, method: :delete, data: { confirm: "Tem certeza?" }, class: "btn btn-danger" do %>
           <i class="fas fa-trash-alt"></i> Excluir
         <% end %>
-
+      
         <%= link_to generate_qr_keylocker_path(@keylocker), target: '_blank', class: 'btn btn-success' do %>
-          <i class="fa fa-qrcode"></i> Gerar QR Code
-        <% end %>
-
-        <%= link_to generate_qr_delivery_keylocker_path(@keylocker), target: '_blank', class: 'btn btn-primary' do %>
           <i class="fa fa-qrcode"></i> Gerar QR Code Delivery
+        <% end %>
+      
+        <%= link_to generate_qr_delivery_keylocker_path(@keylocker), target: '_blank', class: 'btn btn-warning' do %>
+          <i class="fa fa-qrcode"></i> Gerar QR Code Luggage
         <% end %>
       </div>
 
