@@ -9,14 +9,18 @@ class DeliveriesController < ApplicationController
 
     # Criação da encomenda
     def create
-      @delivery = Delivery.new(delivery_params)
+      # Acessando o serial diretamente da URL
+      serial = params[:serial]
+      Rails.logger.debug "Parâmetros recebidos create: #{params.inspect}"
 
+      # Aqui você pode usar o serial para associá-lo ao delivery ou realizar outras ações
+      @delivery = Delivery.new(delivery_params)
+      @delivery.serial = serial  # Supondo que você tenha uma coluna 'serial' no seu modelo Delivery
+      
       if @delivery.save
-        flash[:notice] = "Encomenda criada com sucesso!"
-        redirect_to @delivery
+        redirect_to some_path # Redirecionamento após sucesso
       else
-        flash[:alert] = "Erro ao criar encomenda."
-        render :new
+        render :new # Exibir o formulário novamente em caso de erro
       end
     end
 
@@ -74,6 +78,17 @@ class DeliveriesController < ApplicationController
     end
   
     def delivery_params
-      params.require(:delivery).permit(:package_description, :deliverer_id, :employee_id, :delivery_date, :locker_code, :full_address, :image)
+      params.require(:delivery).permit(
+        :package_description, 
+        :deliverer_id, 
+        :employee_id, 
+        :delivery_date, 
+        :locker_code, 
+        :full_address, 
+        :imageEntregador, 
+        :imageInvoice, 
+        :imageProduct,
+        :serial  # Caso o serial também precise ser permitido
+      )
     end
 end 

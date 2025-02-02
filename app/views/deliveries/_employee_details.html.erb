@@ -1,22 +1,38 @@
 <div id="employee_details">
-  <h4>Funcionário encontrado</h4>
+  <h4>Destinatário encontrado</h4>
   <p><strong>Nome:</strong> <%= @employee.name %></p>
   <p><strong>Email:</strong> <%= @employee.email %></p>
   <p><strong>Telefone:</strong> <%= @employee.phone %></p>
 
-  <!-- Aqui você pode adicionar qualquer outro campo que você desejar exibir -->
+  <!-- Formulário de entrega -->
+  <%= form_with model: @delivery, url: deliveries_path, method: :post, local: true, html: { multipart: true } do |f| %>
 
-  <%= form_with model: @delivery, url: deliveries_path, method: :post, local: true do |f| %>
-    <%= f.hidden_field :employee_id, value: @employee.id %>
-
-    <div class="form-group">
-      <%= f.label :package_details, "Detalhes do Pacote" %>
-      <%= f.text_area :package_details, class: "form-control", placeholder: "Digite detalhes do pacote" %>
+    <div class="form-group mb-3">
+      <%= f.label :package_description, "Detalhes do Pacote" %>
+      <%= f.text_area :package_description, class: "form-control", placeholder: "Digite detalhes do pacote" %>
     </div>
 
-    <div class="form-group">
-      <%= f.label :locker_number, "Número do Locker" %>
-      <%= f.text_field :locker_number, class: "form-control", placeholder: "Número do locker" %>
+    <div class="form-group mb-3">
+      <%= f.label :full_address, "Número do Locker" %>
+      <%= f.text_field :full_address, class: "form-control", placeholder: "Número do locker" %>
+    </div>
+
+    <!-- Campo para upload da imagem do entregador -->
+    <div class="form-group mb-3">
+      <%= f.label :imageEntregador, "Foto do Entregador" %>
+      <%= f.file_field :imageEntregador, class: "form-control" %>
+    </div>
+
+    <!-- Campo para upload da imagem da nota fiscal -->
+    <div class="form-group mb-3">
+      <%= f.label :imageInvoice, "Imagem da Nota Fiscal" %>
+      <%= f.file_field :imageInvoice, class: "form-control" %>
+    </div>
+
+    <!-- Campo para upload da imagem do produto -->
+    <div class="form-group mb-3">
+      <%= f.label :imageProduct, "Foto do Produto" %>
+      <%= f.file_field :imageProduct, class: "form-control" %>
     </div>
 
     <%= f.submit "Confirmar Entrega", class: "btn btn-success" %>

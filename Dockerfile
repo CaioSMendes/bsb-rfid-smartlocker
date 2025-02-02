@@ -16,6 +16,13 @@ RUN bundle install
 # Copiar o código da aplicação para o diretório de trabalho
 COPY . .
 
+# Definir a variável de ambiente para servir arquivos estáticos
+ENV RAILS_SERVE_STATIC_FILES=true
+
+# Pré-compilar os assets para produção
+RUN bundle exec rake assets:clobber
+RUN bundle exec rake assets:precompile
+
 # Copiar o entrypoint.sh e dar permissões de execução
 COPY start.sh /usr/bin/start.sh
 RUN chmod +x /usr/bin/start.sh

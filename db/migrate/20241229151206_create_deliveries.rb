@@ -7,7 +7,10 @@ class CreateDeliveries < ActiveRecord::Migration[7.0]
       t.datetime :delivery_date
       t.string :locker_code
       t.string :full_address
-      t.string :image
+      t.string :imageEntregador
+      t.string :imageInvoice
+      t.string :imageProduct
+      #t.string :serial
 
       t.timestamps
     end

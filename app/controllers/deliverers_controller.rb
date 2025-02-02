@@ -17,11 +17,13 @@ class DeliverersController < ApplicationController
     def create      
       puts("create")
       @deliverer = Deliverer.new(deliverer_params)
+      @deliverer.pin = generate_unique_pin
       if params[:deliverer][:serial].present?
         @deliverer.serial = params[:deliverer][:serial]
       end
       logger.debug("Parametro: #{@deliverer.inspect}")
       if @deliverer.save
+        send_sms(@deliverer.phone, "Brasilia RFID ! Para concluir o cadastro digite o seu PIN de de validacao: #{@deliverer.pin}")
         flash[:notice] = "Entregador cadastrado com sucesso!"
         redirect_to deliverers_path
       else
@@ -37,7 +39,7 @@ class DeliverersController < ApplicationController
       @deliverer = Deliverer.find_by("email = ? OR phone = ? OR cpf = ?", identifier, identifier, identifier)
       if @deliverer
         puts("Deu bom :) !")
-        redirect_to new_delivery_path
+        redirect_to new_delivery_path(serial: params[:serial])
       else
         @deliverer = Deliverer.new
         puts("Deu ruim :( !")
@@ -61,12 +63,10 @@ class DeliverersController < ApplicationController
 
  
 
-    def log_sms_details(delivery)
+    def send_sms(phone, message)
       # Pega o telefone do funcionário
-      phone = delivery
-      puts "Telefone do delivery: #{phone}"
-      msg = "Brasilia RFID ! Voce foi cadastrado no SmartLocker"
-      # Busca os dados da tabela `sendsms`
+      puts "Telefone do entregador: #{phone}"
+      puts "Message Envio: #{message}"
       sendsms_entries = Sendsms.all
         sendsms_entries.each do |sms|
           puts "SMS Entry:"
@@ -75,10 +75,7 @@ class DeliverersController < ApplicationController
           puts "  Message: #{sms.msg}"
           puts "  URL: #{sms.url}"
           puts "  Hash Seguranca: #{sms.hashSeguranca}"
-      
-          # Substitui placeholders na mensagem pelo PIN gerado
-          message = "#{sms.msg} #{new_pin}"
-          puts "  Message Envio: #{message}"
+          
           encoded_message = ERB::Util.url_encode(message)
           # Monta a URL para o envio do SMS
           url = "#{sms.url}?user=#{sms.user}&password=#{sms.password}&destinatario=#{phone}&msg=#{encoded_message}&hashSeguranca=#{sms.hashSeguranca}"
@@ -87,13 +84,31 @@ class DeliverersController < ApplicationController
           begin
             uri = URI.parse(url)
             response = Net::HTTP.get_response(uri)
-      
             # Log do status da requisição
-            puts "Resposta do envio do SMS: #{response.code} - #{response.body}"
+            if response.code.to_i == 200
+              puts "SMS enviado com sucesso!"
+            else
+              puts "Falha no envio do SMS, código de resposta: #{response.code}"
+            end
           rescue StandardError => e
             puts "Erro ao enviar SMS: #{e.message}"
           end
         end
+    end
+  
+
+     # Método para gerar um PIN único
+     def generate_unique_pin
+      loop do
+        pin = generate_pin
+        return pin unless Deliverer.exists?(pin: pin)
+      end
+    end
+    
+    # Lógica de geração de PIN
+    def generate_pin
+      characters = ('0'..'9').to_a + ('A'..'D').to_a
+      (0...6).map { characters.sample }.join
     end
   
     private

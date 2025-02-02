@@ -1,4 +1,8 @@
 #!/bin/sh
+
+chown -R deploy_user:deploy_group /app/public/assets
+chmod -R 755 /app/public/assets
+
 # Remove o arquivo server.pid se ele existir
 if [ -f tmp/pids/server.pid ]; then
   rm tmp/pids/server.pid

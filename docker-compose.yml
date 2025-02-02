@@ -1,3 +1,5 @@
+version: '3'
+
 services:
   postgres:
     image: 'postgres:14'
@@ -10,22 +12,39 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=Admin123
       - POSTGRES_HOST=postgres
+
   app:
     depends_on:
-      - 'postgres'
+      - postgres
     build: .
     command: bash start
-    ports:
-      - '3000:3000'
     volumes:
       - '.:/smartlocker'
+    ports:
+      - "3000:3000"  # Expondo a porta para permitir comunicação com o Nginx
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=Admin123
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
-      - FIRST_TIME_SETUP=true # Adicionando a variável de ambiente para configuração inicial
+      - FIRST_TIME_SETUP=true # Variável de ambiente para configuração inicial
+      - RAILS_SERVE_STATIC_FILES=true
+    networks:
+      - default
 
-volumes:
-  postgres:
-    driver: local
+  nginx:
+    image: nginx
+    restart: always
+    depends_on:
+      - app
+    ports:
+      - "80:80"  # Porta pública para acessar a aplicação
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro  # Montando o arquivo de configuração do Nginx
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge

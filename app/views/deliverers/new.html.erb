@@ -1,63 +1,3 @@
-<h1>Cadastrar Novo Entregador</h1>
-<%= form_with(model: @deliverer, local: true) do |form| %>
-  <% if @deliverer.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@deliverer.errors.count, "error") %> proibiu este entregador de ser salvo:</h2>
-      <ul>
-        <% @deliverer.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-  </div>
-
-  <div class="field">
-    <%= form.label :lastname %>
-    <%= form.text_field :lastname %>
-  </div>
-
-  <div class="field">
-    <%= form.label :phone %>
-    <%= form.text_field :phone %>
-  </div>
-
-  <div class="field">
-    <%= form.label :email %>
-    <%= form.text_field :email %>
-  </div>
-
-  <div class="field">
-    <%= form.label :cpf %>
-    <%= form.text_field :cpf %>
-  </div>
-
-  <div class="field">
-    <%= form.label :pin %>
-    <%= form.text_field :pin %>
-  </div>
-
-  <%= form.hidden_field :serial, value: params[:serial] %>
-
-  <div class="actions">
-    <%= form.submit "Cadastrar" %>
-  </div>
-<% end %>
-
-
-
-
-
-
-
-
-
-
-
 <style>
         body {
             background-color: #f8f9fa;
@@ -92,29 +32,46 @@
                 <h2 class="text-center text-orange mb-4">Cadastrar Novo Entregador</h2>
                 <div id="error-messages" class="alert alert-danger d-none"></div>
                   <%= form_with(model: @deliverer, local: true) do |form| %>
+                    <% if @deliverer.errors.any? %>
+                      <div id="error_explanation">
+                        <h2><%= pluralize(@deliverer.errors.count, "error") %> proibiu este entregador de ser salvo:</h2>
+                        <ul>
+                          <% @deliverer.errors.full_messages.each do |message| %>
+                            <li><%= message %></li>
+                          <% end %>
+                        </ul>
+                      </div>
+                    <% end %>
+
                     <div class="mb-3">
-                        <%= label_tag :name, 'Nome', class: 'form-label' %>
-                        <%= text_field_tag :name, nil, class: 'form-control', placeholder: 'Digite seu nome', required: true %>
+                      <%= form.label :Nome, class: 'form-label' %>
+                      <%= form.text_field :name, class: 'form-control', placeholder: 'Digite seu nome', required: true %>
                     </div>
+
                     <div class="mb-3">
-                        <%= label_tag :lastname, 'Sobrenome', class: 'form-label' %>
-                        <%= text_field_tag :lastname, nil, class: 'form-control', placeholder: 'Digite seu sobrenome', required: true %>
+                      <%= form.label :Sobrenome, class: 'form-label' %>
+                      <%= form.text_field :lastname, class: 'form-control', placeholder: 'Digite seu sobrenome', required: true %>
                     </div>
+
                     <div class="mb-3">
-                        <%= label_tag :phone, 'Telefone', class: 'form-label' %>
-                        <%= telephone_field_tag :phone, nil, class: 'form-control', placeholder: 'Digite seu telefone', required: true %>
+                      <%= form.label :Telefone, class: 'form-label' %>
+                      <%= form.text_field :phone, class: 'form-control', placeholder: 'Digite seu telefone', required: true %>
                     </div>
+
                     <div class="mb-3">
-                        <%= label_tag :email, 'Email', class: 'form-label' %>
-                        <%= email_field_tag :email, nil, class: 'form-control', placeholder: 'Digite seu email', required: true %>
+                      <%= form.label :Email, class: 'form-label' %>
+                      <%= form.text_field :email, class: 'form-control', placeholder: 'Digite seu email', required: true %>
                     </div>
+
                     <div class="mb-3">
-                        <%= label_tag :cpf, 'CPF', class: 'form-label' %>
-                        <%= text_field_tag :cpf, nil, class: 'form-control', placeholder: 'Digite seu CPF', required: true %>
+                      <%= form.label :CPF, class: 'form-label' %>
+                      <%= form.text_field :cpf, class: 'form-control', placeholder: 'Digite seu CPF', required: true %>
                     </div>
-                    <input type="hidden" id="serial" value="SERIAL_AQUI">
-                    <div class="d-grid">
-                        <%= submit_tag 'Cadastrar', class: 'btn btn-orange btn-lg' %>
+
+                    <%= form.hidden_field :serial, value: params[:serial] %>
+
+                    <div class="actions">
+                      <%= form.submit "Cadastrar",  class: 'btn btn-orange btn-lg' %>
                     </div>
                 <% end %>
             </div>

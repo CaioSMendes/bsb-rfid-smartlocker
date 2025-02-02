@@ -1,45 +1,101 @@
-<div id="step1">
-  <%= form_with url: search_employee_by_phone_or_email_deliveries_path, method: :post, remote: true, id: "employee_search_form" do %>
-    <div class="form-group">
-      <%= label_tag :query, "Funcionário (Telefone ou Email)" %>
-      <%= text_field_tag :query, nil, id: "employee_search", class: "form-control", placeholder: "Digite o telefone ou e-mail" %>
-      <%= submit_tag "Verificar", class: "btn btn-info", id: "verify_employee" %>
-    </div>
-  <% end %>
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .card {
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .btn-orange {
+        background-color: #ff6600 !important;
+        border: none;
+        color: white !important;
+        font-size: 16px;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .btn-orange:hover {
+        background-color: #e65c00 !important;
+    }
+    .text-orange {
+        color: #ff6600 !important;
+    }
+    /* Alinha o campo e o botão lado a lado */
+    .input-group {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Espaço entre o campo e o botão */
+    }
+    .input-group input {
+        flex: 1; /* Faz o input ocupar o espaço disponível */
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+</style>
 
-  <div id="employee_error" class="text-danger" style="display: none;"></div>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg p-4">
+                <h2 class="text-center text-orange mb-4">Verificar Destinatário</h2>
+                <div id="error-messages" class="alert alert-danger d-none"></div>
+                <div id="step1">
+                  <%= form_with url: search_employee_by_phone_or_email_deliveries_path, method: :post, remote: true, id: "employee_search_form" do %>
+                    <div class="mb-3">
+                      <label for="employee_search">Destinatário (Telefone ou Email)</label>
+                      <div class="input-group">
+                        <%= text_field_tag :query, nil, id: "employee_search", class: "form-control", placeholder: "Digite o telefone ou e-mail" %>
+                        <%= submit_tag "Verificar", class: 'btn btn-orange', id: "verify_employee" %>
+                      </div>
+                    </div>
+                  <% end %>
+
+                  <div id="employee_error" class="text-danger" style="display: none;"></div>
+                </div>
+
+                <!-- Aqui o funcionário encontrado e o formulário de entrega aparecerão -->
+                <div id="step2" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- Aqui o funcionário encontrado e o formulário de entrega aparecerão -->
-<div id="step2" style="display: none;"></div>
-
-
 <script>
-$(document).ready(function() {
-    $("#verify_employee").click(function(event) {
-      event.preventDefault();
-  
-      var query = $("#employee_search").val();
-  
-      // Pega o token CSRF da página
-      var csrfToken = $('meta[name="csrf-token"]').attr('content');
-  
-      $.ajax({
-        url: "/deliveries/search_employee_by_phone_or_email",
-        method: "POST",
-        data: { query: query },
-        headers: {
-          "X-CSRF-Token": csrfToken // Adiciona o token CSRF no cabeçalho da requisição
-        },
-        success: function(data) {
-          $("#step2").html(data);
-          $("#step1").hide();
-          $("#step2").show();
-        },
-        error: function() {
-          $("#employee_error").text("Funcionário não encontrado.").show();
-        }
-      });
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("verify_employee").addEventListener("click", function(event) {
+        event.preventDefault();
+
+        var query = document.getElementById("employee_search").value;
+
+        // Pega o token CSRF da página
+        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        fetch("/deliveries/search_employee_by_phone_or_email", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRF-Token": csrfToken
+            },
+            body: new URLSearchParams({ query: query })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Funcionário não encontrado.");
+            }
+            return response.text();
+        })
+        .then(data => {
+            document.getElementById("step2").innerHTML = data;
+            document.getElementById("step1").style.display = "none";
+            document.getElementById("step2").style.display = "block";
+        })
+        .catch(error => {
+            document.getElementById("employee_error").textContent = error.message;
+            document.getElementById("employee_error").style.display = "block";
+        });
     });
-  });  
+});
 </script>

@@ -63,7 +63,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_29_151206) do
     t.datetime "delivery_date"
     t.string "locker_code"
     t.string "full_address"
-    t.string "image"
+    t.string "imageEntregador"
+    t.string "imageInvoice"
+    t.string "imageProduct"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

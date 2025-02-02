@@ -1,32 +1,122 @@
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-  <div class="card shadow-lg p-4" style="width: 100%; max-width: 400px;">
-    <h1 class="text-center mb-4">Confirmação de PIN</h1>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .container {
+    max-width: 400px;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+  }
+
+  .logo img {
+    max-width: 200px;
+    margin-bottom: 15px;
+  }
+
+  h1 {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 15px;
+  }
+
+  .form-group {
+    text-align: left;
+    margin-bottom: 15px;
+  }
+
+  .form-group label {
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .btn-orange {
+    background-color: #ff6600 !important;
+    border: none;
+    color: white !important;
+    font-size: 16px;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .btn-orange:hover {
+    background-color: #e65c00 !important;
+  }
+
+  .text-danger {
+    font-size: 14px;
+  }
+
+  .link-access {
+    display: block;
+    margin-top: 15px;
+    font-size: 14px;
+  }
+
+  @media (max-width: 600px) {
+    .container {
+      padding: 10px;
+    }
+  }
+</style>
+
+<div class="container">
+  <div class="card">
+    <div class="logo">
+      <%= image_tag 'logoBsbRFID.png', alt: 'Brasilia RFID' %>
+    </div>
+
+    <h1>Confirmação de PIN</h1>
 
     <% if @keylocker %>
-      <p class="text-center mb-3"><strong>Locker:</strong> <%= @keylocker.nameDevice %></p>
-      <p class="text-center mb-3"><strong>Serial:</strong> <%= @keylocker.serial %></p>
-
-      <!-- Form para validar o PIN -->
-      <%= form_with url: validate_pin_path, method: :post, local: true do |f| %>
-        <!-- Passando o serial do Locker como campo oculto -->
+      <p><strong>Locker:</strong> <%= @keylocker.nameDevice %></p>
+      <p><strong>Serial:</strong> <%= @keylocker.serial %></p>
+        <%= form_with url: validate_pin_path, method: :post, local: true do |f| %>
         <%= hidden_field_tag :serial, params[:serial] %>
 
-        <div class="form-group">
-          <%= f.label :PIN, 'Digite seu PIN:', class: 'form-label' %>
-          <%= f.text_field :PIN, class: 'form-control', required: true %>
-        </div>
+          <div class="form-group">
+            <%= f.label :PIN, 'Digite seu PIN:', class: 'form-label' %>
+            <%= f.text_field :PIN, class: 'form-control',placeholder: 'Insira o PIN',  required: true %>
+          </div>
 
-        <div class="text-center">
-          <%= f.submit 'Validar PIN', class: 'btn btn-primary w-100' %>
-        </div>
-      <% end %>
+          <div class="text-center">
+            <%= f.submit 'Validar PIN', class: "btn btn-orange" %>
+          </div>
+        <% end %>
 
-      <!-- Mensagem de erro, se houver -->
       <% if flash[:error] %>
-        <p class="text-danger mt-3 text-center"><%= flash[:error] %></p>
+        <p class="text-danger"><%= flash[:error] %></p>
       <% end %>
-
-      <!-- Botão para reenviar PIN -->
       <div class="text-center mt-3">
         <button id="resend-pin-btn" class="btn btn-secondary w-100" disabled>
           Reenviar PIN
@@ -34,10 +124,11 @@
         <p id="timer-text" class="mt-2 text-muted">Você poderá reenviar o PIN em 60 segundos.</p>
       </div>
     <% else %>
-      <p class="text-center">Locker não encontrado.</p>
+      <p class="text-danger">Locker não encontrado.</p>
     <% end %>
   </div>
 </div>
+
 
 <script>
   // Variáveis para o timer
