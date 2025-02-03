@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :products
   get 'debug_logs/index'
   get 'email_settings/new'
   get 'email_settings/create'

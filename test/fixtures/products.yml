@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  package_description: MyString
+  locker_code: MyString
+  pin: MyString
+  full_address: MyString
+  imageEntregador: MyString
+  imageInvoice: MyString
+  imageProduct: MyString
+
+two:
+  package_description: MyString
+  locker_code: MyString
+  pin: MyString
+  full_address: MyString
+  imageEntregador: MyString
+  imageInvoice: MyString
+  imageProduct: MyString

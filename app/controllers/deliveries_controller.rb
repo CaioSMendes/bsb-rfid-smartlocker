@@ -5,6 +5,7 @@ class DeliveriesController < ApplicationController
       @delivery = Delivery.new
       @deliverers = Deliverer.all
       @employees = Employee.all
+      @product = Product.new
     end
 
     # Criação da encomenda
@@ -32,7 +33,8 @@ class DeliveriesController < ApplicationController
         render plain: "<p class='text-danger'>Por favor, insira um telefone ou e-mail.</p>", status: :unprocessable_entity
         return
       end
-    
+      @product = Product.new # Garante que product nunca seja nil
+
       # Tenta buscar pelo telefone primeiro
       @employee = search_employee_by_phone(query)
       
@@ -44,7 +46,8 @@ class DeliveriesController < ApplicationController
     
       respond_to do |format|
         if @employee
-          format.html { render partial: 'employee_details', locals: { employee: @employee } } # Renderiza o parcial com as informações do funcionário
+          format.html { render partial: 'employee_details', locals: { employee: @employee, product: @product } }
+          #format.html { render partial: 'employee_details', locals: { employee: @employee } } # Renderiza o parcial com as informações do funcionário
         else
           format.html { render plain: "<p class='text-danger'>Funcionário não encontrado.</p>", status: :not_found }
         end
@@ -62,14 +65,22 @@ class DeliveriesController < ApplicationController
       end
     end
 
-    # Método para buscar o funcionário por e-mail
     def search_employee_by_email(query)
       if query.match?(/\A[\w\._%+-]+@[\w.-]+\.[a-zA-Z]{2,}\z/)  # Verifica se a query parece um e-mail
         puts "Consulta por e-mail: #{query}"
-        Employee.find_by(email: query)  # Busca no banco de dados
+        employee = Employee.find_by(email: query)  # Busca no banco de dados
+        if employee
+          puts "Funcionário encontrado: #{employee.inspect}" # Mostra os dados do funcionário
+          return employee
+        else
+          puts "Nenhum funcionário encontrado para o e-mail: #{query}"
+          return nil
+        end
+      else
+        puts "Formato de e-mail inválido: #{query}"
+        return nil
       end
     end
-    
     
     private
 

@@ -39,6 +39,7 @@ class DeliverersController < ApplicationController
       @deliverer = Deliverer.find_by("email = ? OR phone = ? OR cpf = ?", identifier, identifier, identifier)
       if @deliverer
         puts("Deu bom :) !")
+        #redirect_to products_path(serial: params[:serial])
         redirect_to new_delivery_path(serial: params[:serial])
       else
         @deliverer = Deliverer.new

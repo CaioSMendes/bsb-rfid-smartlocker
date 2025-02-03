@@ -4,54 +4,68 @@
   <p><strong>Email:</strong> <%= @employee.email %></p>
   <p><strong>Telefone:</strong> <%= @employee.phone %></p>
 
-  <!-- Formulário de entrega -->
-  <%= form_with model: @delivery, url: deliveries_path, method: :post, local: true, html: { multipart: true } do |f| %>
-
+  <%= form_with model: product, url: products_path, method: :post, local: true, html: { multipart: true } do |form| %>
+    <% if product.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
+  
+        <ul>
+          <% product.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  
     <div class="form-group mb-3">
-      <%= f.label :package_description, "Detalhes do Pacote" %>
-      <%= f.text_area :package_description, class: "form-control", placeholder: "Digite detalhes do pacote" %>
+      <%= form.label :package_description, style: "display: block" %>
+      <%= form.text_area :package_description, class: "form-control", placeholder: "Digite detalhes do pacote" %>
     </div>
-
+  
     <div class="form-group mb-3">
-      <%= f.label :full_address, "Número do Locker" %>
-      <%= f.text_field :full_address, class: "form-control", placeholder: "Número do locker" %>
+      <%= form.label :locker_code, style: "display: block" %>
+      <%= form.text_field :locker_code, class: "form-control", placeholder: "Número do locker" %>
     </div>
-
-    <!-- Campo para upload da imagem do entregador -->
+  
     <div class="form-group mb-3">
-      <%= f.label :imageEntregador, "Foto do Entregador" %>
-      <%= f.file_field :imageEntregador, class: "form-control" %>
+      <%= form.label :pin, style: "display: block" %>
+      <%= form.text_field :pin, class: "form-control", placeholder: "Número do locker" %>
     </div>
-
-    <!-- Campo para upload da imagem da nota fiscal -->
+  
     <div class="form-group mb-3">
-      <%= f.label :imageInvoice, "Imagem da Nota Fiscal" %>
-      <%= f.file_field :imageInvoice, class: "form-control" %>
+      <%= form.label :full_address, style: "display: block" %>
+      <%= form.text_field :full_address, class: "form-control", placeholder: "Número do locker" %>
     </div>
-
-    <!-- Campo para upload da imagem do produto -->
+  
     <div class="form-group mb-3">
-      <%= f.label :imageProduct, "Foto do Produto" %>
-      <%= f.file_field :imageProduct, class: "form-control" %>
+      <%= form.label :imageEntregador, style: "display: block" %>
+      <%= form.file_field :imageEntregador, class: "form-control" %>
     </div>
-
-    <%= f.submit "Confirmar Entrega", class: "btn btn-success" %>
+  
+    <div class="form-group mb-3">
+      <%= form.label :imageInvoice, style: "display: block" %>
+      <%= form.file_field :imageInvoice, class: "form-control" %>
+    </div>
+  
+    <div class="form-group mb-3">
+      <%= form.label :imageProduct, style: "display: block" %>
+      <%= form.file_field :imageProduct, class: "form-control" %>
+    </div>
+  
+      <%= form.submit "Confirmar Entrega", class: "btn btn-success" %>
   <% end %>
-</div>
-
 
 <script>
-$(document).ready(function() {
+$(document).on("turbo:load", function() {
   $("#verify_employee").click(function(event) {
-    event.preventDefault(); // Evita envio padrão do formulário
+    event.preventDefault();
 
     $.ajax({
-      url: "<%= search_employee_by_phone_or_email_deliveries_path %>",
+      url: "/deliveries/search_employee_by_phone_or_email", // Certifique-se de que esta rota existe!
       method: "POST",
       data: { query: $("#employee_search").val() },
       success: function(data) {
-        // Insere o conteúdo retornado pela requisição no passo 2 do formulário
-        $("#step2").html(data);  
+        $("#step2").html(data);
         $("#step1").hide();
         $("#step2").show();
       },

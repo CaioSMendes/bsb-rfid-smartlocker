@@ -1,5 +1,4 @@
 #!/bin/sh
-
 chown -R deploy_user:deploy_group /app/public/assets
 chmod -R 755 /app/public/assets
 
