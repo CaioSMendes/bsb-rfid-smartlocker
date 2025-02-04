@@ -1,0 +1,6 @@
+pt:
+  devise:
+    sessions:
+      signed_in: "Login realizado com sucesso."
+      user:
+        signed_in: "Bem-vindo! Você entrou com sucesso."

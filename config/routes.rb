@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   post 'deliveries/search_employee_by_phone_or_email', to: 'deliveries#search_employee_by_phone_or_email', as: 'search_employee_by_phone_or_email_deliveries'
   get 'deliverers/show_verification', to: 'deliverers#show_verification', as: 'show_verification'
   post 'deliverers/verify_access', to: 'deliverers#verify_access', as: 'deliverers_verify_access'
+  post '/products/save_serial', to: 'products#save_serial'
 
   resources :deliveries
   resources :deliverers do

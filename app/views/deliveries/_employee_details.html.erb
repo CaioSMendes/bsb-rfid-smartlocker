@@ -16,21 +16,20 @@
         </ul>
       </div>
     <% end %>
-  
+
     <div class="form-group mb-3">
       <%= form.label :package_description, style: "display: block" %>
       <%= form.text_area :package_description, class: "form-control", placeholder: "Digite detalhes do pacote" %>
     </div>
   
     <div class="form-group mb-3">
-      <%= form.label :locker_code, style: "display: block" %>
-      <%= form.text_field :locker_code, class: "form-control", placeholder: "Número do locker" %>
-    </div>
-  
-    <div class="form-group mb-3">
       <%= form.label :pin, style: "display: block" %>
       <%= form.text_field :pin, class: "form-control", placeholder: "Número do locker" %>
     </div>
+
+    <%= form.hidden_field :serial, value: @serial %>
+    <%= form.hidden_field :serial, value: params[:serial] %>
+ 
   
     <div class="form-group mb-3">
       <%= form.label :full_address, style: "display: block" %>

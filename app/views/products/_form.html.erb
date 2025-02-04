@@ -1,4 +1,4 @@
-<%= form_with(model: product) do |form| %>
+<%= form_with(model: product, local: true, html: { multipart: true }) do |f| %>
   <% if product.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
@@ -20,6 +20,10 @@
     <%= form.label :locker_code, style: "display: block" %>
     <%= form.text_field :locker_code %>
   </div>
+
+  <%= form.hidden_field :serial, value: params[:serial] %>
+
+  <%= form.hidden_field :locker_code, value: params[:serial] %>
 
   <div>
     <%= form.label :pin, style: "display: block" %>

@@ -1,37 +1,107 @@
-<div id="<%= dom_id product %>">
-  <p>
-    <strong>Package description:</strong>
-    <%= product.package_description %>
-  </p>
+<style>
+  .product-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    max-width: 600px;
+    background: #fff;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    text-align: center;
+  }
 
-  <p>
-    <strong>Locker code:</strong>
-    <%= product.locker_code %>
-  </p>
+  .product-title {
+    font-size: 1.6em;
+    margin-bottom: 15px;
+    color: #222;
+    font-weight: bold;
+  }
 
-  <p>
-    <strong>Pin:</strong>
-    <%= product.pin %>
-  </p>
+  .product-info p {
+    margin: 8px 0;
+    font-size: 14px;
+    color: #444;
+  }
 
-  <p>
-    <strong>Full address:</strong>
-    <%= product.full_address %>
-  </p>
+  .product-images {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+  }
 
-  <p>
-    <strong>Imageentregador:</strong>
-    <%= product.imageEntregador %>
-  </p>
+  .image-container {
+    text-align: center;
+    width: 45%;
+    max-width: 250px;
+  }
 
-  <p>
-    <strong>Imageinvoice:</strong>
-    <%= product.imageInvoice %>
-  </p>
+  .image-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+  }
 
-  <p>
-    <strong>Imageproduct:</strong>
-    <%= product.imageProduct %>
-  </p>
+  .image-container img:hover {
+    transform: scale(1.05);
+  }
 
+  @media (max-width: 500px) {
+    .product-images {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .image-container {
+      width: 100%;
+    }
+  }
+</style>
+
+<div id="<%= dom_id product %>" class="product-card">
+  <h2 class="product-title">Detalhes do Pacote</h2>
+
+  <div class="product-info">
+    <p><strong>Descrição:</strong> <%= product.package_description %></p>
+    <p><strong>Locker:</strong> <%= product.locker_code %></p>
+    <p><strong>PIN:</strong> <%= product.pin %></p>
+    <p><strong>Serial:</strong> <%= product.serial %></p>
+    <p><strong>Endereço:</strong> <%= product.full_address %></p>
+  </div>
+
+  <div class="product-images">
+    <% if product.image_entregador.attached? %>
+      <div class="image-container">
+        <p>Entregador</p>
+        <a href="<%= url_for(product.image_entregador) %>" download>
+          <%= image_tag url_for(product.image_entregador), alt: "Imagem do Entregador" %>
+        </a>
+      </div>
+    <% end %>
+
+    <% if product.image_invoice.attached? %>
+      <div class="image-container">
+        <p>Nota Fiscal</p>
+        <a href="<%= url_for(product.image_invoice) %>" download>
+          <%= image_tag url_for(product.image_invoice), alt: "Imagem da Nota Fiscal" %>
+        </a>
+      </div>
+    <% end %>
+
+    <% if product.image_product.attached? %>
+      <div class="image-container">
+        <p>Produto</p>
+        <a href="<%= url_for(product.image_product) %>" download>
+          <%= image_tag url_for(product.image_product), alt: "Imagem do Produto" %>
+        </a>
+      </div>
+    <% end %>
+  </div>
 </div>
+
+
+<%= link_to "Enviar Para o Locker", access_auth_success_page_path(serial: params[:serial]), class: "btn btn-primary" %>
