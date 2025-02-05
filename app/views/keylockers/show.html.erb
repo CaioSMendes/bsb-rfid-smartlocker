@@ -47,7 +47,7 @@
           <strong>Status:</strong>
           <button class="btn <%= @keylocker.status == 'bloqueado' ? 'btn-danger' : 'btn-primary' %>">
             <i class="fas <%= @keylocker.status == 'bloqueado' ? 'fa-lock' : 'fa-unlock' %>"></i>
-            <%= @keylocker.status.capitalize %>
+            <%= @keylocker.status.to_s.capitalize %>
           </button>
         </p>
       </div>
