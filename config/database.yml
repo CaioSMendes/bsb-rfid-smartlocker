@@ -2,10 +2,10 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= ENV["POSTGRES_USER"] %> #Funciona 
-  password: <%= ENV["POSTGRES_PASSWORD"] %> #Funciona
-  #username: smartlocker_user  # Alterado aqui
-  #password: 1952  # Alterado aqui
+  #username: <%= ENV["POSTGRES_USER"] %> #Funciona 
+  #password: <%= ENV["POSTGRES_PASSWORD"] %> #Funciona
+  username: smartlocker_user  # Alterado aqui
+  password: 1952  # Alterado aqui
   host: <%= ENV["POSTGRES_HOST"] %>
   port: <%= ENV.fetch("POSTGRES_PORT") { 5432 } %>
 
