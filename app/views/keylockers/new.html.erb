@@ -1,2 +1,16 @@
-<%= render "form", keylocker: @keylocker %>
+<p style="color: green"><%= notice %></p>
 
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <ol class="breadcrumb">
+          <li class="active">
+            <h1><i class="fas fa-box"></i> Meus Lockers</h1>
+          </li>
+        </ol>
+      </div>
+    </div>
+    <%= render "form", keylocker: @keylocker %>
+  </div>
+</div>

@@ -26,6 +26,7 @@ class KeylockersController < ApplicationController
 
   # GET /keylockers/1/edit
   def edit
+    @keylocker = Keylocker.find(params[:id])
   end
 
   # POST /keylockers or /keylockers.json
