@@ -1,0 +1,7 @@
+{
+    email contato@smartlockerbrasiliarfid.com.br  # Substitua pelo seu email
+}
+
+smartlockerbrasiliarfid.com.br {
+    reverse_proxy app:3000
+}
