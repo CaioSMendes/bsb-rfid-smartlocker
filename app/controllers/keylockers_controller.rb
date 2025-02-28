@@ -112,10 +112,8 @@ class KeylockersController < ApplicationController
   def generate_qr_delivery
     keylocker = Keylocker.find(params[:id])
     serial = keylocker.serial
-    qr_data = "http://localhost:3000/deliverers/check?serial=#{serial}"
+    qr_data = "#{request.base_url}/deliverers/check?serial=#{serial}"
     qrcode = RQRCode::QRCode.new(qr_data)
-
-    # Renderizar o QR Code como imagem SVG
     svg = qrcode.as_svg(
       offset: 0,
       color: "000",
@@ -123,11 +121,9 @@ class KeylockersController < ApplicationController
       module_size: 6,
       standalone: true
     )
-
     render inline: svg, content_type: "image/svg+xml"
   end
-
-
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_keylocker

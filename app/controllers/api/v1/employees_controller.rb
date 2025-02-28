@@ -375,16 +375,21 @@ module Api
         id_nv_usr = params[:ID_NV_USR]
         rfid_nv_usr = params[:RFID_NV_USR]
         snh_nv_usr = params[:SNH_NV_USR]
-    
+        
         # Encontre o funcionário com base no campo PIN
         employee = Employee.find_by(PIN: id_nv_usr)
-    
+        puts "Funcionário encontrado: #{employee.inspect}"
+      
         if employee
           # Atualize o campo cardRFID se RFID_NV_USR estiver presente
-          employee.update(cardRFID: rfid_nv_usr) if rfid_nv_usr.present?
-    
+          if rfid_nv_usr.present?
+            puts "Atualizando RFID para: #{rfid_nv_usr}"
+            employee.update(cardRFID: rfid_nv_usr)
+          end
+          
           # Atualize os campos pswdSmartlocker se SNH_NV_USR estiver presente
           if snh_nv_usr.present?
+            puts "Atualizando senha do smartlocker para: #{snh_nv_usr}"
             employee.update(pswdSmartlocker: snh_nv_usr)
             render json: { message: 'Usuário cadastrado com sucesso' }
           else
@@ -394,6 +399,7 @@ module Api
           render json: { message: 'ID_NV_USR não corresponde a nenhum PIN de funcionário' }, status: :unprocessable_entity
         end
       end
+      
 
 
       def process_locker_code
@@ -430,28 +436,6 @@ module Api
       
       
       
-      def employees_by_keylocker
-        serial = params[:serial]
-
-        # Encontra o Keylocker com o serial fornecido
-        keylocker = Keylocker.find_by(serial: serial)
-
-        if keylocker
-          # Encontra os funcionários associados ao keylocker
-          employees = keylocker.employees
-
-          # Se houver funcionários, retornamos um JSON com os dados solicitados
-          if employees.any?
-            render json: employees.as_json(only: [:name, :lastname, :phone, :email, :pswdSmartlocker, :cardRFID])
-          else
-            render json: { error: "Nenhum funcionário encontrado para este keylocker" }, status: :not_found
-          end
-        else
-          # Caso o serial não corresponda a nenhum keylocker
-          render json: { error: "Keylocker não encontrado" }, status: :not_found
-        end
-      end
-      
       def process_locker_code
         serial = params[:serial]
         locker_codes = params[:keys] # Estado atual dos nichos
@@ -459,84 +443,81 @@ module Api
       
         # Validações iniciais
         if locker_codes.blank?
-          puts "Erro: 'keys' não está presente nos parâmetros ou é vazio."
           return render json: { error: "Código dos nichos não pode ser vazio." }, status: :bad_request
         end
       
         locker_codes = locker_codes.strip.gsub("\n", "") # Remove espaços e quebras de linha
         if locker_codes.empty?
-          puts "Erro: Código do locker é vazio após o tratamento."
           return render json: { error: "Código do locker não pode ser vazio." }, status: :bad_request
         end
-      
-        puts "Serial recebido: #{serial}"
-        puts "Locker codes recebidos: #{locker_codes}"
-        puts "Acesso recebido: #{acesso}"
       
         # Busca pelo keylocker
         keylocker = Keylocker.find_by(serial: serial)
         if keylocker.nil?
-          puts "Erro: Keylocker não encontrado com o serial #{serial}."
           return render json: { error: "Keylocker não encontrado." }, status: :not_found
         end
       
         # Busca pelo funcionário (acesso pode ser por RFID ou senha)
         employee = Employee.find_by(cardRFID: acesso) || Employee.find_by(pswdSmartlocker: acesso)
         if employee.nil?
-          puts "Erro: Funcionário não encontrado."
           return render json: { error: "Funcionário não encontrado." }, status: :not_found
         end
       
         # Verifica se o funcionário tem acesso ao keylocker
         unless employee.keylockers.include?(keylocker)
-          puts "Erro: Acesso negado ao keylocker."
           return render json: { error: "Acesso negado: o funcionário não tem permissão para este keylocker." }, status: :unauthorized
         end
       
         # Recupera o último estado dos nichos para o keylocker
-        last_log = Log.where(key_id: keylocker.serial).order(:timestamp).last
+        last_log = Log.where(keylocker: keylocker).order(:timestamp).last
         previous_state = last_log&.status || "0" * locker_codes.length # Default: tudo livre (0s)
-      
-        puts "Estado anterior: #{previous_state}"
-        puts "Estado atual: #{locker_codes}"
       
         # Processa mudanças de estado
         previous_state.chars.each_with_index do |prev_char, index|
           current_char = locker_codes[index]
       
           if prev_char != current_char
-            action = current_char == "1" ? "entrada" : "saída"
+            action = current_char == "1" ? "retirada" : "devolução"
             status = current_char == "1" ? "Ocupado" : "Livre"
             comments = current_char == "1" ? 
                         "Nicho #{index + 1} ocupado por #{employee.email}" : 
                         "Nicho #{index + 1} liberado por #{employee.email}"
+
+             # Atualiza o estado do nicho no banco
+              keylocker_info = keylocker.keylockerinfos.find_by(niche_number: index + 1)
+              if keylocker_info
+                keylocker_info.update(empty: current_char == "1" ? 1 : 0)
+              end
       
-            Log.create(
-              employee_id: employee.id,
-              action: action,
-              key_id: keylocker.serial,
-              locker_name: keylocker.nameDevice,
-              timestamp: Time.now,
-              status: status,
-              comments: comments
-            )
-      
-            puts "Log criado para o nicho #{index + 1}: Ação #{action}, Status #{status}"
+            begin
+              # Cria o log para o nicho alterado
+              Log.create!(
+                employee_id: employee.id,
+                action: action,
+                keylocker: keylocker,
+                locker_name: keylocker.nameDevice,
+                timestamp: Time.now,
+                status: status,
+                comments: comments
+              )
+            rescue ActiveRecord::RecordInvalid => e
+              # Exibe as mensagens de erro diretamente
+              puts "Erro ao criar o log: #{e.message}"
+              puts "Erros de validação: #{e.record.errors.full_messages.join(', ')}"
+            end
           end
         end
       
         render json: { status: 'Autorizado', message: 'Mudanças registradas com sucesso.' }, status: :ok
       end
-      
-      
 
       def check_card_access
         serial = params[:serial]
-        snh_card_usr = params[:RFID_NV_USR]
-        
+        snh_card_usr = params[:SNH_RFID_USR]  # Altere para SNH_KEYPAD_USR, já que é o campo enviado pelo parâmetro
+      
         # Encontra o Keylocker pelo serial
         keylocker = Keylocker.find_by(serial: serial)
-        
+      
         # Retorna erro se o keylocker não for encontrado ou estiver bloqueado
         if keylocker.nil?
           render json: { status: 'Keylocker não encontrado' }, status: :not_found
@@ -546,11 +527,18 @@ module Api
           return
         end
       
-        # Encontra o Employee pelo cartão RFID
+        # Verifica se o cartão RFID corresponde ao funcionário
         employee = Employee.find_by(cardRFID: snh_card_usr)
-        puts "Employee encontrado: #{employee.inspect}"
       
-        # Verifica se o Employee é autorizado a acessar o keylocker
+        # Verifica se o Employee foi encontrado e se o cartão RFID é válido
+        if employee.nil?
+          render json: { status: 'Funcionário não encontrado ou cartão RFID inválido' }, status: :unauthorized
+          return
+        else
+          puts "Employee cartão RFID encontrado: #{employee.inspect}"
+        end
+      
+        # Verifica se o Employee tem permissão para acessar o keylocker
         if keylocker && employee && employee.keylockers.include?(keylocker)
           # Salva o employee na sessão
           session[:employee] = {
@@ -561,7 +549,7 @@ module Api
             email: employee.email
           }
           puts "Sessão salva com sucesso! Employee: #{session[:employee]}"
-          
+      
           # Verifica horários de trabalho
           if employee.workdays.exists? && employee.workdays.any?(&:enabled)
             if employee_working_now?(employee)
@@ -576,7 +564,6 @@ module Api
           render json: { status: 'Acesso não autorizado ou credenciais inválidas' }, status: :unauthorized
         end
       end
-      
       
       def check_keypad_access
         serial = params[:serial]

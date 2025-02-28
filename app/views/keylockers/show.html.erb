@@ -38,11 +38,11 @@
           <p><strong>Email:</strong> <%= user.email %></p>
         <% end %>
         <p><strong>Tipo do locker:</strong> <%= @keylocker.lockertype %></p>
-        <p><strong>Proprietário:</strong> <%= @keylocker.owner %></p>
+        <p><strong>Proprietário do locker:</strong> <%= @keylocker.owner %></p>
         <p><strong>Nome do dispositivo:</strong> <%= @keylocker.nameDevice %></p>
         <p><strong>CNPJ ou CPF:</strong> <%= @keylocker.cnpjCpf %></p>
-        <p><strong>Serial:</strong> <%= @keylocker.serial %></p>
-        <p><strong>Quantidade de Nicho:</strong> <%= @keylocker.qtd %></p>
+        <p><strong>Serial do locker:</strong> <%= @keylocker.serial %></p>
+        <p><strong>Quantidade de NichoS:</strong> <%= @keylocker.qtd %></p>
         <p>
           <strong>Status:</strong>
           <button class="btn <%= @keylocker.status == 'bloqueado' ? 'btn-danger' : 'btn-primary' %>">
@@ -65,13 +65,18 @@
         <%= button_to @keylocker, method: :delete, data: { confirm: "Tem certeza?" }, class: "btn btn-danger" do %>
           <i class="fas fa-trash-alt"></i> Excluir
         <% end %>
-      
-        <%= link_to generate_qr_keylocker_path(@keylocker), target: '_blank', class: 'btn btn-success' do %>
-          <i class="fa fa-qrcode"></i> Gerar QR Code Delivery
-        <% end %>
-      
-        <%= link_to generate_qr_delivery_keylocker_path(@keylocker), target: '_blank', class: 'btn btn-warning' do %>
-          <i class="fa fa-qrcode"></i> Gerar QR Code Luggage
+
+          <% if @keylocker.lockertype == "Armário de chaves" %>
+            
+          <% elsif @keylocker.lockertype == "Armário de encomendas" %>
+          <%= link_to generate_qr_keylocker_path(@keylocker), target: '_blank', class: 'btn btn-success' do %>
+            <i class="fa fa-qrcode"></i> Gerar QR Code Delivery
+          <% end %>
+            
+          <% elsif @keylocker.lockertype == "Guarda Volume" %>
+          <%= link_to generate_qr_delivery_keylocker_path(@keylocker), target: '_blank', class: 'btn btn-warning' do %>
+            <i class="fa fa-qrcode"></i> Gerar QR Code Luggage
+          <% end %>
         <% end %>
       </div>
 

@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   get 'deliverers/show_verification', to: 'deliverers#show_verification', as: 'show_verification'
   post 'deliverers/verify_access', to: 'deliverers#verify_access', as: 'deliverers_verify_access'
   post '/products/save_serial', to: 'products#save_serial'
+  mount ActionCable.server => '/cable'
 
   resources :deliveries
   resources :deliverers do
