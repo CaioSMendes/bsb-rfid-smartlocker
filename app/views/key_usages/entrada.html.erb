@@ -24,6 +24,7 @@
                   <th><i class="fas fa-user"></i> Funcionário</th>
                   <th><i class="fas fa-clipboard-check"></i> Ação</th>
                   <th><i class="fas fa-lock"></i> Serial do Locker</th>
+                  <th><i class="fas fa-cogs"></i> Objeto</th>
                   <th><i class="fas fa-box-open"></i> Nome do Locker</th>
                   <th><i class="fas fa-calendar-alt"></i> Data e Hora</th>
                   <th><i class="fas fa-check-circle"></i> Status</th>
@@ -36,14 +37,21 @@
                   <tr>
                     <td><%= log_info[:log].employee.name %> <%= log_info[:log].employee.lastname %></td>
                     <td><%= log_info[:log].action %></td>
-                    <td><%= log_info[:log].key_id %></td>
+                    <td><%= log_info[:log].locker_serial %></td>
+                    <td><%= log_info[:log].locker_object %></td>
                     <td><%= log_info[:log].locker_name %></td>
                     <td><%= log_info[:log].timestamp.strftime('%d/%m/%Y %H:%M:%S') %></td>
                     <td><%= log_info[:log].status %></td>
                     <td><%= log_info[:log].comments %></td>
                     <td>
-                      <% if log_info[:alert] %>  <!-- Verifica se o alerta deve ser exibido -->
-                        <button class="btn btn-danger">Alerta: Devolução não realizada</button>
+                      <% if log_info[:log].action == 'retirada' %>
+                        <% if log_info[:alert] %>  <!-- Verifica se o alerta deve ser exibido -->
+                          <button class="btn btn-danger">Devolução não realizada</button>
+                        <% end %>
+                      <% elsif log_info[:log].action == 'devolução' %>
+                        <button class="btn btn-success">Devolução realizada</button>
+                      <% else %>
+                        <%= log_info[:log].action %>  <!-- Caso não seja "retirada" nem "devolução" -->
                       <% end %>
                     </td>
                   </tr>

@@ -5,6 +5,8 @@ class CreateLogs < ActiveRecord::Migration[7.0]
       t.string "action"  # Pode ser 'entrada' ou 'saída'
       t.string "key_id"  # Exemplo: 'LS 10000001'
       t.string "locker_name"  # Nome do locker ou dispositivo
+      t.string "locker_serial"
+      t.string "locker_object"
       t.datetime "timestamp"  # Hora e data da ação
       t.string "status"  # Status do locker (aberto, fechado)
       t.text "comments"  # Comentários adicionais

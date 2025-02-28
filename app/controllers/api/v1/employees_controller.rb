@@ -433,84 +433,93 @@ module Api
       end
       
       
-      
-      
-      
       def process_locker_code
         serial = params[:serial]
         locker_codes = params[:keys] # Estado atual dos nichos
         acesso = params[:acesso] # Pode ser o RFID ou a senha de acesso
       
         # Validações iniciais
-        if locker_codes.blank?
-          return render json: { error: "Código dos nichos não pode ser vazio." }, status: :bad_request
-        end
+        return render json: { error: "Código dos nichos não pode ser vazio." }, status: :bad_request if locker_codes.blank?
       
-        locker_codes = locker_codes.strip.gsub("\n", "") # Remove espaços e quebras de linha
-        if locker_codes.empty?
-          return render json: { error: "Código do locker não pode ser vazio." }, status: :bad_request
-        end
+        # Filtra apenas '0' e '1' da sequência
+        locker_codes = locker_codes.gsub(/[^01]/, '')
+      
+        return render json: { error: "Código do locker não pode ser vazio." }, status: :bad_request if locker_codes.empty?
       
         # Busca pelo keylocker
         keylocker = Keylocker.find_by(serial: serial)
-        if keylocker.nil?
-          return render json: { error: "Keylocker não encontrado." }, status: :not_found
-        end
+        return render json: { error: "Keylocker não encontrado." }, status: :not_found if keylocker.nil?
       
         # Busca pelo funcionário (acesso pode ser por RFID ou senha)
         employee = Employee.find_by(cardRFID: acesso) || Employee.find_by(pswdSmartlocker: acesso)
-        if employee.nil?
-          return render json: { error: "Funcionário não encontrado." }, status: :not_found
-        end
+        return render json: { error: "Funcionário não encontrado." }, status: :not_found if employee.nil?
       
         # Verifica se o funcionário tem acesso ao keylocker
         unless employee.keylockers.include?(keylocker)
           return render json: { error: "Acesso negado: o funcionário não tem permissão para este keylocker." }, status: :unauthorized
         end
       
-        # Recupera o último estado dos nichos para o keylocker
-        last_log = Log.where(keylocker: keylocker).order(:timestamp).last
-        previous_state = last_log&.status || "0" * locker_codes.length # Default: tudo livre (0s)
+        # Buscar todos os nichos ordenados por `posicion`
+        keylocker_infos = keylocker.keylockerinfos.order(:posicion)
+        return render json: { error: "Nenhum nicho encontrado." }, status: :not_found if keylocker_infos.empty?
+      
+        # Exibir a quantidade de nichos cadastrados no keylocker
+        qtd_nichos = keylocker_infos.count
+        puts "🔹 O keylocker #{serial} possui #{qtd_nichos} nichos cadastrados."
+      
+        qtd_nichos_codes = locker_codes.length
+        puts "🔹 A sequência recebida do locker representa #{qtd_nichos_codes} nichos."
+      
+        # Verificar se a sequência recebida tem o mesmo tamanho dos nichos cadastrados
+        if locker_codes.length != keylocker_infos.count
+          return render json: { error: "O código dos nichos não corresponde à quantidade de nichos do keylocker." }, status: :unprocessable_entity
+        end
+      
+        # Criar um estado anterior baseado no que está salvo no banco
+        previous_state = keylocker_infos.map { |info| info.empty.to_s }.join
+      
+        # Array para armazenar mudanças
+        changes = []
       
         # Processa mudanças de estado
-        previous_state.chars.each_with_index do |prev_char, index|
-          current_char = locker_codes[index]
+        keylocker_infos.each_with_index do |keylocker_info, index|
+          prev_char = previous_state[index] # Estado anterior do nicho
+          current_char = locker_codes[index] # Novo estado recebido
       
           if prev_char != current_char
             action = current_char == "1" ? "retirada" : "devolução"
             status = current_char == "1" ? "Ocupado" : "Livre"
             comments = current_char == "1" ? 
-                        "Nicho #{index + 1} ocupado por #{employee.email}" : 
-                        "Nicho #{index + 1} liberado por #{employee.email}"
+                        "Nicho #{keylocker_info.posicion} ocupado por #{employee.email}" : 
+                        "Nicho #{keylocker_info.posicion} liberado por #{employee.email}"
 
-             # Atualiza o estado do nicho no banco
-              keylocker_info = keylocker.keylockerinfos.find_by(niche_number: index + 1)
-              if keylocker_info
-                keylocker_info.update(empty: current_char == "1" ? 1 : 0)
-              end
+            locker_object = keylocker_info.object
+            puts "🔹 Objeto a ser salvo  #{locker_object}"
+            # Atualiza o estado do nicho no banco
+            keylocker_info.update(empty: current_char.to_i)
       
-            begin
-              # Cria o log para o nicho alterado
-              Log.create!(
-                employee_id: employee.id,
-                action: action,
-                keylocker: keylocker,
-                locker_name: keylocker.nameDevice,
-                timestamp: Time.now,
-                status: status,
-                comments: comments
-              )
-            rescue ActiveRecord::RecordInvalid => e
-              # Exibe as mensagens de erro diretamente
-              puts "Erro ao criar o log: #{e.message}"
-              puts "Erros de validação: #{e.record.errors.full_messages.join(', ')}"
-            end
+            # Adiciona mudança ao array
+            changes << {
+              employee_id: employee.id,
+              action: action,
+              keylocker_id: keylocker.id,
+              locker_serial: keylocker.serial,
+              locker_object: locker_object,
+              locker_name: keylocker.nameDevice,
+              timestamp: Time.now,
+              status: status,
+              comments: comments
+            }
           end
         end
       
+        # Criar logs apenas para os nichos que mudaram de estado
+        Log.insert_all(changes) unless changes.empty?
+      
         render json: { status: 'Autorizado', message: 'Mudanças registradas com sucesso.' }, status: :ok
       end
-
+      
+      
       def check_card_access
         serial = params[:serial]
         snh_card_usr = params[:SNH_RFID_USR]  # Altere para SNH_KEYPAD_USR, já que é o campo enviado pelo parâmetro

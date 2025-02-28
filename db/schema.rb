@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_02_28_105357) do
+ActiveRecord::Schema[7.0].define(version: 2025_02_28_125750) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -171,6 +171,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_28_105357) do
     t.string "action"
     t.string "key_id"
     t.string "locker_name"
+    t.string "locker_serial"
+    t.string "locker_object"
     t.datetime "timestamp"
     t.string "status"
     t.text "comments"

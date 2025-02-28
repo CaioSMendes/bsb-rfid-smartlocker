@@ -114,7 +114,7 @@ users_with_keylockers = []
         lockertype: ['Armário de chaves', 'Armário de encomendas', 'Guarda Volume'].sample,
         keylockerinfos_attributes: [
           { object: 'Notebook', posicion: 1, empty: 0 },
-          { object: 'Celular', posicion: 2, empty: 1 },
+          { object: 'Celular', posicion: 2, empty: 0 },
           { object: 'Câmera', posicion: 3, empty: 0 },
           { object: 'Kindle', posicion: 4, empty: 0 },
           { object: 'Tablet', posicion: 5, empty: 0 },
