@@ -18,127 +18,137 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
+  
 
   <body>
-  <div class="wrapper d-flex align-items-stretch">
-    <nav id="sidebar" class="active">
+    <div class="wrapper d-flex align-items-stretch">
+      <nav id="sidebar" class="active">
         <h1><a href="index.html" class="logo"></a></h1>
         <ul class="list-unstyled components mb-5">
-           
-            <li class="active">
-              <%= link_to root_path do %>
-                <span class="fa fa-home"></span> Home
-              <% end %>
-            </li>
-            
-            <li class="active">
-              <%= link_to keylockers_path do %>
-                <span class="fas fa-box"></span> Meus Lockers
-              <% end %>
-            </li>
+          <li class="active">
+            <%= link_to root_path do %>
+              <span class="fa fa-home"></span> Home
+            <% end %>
+          </li>
 
-            <li class="active">
-              <%= link_to employees_path do %>
-                <span class="fa fa-user-tie"></span> Meus Colaboradores
-              <% end %>
-            </li>
+          <li class="active">
+            <%= link_to keylockers_path do %>
+              <span class="fas fa-box"></span> Meus Lockers
+            <% end %>
+          </li>
 
-            <li class="active">
-              <%= link_to entrada_key_usages_path do %>
-                <span class="fa fa-history"></span> Histórico
-              <% end %>
-            </li> 
+          <li class="active">
+            <%= link_to employees_path do %>
+              <span class="fa fa-user-tie"></span> Meus Colab.
+            <% end %>
+          </li>
+
+          <li class="active">
+            <%= link_to entrada_key_usages_path do %>
+              <span class="fa fa-history"></span> Histórico
+            <% end %>
+          </li> 
         </ul>
         <div class="footer">
-            <p>
-                Copyright &copy; All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
-            </p>
+          <p>
+            Copyright &copy; All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
+          </p>
         </div>
-    </nav>
+      </nav>
 
-    
-
-    <div id="content" class="p-4 p-md-5">
+      <div id="content" class="p-4 p-md-5">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <button type="button" id="sidebarCollapse" class="btn btn-primary-orange">
-                    <i class="fa fa-bars"></i>
-                    <span class="sr-only">Toggle Menu</span>
-                </button>
-                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fa fa-bars"></i>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-envelope"></i> Notificações
-                                <% if flash[:notice].present? %>
-                                    <span class="badge badge-success">1</span> <!-- Ou qualquer outra lógica de contagem -->
-                                <% end %>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <% if flash[:notice].present? %>
-                                    <div class="dropdown-item"><%= flash[:notice] %></div>
-                                    <div class="dropdown-divider"></div>
-                                    <%= link_to 'Limpar notificações', '#', class: 'dropdown-item', onclick: "limparNotificacoes()" %>
-                                <% else %>
-                                    <div class="dropdown-item">Nenhuma notificação</div>
-                                <% end %>
-                                <a class="dropdown-item" href="#">Opção 1</a>
-                                <a class="dropdown-item" href="#">Opção 2</a>
-                                <a class="dropdown-item" href="#">Opção 3</a>
-                            </li>
-                        <li class="nav-item dropdown">
-                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <% if current_user %>
-                              <i class="fa fa-user"></i> <%= current_user.name %>
-                            <% else %>
+          <div class="container-fluid">
+            <button type="button" id="sidebarCollapse" class="btn btn-primary-orange">
+              <i class="fa fa-bars"></i>
+              <span class="sr-only">Toggle Menu</span>
+            </button>
+            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <i class="fa fa-bars"></i>
+            </button>
 
-                            <% end %>
-                          </a>
-                          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <%= link_to dadosuser_path, class: 'dropdown-item' do %>
-                                 <i class="fa fa-fw fa-user"></i>
-                                Perfil
-                            <% end %> 
-      
-                              <a class="dropdown-item" href="#">
-                                  <i class="fa fa-fw fa-envelope"></i> Inbox
-                              </a>
-                              
-                              <%= link_to edit_user_registration_path, class: 'dropdown-item' do %>
-                                  <i class="fa fa-fw fa-gear"></i>
-                                  Settings
-                              <% end %> 
-      
-                              <div class="dropdown-divider"></div>
-                              <%= link_to destroy_user_session_path, method: :delete, class: 'dropdown-item' do %>
-                                  <i class="fa fa-fw fa-power-off"></i>                           
-                                  Log Out
-                              <% end %>  
-      
-                          </div> 
-                        </li>
-                    </ul>
-                </div>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="notificacoes-btn">
+                    <i class="fa fa-envelope"></i> Notificações
+                    <span class="badge badge-danger" id="notificacao-counter">
+                      <%= contador_notificacoes %>
+                    </span>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="notificacoes-menu">
+                    <% if @notifications.any? %>
+                      <% @notifications.each do |notification| %>
+                        <a class="dropdown-item" href="#" style="font-size: 1rem; padding: 10px; border-radius: 5px; margin-bottom: 5px; white-space: normal; word-wrap: break-word; width: 100%; max-width: 400px;">
+                          <i class="fa fa-bell" style="margin-right: 10px;"></i> <%= raw notification[:message] %>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                      <% end %>
+                      <a href="#" class="dropdown-item text-center" style="font-size: 0.8rem; color: #007bff;" onclick="limparNotificacoes()">Limpar notificações</a>
+                    <% else %>
+                      <div class="dropdown-item text-center" style="font-size: 0.9rem; color: #777;">Nenhuma notificação</div>
+                    <% end %>
+                  </div>
+
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <% if current_user %>
+                      <i class="fa fa-user"></i> <%= current_user.name %>
+                    <% else %>
+                      <%= link_to 'Login', new_user_session_path %>
+                    <% end %>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <%= link_to dadosuser_path, class: 'dropdown-item' do %>
+                      <i class="fa fa-fw fa-user"></i>
+                      Perfil
+                    <% end %> 
+                    <%= link_to edit_user_registration_path, class: 'dropdown-item' do %>
+                      <i class="fa fa-fw fa-gear"></i>
+                      Settings
+                    <% end %> 
+
+                    <div class="dropdown-divider"></div>
+                    <%= link_to destroy_user_session_path, method: :delete, class: 'dropdown-item' do %>
+                      <i class="fa fa-fw fa-power-off"></i> Log Out
+                    <% end %>  
+                  </div> 
+                </li>
+              </ul>
             </div>
+          </div>
         </nav>
         <%= yield %>
+      </div>
     </div>
-</div>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     <script src="js/main.js"></script>
     <script>
-        function limparNotificacoes() {
-            document.querySelector('.dropdown-item').innerHTML = 'Nenhuma notificação';
-            document.querySelector('.badge').style.display = 'none';
+    function limparNotificacoes() {
+      document.getElementById("notificacao-counter").style.display = 'none';
+      const notificacoesMenu = document.getElementById("notificacoes-menu");
+      notificacoesMenu.innerHTML = '<div class="dropdown-item text-center" style="font-size: 0.9rem; color: #777;">Nenhuma notificação</div>';
+    }
+  
+    function atualizarContadorNotificacoes() {
+      $.get("/", function (data) {
+        let count = $("#notificacao-counter", $(data)).text().trim(); // Pega o contador atualizado
+        let badge = $("#notificacao-counter");
+
+        // Atualiza a exibição do contador
+        if (count > 0) {
+          badge.text(count);
+          badge.show();  // Exibe o contador
+        } else {
+          badge.hide();  // Esconde o contador se não houver notificações
         }
-    </script>
+      });
+    }
+    setInterval(atualizarContadorNotificacoes, 1000);
+  </script>
   </body>
 </html>
-
-

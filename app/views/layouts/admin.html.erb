@@ -49,19 +49,19 @@
 
             <li class="active">
               <%= link_to manager_users_index_path do %>
-                <span class="fa fa-user"></span> Admin do Locker
+                <span class="fa fa-user"></span> Admin do Sistema
               <% end %>
             </li>
 
             <li class="active">
               <%= link_to employees_path do %>
-                <span class="fa fa-user-tie"></span> Meus Colaboradores
+                <span class="fa fa-user-tie"></span> Meus Colab.
               <% end %>
             </li>
 
             <li class="active">
               <%= link_to email_settings_new_path do %>
-                <span class="fa fa-gear"></span> Configuração
+                <span class="fa fa-gear"></span> Config.
               <% end %>
             </li>
         </ul>
@@ -86,17 +86,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-envelope"></i> Notificação
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Opção 1</a>
-                                <a class="dropdown-item" href="#">Opção 2</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Outra Opção</a>
-                            </div>
-                        </li>
+                      
                         <li class="nav-item dropdown">
                           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <% if current_user %>
@@ -112,10 +102,6 @@
                                 Perfil
                               <% end %> 
       
-                              
-                              <a class="dropdown-item" href="#">
-                                  <i class="fa fa-fw fa-envelope"></i> Inbox
-                              </a>
                               
                               <%= link_to edit_user_registration_path, class: 'dropdown-item' do %>
                                   <i class="fa fa-fw fa-gear"></i>

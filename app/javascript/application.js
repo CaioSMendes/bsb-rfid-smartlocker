@@ -2,6 +2,11 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 import "./channels"
+import Chartkick from "chartkick"
+import Chart from "chart.js"
+
+// Configura o Chartkick para usar o Chart.js
+Chartkick.addAdapter(Chart)
 
 
 import { createConsumer } from "@rails/actioncable"

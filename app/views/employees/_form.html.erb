@@ -38,10 +38,10 @@
             </div>
           </div>
 
-          <!-- Campo para o nome da empresa -->
-          <div class="form-outline mb-4" id="companyIDField">
-            <%= form.label :companyID, "Nome da Empresa", class: "form-label" %>
-            <%= form.text_field :companyID, id: 'form7Example3', class: 'form-control' %>
+          <!-- Campo para o telefone -->
+          <div class="form-outline" id="companyIDField">
+            <%= form.label :phone, "Telefone", class: "form-label" %>
+            <%= form.text_field :phone, id: 'phoneNumberInput', class: 'form-control', oninput: "handleInputChange()" %>
           </div>
 
           <!-- Campo para o email -->
@@ -50,28 +50,36 @@
             <%= form.text_field :email, id: 'form7Example3', class: 'form-control' %>
           </div>
 
-          <!-- Campos para telefone e função -->
+          <!-- Campos para CPF -->
           <div class="row mb-4" id="functionField">
-            <div class="col">
-              <div class="form-outline">
-                <%= form.label :phone, "Telefone", class: "form-label" %>
-                <%= form.text_field :phone, id: 'phoneNumberInput', class: 'form-control', oninput: "handleInputChange()" %>
-              </div>
-            </div>
-
-            <div class="col">
-              <div class="form-outline">
-                <%= form.label :function, "Cargo", class: "form-label" %>
-                <%= form.text_field :function, id: 'form7Example4', class: 'form-control' %>
-              </div>
-            </div>
-
             <div class="col">
               <div class="form-outline">
                 <%= form.label :cpf, "CPF", class: "form-label" %>
                 <%= form.text_field :cpf, id: 'form7Example4', class: 'form-control' %>
               </div>
             </div>
+          </div>
+
+          <!-- Campos para Cargo -->
+          <div class="row mb-4" id="functionField">
+            <div class="col">
+              <div class="form-outline">
+                <%= form.label :function, "Cargo", class: "form-label" %>
+                <%= form.text_field :function, id: 'form7Example4', class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <!-- Campo para o nome da empresa -->
+          <div class="form-outline mb-4" id="companyIDField">
+            <%= form.label :companyID, "Nome da Empresa", class: "form-label" %>
+            <%= form.text_field :companyID, id: 'form7Example3', class: 'form-control' %>
+          </div>
+
+          <!-- Foto do colaborador -->
+          <div class="form-outline mb-4">
+            <%= form.label :profile_picture, "Foto do Colaborador", class: "form-label" %>
+            <%= form.file_field :profile_picture, id: 'form7Example7', class: 'form-control' %>
           </div>
 
           <!-- Checkbox para limitar o acesso -->
@@ -122,16 +130,11 @@
             <% end %>
           </div>
 
-          <!-- Foto do colaborador -->
-          <div class="form-outline mb-4">
-            <%= form.label :profile_picture, "Foto do Colaborador", class: "form-label" %>
-            <%= form.file_field :profile_picture, id: 'form7Example7', class: 'form-control' %>
-          </div>
-
           <!-- Botões de Submit e Back -->
           <div class="d-flex">
+
             <div class="form-group mr-2">
-              <%= form.submit 'Cadastrar Colaborador', class: 'btn btn-primary' %>
+              <%= form.submit 'Salvar', class: 'btn btn-primary' %>
             </div>
 
             <div class="form-group">

@@ -38,8 +38,8 @@
             <% end %>
             <div class="card-body">
               <p><strong>Tipo do Locker:</strong> <%= keylocker.lockertype %></p>
-              <p><strong>Proprietário do Locker:</strong> <%= keylocker.owner %></p>
               <p><strong>Nome do Locker:</strong> <%= keylocker.nameDevice %></p>
+              <p><strong>Proprietário do Locker:</strong> <%= keylocker.owner %></p>
               <p><strong>CNPJ ou CPF:</strong> <%= keylocker.cnpjCpf %></p>
               <p><strong>Serial do Locker:</strong> <%= keylocker.serial %></p>
               <p><strong>Quantidade de NichoS:</strong> <%= keylocker.qtd %></p>
@@ -51,15 +51,6 @@
                     <i class="lock-icon <%= keylocker.status == 'bloqueado' ? 'fa fa-lock' : 'fa fa-unlock' %>"></i>
                     <%= keylocker.status %>
                   </button>
-              
-                  <!-- Botão para abrir/fechar porta -->
-                  <%= form_with url: api_v1_toggle_door_path, method: :post, class: "d-grid" do %>
-                    <%= hidden_field_tag :serial, keylocker.serial %>
-                    <button type="submit" class="btn <%= keylocker.door == 'fechado' ? 'btn-danger' : 'btn-success' %>">
-                      <i class="fa <%= keylocker.door == 'fechado' ? 'fa-door-closed' : 'fa-door-open' %>"></i>
-                      <%= keylocker.door == 'fechado' ? 'Abrir Porta' : 'Fechar Porta' %>
-                    </button>
-                  <% end %>
                 </div>
               <% end %>
               

@@ -61,7 +61,7 @@ class DeliveriesController < ApplicationController
         normalized_query = query.gsub(/\D/, '')  
         puts "Consulta por telefone (normalizado): #{normalized_query}"
         # Realiza a busca no banco de dados
-        Employee.find_by('REPLACE(phone, " ", "") = ?', normalized_query)
+        Employee.find_by("REGEXP_REPLACE(phone, '[^0-9]', '', 'g') = ?", normalized_query)
       end
     end
 
@@ -102,4 +102,4 @@ class DeliveriesController < ApplicationController
         :serial  # Caso o serial também precise ser permitido
       )
     end
-end 
+end

@@ -1,3 +1,16 @@
+<style>
+  .btn-custom-orange {
+    background-color: #ff6600 !important;
+    border-color: #ff6600 !important;
+    color: #fff !important;
+  }
+
+  .btn-custom-orange:hover {
+    background-color: #e65c00 !important;
+    border-color: #e65c00 !important;
+  }
+</style>
+
 <p class="alert alert-success"><%= notice %></p>
 
 <div id="page-wrapper">
@@ -34,15 +47,15 @@
       <div class="card p-4 mb-4">
         <h3>Detalhes do Locker</h3>
         <% @users.each do |user| %> <!-- Itera sobre os usuários associados -->
-          <p><strong>Nome:</strong> <%= user.name %> <%= user.lastname %></p>
-          <p><strong>Email:</strong> <%= user.email %></p>
+          <p><strong>Adm do Locker:</strong> <%= user.name %> <%= user.lastname %></p>
+          <p><strong>Email do Adm:</strong> <%= user.email %></p>
         <% end %>
         <p><strong>Tipo do locker:</strong> <%= @keylocker.lockertype %></p>
-        <p><strong>Proprietário do locker:</strong> <%= @keylocker.owner %></p>
         <p><strong>Nome do dispositivo:</strong> <%= @keylocker.nameDevice %></p>
+        <p><strong>Proprietário do locker:</strong> <%= @keylocker.owner %></p>
         <p><strong>CNPJ ou CPF:</strong> <%= @keylocker.cnpjCpf %></p>
         <p><strong>Serial do locker:</strong> <%= @keylocker.serial %></p>
-        <p><strong>Quantidade de NichoS:</strong> <%= @keylocker.qtd %></p>
+        <p><strong>Quantidade de Nichos:</strong> <%= @keylocker.qtd %></p>
         <p>
           <strong>Status:</strong>
           <button class="btn <%= @keylocker.status == 'bloqueado' ? 'btn-danger' : 'btn-primary' %>">
@@ -67,15 +80,36 @@
         <% end %>
 
           <% if @keylocker.lockertype == "Armário de chaves" %>
+          <%= form_with url: api_v1_toggle_door_path, method: :post, class: "d-grid" do %>
+            <button type="submit" class="btn <%= @keylocker.door == 'fechado' ? 'btn-custom-orange' : 'btn-success' %>">
+              <i class="fa <%= @keylocker.door == 'fechado' ? 'fa-door-closed' : 'fa-door-open' %>"></i>
+              <%= @keylocker.door == 'fechado' ? 'Abrir Porta' : 'Fechar Porta' %>
+            </button>
+          <% end %>
             
           <% elsif @keylocker.lockertype == "Armário de encomendas" %>
           <%= link_to generate_qr_keylocker_path(@keylocker), target: '_blank', class: 'btn btn-success' do %>
             <i class="fa fa-qrcode"></i> Gerar QR Code Delivery
           <% end %>
+
+          <!-- Botão para abrir/fechar porta -->
+          <%= form_with url: api_v1_toggle_door_path, method: :post, class: "d-grid" do %>
+            <button type="submit" class="btn <%= @keylocker.door == 'fechado' ? 'btn-custom-orange' : 'btn-success' %>">
+              <i class="fa <%= @keylocker.door == 'fechado' ? 'fa-door-closed' : 'fa-door-open' %>"></i>
+              <%= @keylocker.door == 'fechado' ? 'Abrir Porta' : 'Fechar Porta' %>
+            </button>
+          <% end %>
             
           <% elsif @keylocker.lockertype == "Guarda Volume" %>
           <%= link_to generate_qr_delivery_keylocker_path(@keylocker), target: '_blank', class: 'btn btn-warning' do %>
             <i class="fa fa-qrcode"></i> Gerar QR Code Luggage
+          <% end %>
+          <!-- Botão para abrir/fechar porta -->
+          <%= form_with url: api_v1_toggle_door_path, method: :post, class: "d-grid" do %>
+            <button type="submit" class="btn <%= @keylocker.door == 'fechado' ? 'btn-custom-orange' : 'btn-success' %>">
+              <i class="fa <%= @keylocker.door == 'fechado' ? 'fa-door-closed' : 'fa-door-open' %>"></i>
+              <%= @keylocker.door == 'fechado' ? 'Abrir Porta' : 'Fechar Porta' %>
+            </button>
           <% end %>
         <% end %>
       </div>
@@ -97,8 +131,8 @@
                 <td><strong><%= index + 1 %></strong></td>
                 <td><%= info.object.presence || "Nenhum objeto" %></td>
                 <td>
-                  <span class="badge <%= info.empty == 1 ? 'badge-danger' : 'badge-success' %>">
-                    <%= info.empty == 1 ? 'Ocupado' : 'Livre' %>
+                  <span class="badge <%= info.empty == 1 ? 'badge-success' : 'badge-danger'%>">
+                    <%= info.empty == 1 ? 'Presente' : 'Ausente' %>
                   </span>
                 </td>
               </tr>

@@ -62,11 +62,6 @@
                         </p>
 
                         <p>
-                            <strong>Empresa:</strong>
-                            <%= employee.companyID %>
-                        </p>
-
-                        <p>
                             <strong>PIN:</strong>
                             <%= employee.PIN %>
                         </p>
@@ -79,6 +74,11 @@
                         <p>
                             <strong>Cargo:</strong>
                             <%= employee.function %>
+                        </p>
+
+                        <p>
+                            <strong>Empresa:</strong>
+                            <%= employee.companyID %>
                         </p>
 
                         <% if current_user.admin? %>

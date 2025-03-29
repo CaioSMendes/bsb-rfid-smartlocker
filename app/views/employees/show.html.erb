@@ -59,30 +59,15 @@
             </p>
 
             <p>
+              <strong>Telefone:</strong>
+              <%= @employee.phone %>
+            </p>
+
+            <p>
               <strong>Email:</strong>
               <%= @employee.email %>
             </p>
 
-            <p>
-              <strong>Empresa:</strong>
-              <%= @employee.companyID %>
-            </p>
-                  
-            <p>
-              <strong>Telefone:</strong>
-              <%= @employee.phone %>
-            </p>
-                  
-            <p>
-              <strong>Cargo:</strong>
-              <%= @employee.function %>
-            </p>
-
-            <p>
-              <strong>CPF:</strong>
-              <%= @employee.cpf %>
-            </p>
-                  
             <p>
               <strong>Código Pin:</strong>
               <%= @employee.PIN %>
@@ -96,7 +81,7 @@
                   N/A
                 <% end %>            
             </p>
-                  
+
             <p>
               <strong>ID Card:</strong>
               <% if @employee.cardRFID.present? %>
@@ -104,6 +89,21 @@
               <% else %>
                 N/A
               <% end %>
+            </p>
+
+            <p>
+              <strong>CPF:</strong>
+              <%= @employee.cpf %>
+            </p>
+
+            <p>
+              <strong>Cargo:</strong>
+              <%= @employee.function %>
+            </p>
+
+            <p>
+              <strong>Empresa:</strong>
+              <%= @employee.companyID %>
             </p>
                   
             <p>

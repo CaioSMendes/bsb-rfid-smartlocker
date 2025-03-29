@@ -15,6 +15,8 @@ gem 'i18n'
 gem 'rack-cors'
 gem 'rqrcode'
 gem 'activesupport', '7.0.8'
+gem 'chartkick'
+gem 'groupdate' 
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.8"

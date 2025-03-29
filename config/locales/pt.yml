@@ -28,6 +28,8 @@ pt:
               taken: "já está em uso"
         key_usage:
           attributes:
+            email:
+              blank: "O campo e-mail não pode ficar em branco"
             employee:
               required: "Funcionário é obrigatório"
             employee_id:
@@ -42,3 +44,19 @@ pt:
               required: "Hora da ação é obrigatória"
     messages:
       record_invalid: "O registro não é válido"
+
+  devise:
+    passwords:
+      new:
+        title: "Esqueci sua senha?"
+        send_instructions: "Instruções de recuperação de senha foram enviadas para seu e-mail."
+      edit:
+        title: "Alterar sua senha"
+        password: "Nova senha"
+        confirm_password: "Confirmar senha"
+        submit: "Alterar senha"
+
+  errors:
+    messages:
+      not_saved: "Não foi possível salvar"
+      blank: "não pode ficar em branco"

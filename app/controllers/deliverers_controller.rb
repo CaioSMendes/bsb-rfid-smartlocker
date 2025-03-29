@@ -18,9 +18,9 @@ class DeliverersController < ApplicationController
       puts("create")
       @deliverer = Deliverer.new(deliverer_params)
       @deliverer.pin = generate_unique_pin
-      if params[:deliverer][:serial].present?
-        @deliverer.serial = params[:deliverer][:serial]
-      end
+      #if params[:deliverer][:serial].present?
+        #@deliverer.serial = params[:deliverer][:serial]
+      #end
       logger.debug("Parametro: #{@deliverer.inspect}")
       if @deliverer.save
         send_sms(@deliverer.phone, "Brasilia RFID ! Para concluir o cadastro digite o seu PIN de de validacao: #{@deliverer.pin}")
@@ -123,6 +123,6 @@ class DeliverersController < ApplicationController
     end
   
     def deliverer_params
-      params.require(:deliverer).permit(:name, :serial, :lastname, :phone, :email, :cpf, :pin, :keylocker_id)
+      params.require(:deliverer).permit(:name, :lastname, :phone, :email, :cpf, :pin, :keylocker_id)
     end
 end  

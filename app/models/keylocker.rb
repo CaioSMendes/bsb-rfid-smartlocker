@@ -7,6 +7,7 @@ class Keylocker < ApplicationRecord
   has_many :users, through: :user_lockers
   has_many :keylockerinfos, dependent: :destroy
   has_many :deliverers
+  has_many :logs
   accepts_nested_attributes_for :keylockerinfos, allow_destroy: true
   
   has_many :employees_keylockers

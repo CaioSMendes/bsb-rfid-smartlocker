@@ -1,18 +1,27 @@
 <style>
   * {
     box-sizing: border-box;
-  }
-
-  body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
   }
 
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7fc;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
   .container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 100%;
     max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
   }
 
   .logo {
@@ -21,12 +30,15 @@
   }
 
   .logo img {
-    max-width: 250px;
+    max-width: 200px;
     height: auto;
   }
 
   h2 {
     text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 24px;
   }
 
   .field {
@@ -34,38 +46,69 @@
   }
 
   .field label {
-    display: block;
+    font-size: 14px;
+    color: #666;
     margin-bottom: 5px;
+    display: block;
   }
 
   .field input[type="email"],
   .field input[type="password"] {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+  }
+
+  .field input[type="email"]:focus,
+  .field input[type="password"]:focus {
+    border-color: #ff6400;
+    outline: none;
   }
 
   .actions {
     text-align: center;
   }
 
-
-  @media (max-width: 600px) {
-    .container {
-      padding: 10px;
-    }
-  }
-
   .actions .cadastrar-button {
-    padding: 10px 20px;
+    padding: 12px 20px;
     font-size: 16px;
     background-color: #ff6400;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+
+  .actions .cadastrar-button:hover {
+    background-color: #ff5300;
+  }
+
+  .form-check {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .form-check input {
+    margin-right: 8px;
+  }
+
+  @media (max-width: 600px) {
+    .container {
+      padding: 20px;
+    }
+
+    h2 {
+      font-size: 20px;
+    }
   }
 </style>
 
@@ -87,22 +130,16 @@
     </div>
 
     <% if devise_mapping.rememberable? %>
-    <div class="field form-check">
-      <%= f.check_box :remember_me, class: 'form-check-input' %>
-      <%= label_tag 'user_remember_me', 'Lembrar-me', class: 'form-check-label' %>
-    </div>
-  <% end %>
+      <div class="field form-check">
+        <%= f.check_box :remember_me, class: 'form-check-input' %>
+        <%= label_tag 'user_remember_me', 'Lembrar-me', class: 'form-check-label' %>
+      </div>
+    <% end %>
 
     <div class="actions">
       <%= f.submit "Entrar", class: "cadastrar-button" %>
     </div>
   <% end %>
-  <% if Rails.env.development? %>
-    <p>Estou no ambiente de desenvolvimento</p>
-  <% elsif Rails.env.test? %>
-    <p>Estou no ambiente de teste</p>
-  <% elsif Rails.env.production? %>
-    <p>Estou no ambiente de produção</p>
-  <% end %>
+
   <%= render "devise/shared/links" %>
 </div>

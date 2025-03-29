@@ -17,6 +17,14 @@ class KeyUsagesController < ApplicationController
   
     # Exibindo no console os logs recuperados para depuração
     puts "Logs encontrados para o usuário #{current_user.email}:"
+
+     # Verificando se há movimentação de log
+     @latest_logs = @logs.limit(5)
+
+    if @latest_logs.any?
+      # Exemplo de notificação
+      flash[:notice] = "Você tem novos logs de movimentação!"
+    end
   
     # Criando um array de logs com alertas
     @logs_with_alert = @logs.map do |log|

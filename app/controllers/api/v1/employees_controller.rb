@@ -487,11 +487,11 @@ module Api
           current_char = locker_codes[index] # Novo estado recebido
       
           if prev_char != current_char
-            action = current_char == "1" ? "retirada" : "devolução"
-            status = current_char == "1" ? "Ocupado" : "Livre"
+            action = current_char == "1" ? "devolução" : "retirada"
+            status = current_char == "1" ? "Ausente" : "Presente"
             comments = current_char == "1" ? 
-                        "Nicho #{keylocker_info.posicion} ocupado por #{employee.email}" : 
-                        "Nicho #{keylocker_info.posicion} liberado por #{employee.email}"
+                        "Nicho #{keylocker_info.posicion} objeto entregue por #{employee.email}" : 
+                        "Nicho #{keylocker_info.posicion} objeto retirado por #{employee.email}"
 
             locker_object = keylocker_info.object
             puts "🔹 Objeto a ser salvo  #{locker_object}"

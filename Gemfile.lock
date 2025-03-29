@@ -89,6 +89,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    chartkick (5.1.4)
     chunky_png (1.4.0)
     concurrent-ruby (1.2.2)
     crass (1.0.6)
@@ -114,6 +115,8 @@ GEM
     ffi (1.16.3)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    groupdate (6.5.1)
+      activesupport (>= 7)
     http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
@@ -310,10 +313,12 @@ DEPENDENCIES
   bootsnap
   bootstrap (~> 5.3.2)
   capybara
+  chartkick
   debug
   devise
   dockerfile-rails (>= 1.6)
   faker
+  groupdate
   i18n
   importmap-rails
   jbuilder
