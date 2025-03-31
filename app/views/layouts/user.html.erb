@@ -146,9 +146,11 @@
         } else {
           badge.hide();  // Esconde o contador se não houver notificações
         }
+        let newNotifications = $(data).find("#notificacoes-menu").html();
+        notificacoesMenu.html(newNotifications);
       });
     }
-    setInterval(atualizarContadorNotificacoes, 1000);
+    setInterval(atualizarContadorNotificacoes, 5000);
   </script>
   </body>
 </html>

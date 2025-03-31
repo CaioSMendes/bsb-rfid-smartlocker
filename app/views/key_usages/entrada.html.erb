@@ -27,7 +27,6 @@
                   <th><i class="fas fa-cogs"></i> Objeto</th>
                   <th><i class="fas fa-box-open"></i> Nome do Locker</th>
                   <th><i class="fas fa-lock"></i> Serial do Locker</th>
-                  <th><i class="fas fa-check-circle"></i> Status</th>
                   <th><i class="fas fa-comment-dots"></i> Comentários</th>
                   <th><i class="fas fa-exclamation-triangle"></i> Alerta</th> <!-- Nova coluna para o alerta -->
                 </tr>
@@ -41,12 +40,11 @@
                     <td><%= log_info[:log].locker_object %></td>
                     <td><%= log_info[:log].locker_name %></td>
                     <td><%= log_info[:log].locker_serial %></td>
-                    <td><%= log_info[:log].status %></td>
                     <td><%= log_info[:log].comments %></td>
                     <td>
                       <% if log_info[:log].action == 'retirada' %>
                         <% if log_info[:alert] %>  <!-- Verifica se o alerta deve ser exibido -->
-                          <button class="btn btn-danger">“Objeto Retirado</button>
+                          <button class="btn btn-danger">Objeto Retirado</button>
                         <% end %>
                       <% elsif log_info[:log].action == 'devolução' %>
                         <button class="btn btn-success">Objeto Devolvido</button>

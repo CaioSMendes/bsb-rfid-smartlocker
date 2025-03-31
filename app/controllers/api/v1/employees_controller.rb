@@ -488,7 +488,7 @@ module Api
       
           if prev_char != current_char
             action = current_char == "1" ? "devolução" : "retirada"
-            status = current_char == "1" ? "Ausente" : "Presente"
+            status = current_char == "1" ? "Presente" : "Ausente" 
             comments = current_char == "1" ? 
                         "Nicho #{keylocker_info.posicion} objeto entregue por #{employee.email}" : 
                         "Nicho #{keylocker_info.posicion} objeto retirado por #{employee.email}"

@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
                  .where(employees: { user_id: current_user.id })
                  .where("logs.id > ?", last_seen_id)
                  .order(created_at: :desc)
-                 .limit(10) # Mantém no máximo 10 notificações exibidas
+                 .limit(5) # Mantém no máximo 10 notificações exibidas
   
       # Cria mensagens formatadas
       @notifications = @logs.map do |log|
