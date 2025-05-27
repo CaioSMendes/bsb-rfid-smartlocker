@@ -3,8 +3,8 @@ I18n.locale = :pt
 module Api
   module V1
     class EmployeesController < ApplicationController
-      skip_before_action :verify_authenticity_token, only: [:list_employees, :check_access, :control_locker_key, :control_exit_keypad, :control_exit_card, :locker_security, :toggle_door, :employees_by_keylocker, :process_locker_code, :check_card_access, :check_keypad_access, :employees_by_keylocker_card,:information_locker, :esp8288params, :check_user]
-      skip_before_action :authenticate_user!, only: [:list_employees, :check_access, :control_locker_key, :control_exit_keypad, :control_exit_card, :locker_security, :toggle_door, :employees_by_keylocker, :process_locker_code, :check_card_access, :check_keypad_access, :employees_by_keylocker_card, :information_locker, :esp8288params, :check_user ]
+      skip_before_action :verify_authenticity_token, only: [:list_employees, :check_access, :control_locker_key, :control_exit_keypad, :control_exit_card, :locker_security, :toggle_door, :employees_by_keylocker, :process_locker_code, :check_card_access, :check_keypad_access, :employees_by_keylocker_card,:information_locker, :esp8288params, :check_user, :check_employee_access]
+      skip_before_action :authenticate_user!, only: [:list_employees, :check_access, :control_locker_key, :control_exit_keypad, :control_exit_card, :locker_security, :toggle_door, :employees_by_keylocker, :process_locker_code, :check_card_access, :check_keypad_access, :employees_by_keylocker_card, :information_locker, :esp8288params, :check_user, :check_employee_access] 
 
       # Define a localização padrão como português do Brasil
       before_action :set_locale
@@ -12,6 +12,30 @@ module Api
       def index
         @employees = Employee.all
         render json: @employees
+      end
+
+      def check_employee_access
+        serial = params[:serial]
+
+        # Busca o Keylocker pelo serial
+        keylocker = Keylocker.find_by(serial: serial)
+
+        if keylocker.nil?
+          render json: { status: "ERROR", message: "Keylocker não encontrado" }, status: :not_found
+          return
+        end
+
+       
+
+        employees = keylocker.employees
+
+        render json: {
+          status: "SUCCESS",
+          message: "Funcionários relacionados ao Keylocker com serial #{serial}",
+          data: employees.as_json(only: [
+            :name, :lastname, :pswdSmartlocker, :cardRFID
+          ])
+        }, status: :ok
       end
 
       def list_employees

@@ -117,6 +117,7 @@ Rails.application.routes.draw do
       post 'check_user', to: 'employees#check_user'
       post 'toggle_door', to: 'employees#toggle_door'
       get '/check_card_access', to: 'employees#check_card_access'
+      get '/check_employee_access', to: 'employees#check_employee_access'
       get '/check_keypad_access', to: 'employees#check_keypad_access'
       get '/:serial/employees', to: 'employees#employees_by_keylocker_card'
       post 'lockers/update_positions', to: 'employees#process_locker_code'
