@@ -24,6 +24,6 @@ class Keylocker < ApplicationRecord
   private
 
   def generate_serial
-    self.serial = SecureRandom.alphanumeric(10).upcase
+    self.serial ||= SecureRandom.alphanumeric(10).upcase
   end
 end

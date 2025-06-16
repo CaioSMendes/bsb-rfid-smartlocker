@@ -12,57 +12,58 @@
   </div>
 </div>
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-12"> <!-- Garantir que a linha ocupe toda a largura disponível -->
-      <div class="right_col mt-3" role="main">
-        <div class="row">
-          <div class="table-responsive">
-            <table class="table table-bordered table-striped table-hover">
-              <thead class="thead-dark">
-                <tr>
-                  <th><i class="fas fa-user"></i> Colaborador</th>
-                  <th><i class="fas fa-calendar-alt"></i> Data e Hora</th>
-                  <th><i class="fas fa-clipboard-check"></i> Ação</th>
-                  <th><i class="fas fa-cogs"></i> Objeto</th>
-                  <th><i class="fas fa-box-open"></i> Nome do Locker</th>
-                  <th><i class="fas fa-lock"></i> Serial do Locker</th>
-                  <th><i class="fas fa-comment-dots"></i> Comentários</th>
-                  <th><i class="fas fa-exclamation-triangle"></i> Alerta</th> <!-- Nova coluna para o alerta -->
-                </tr>
-              </thead>
-              <tbody>
-                <% @logs_with_alert.each do |log_info| %> <!-- Usando a variável correta @logs_with_alert -->
+<div id="logs_table_container"> <!-- Esse id é importante para o JS -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12"> <!-- Garantir que a linha ocupe toda a largura disponível -->
+        <div class="right_col mt-3" role="main">
+          <div class="row">
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped table-hover">
+                <thead class="thead-dark">
                   <tr>
-                    <td><%= log_info[:log].employee.name %> <%= log_info[:log].employee.lastname %></td>
-                    <td><%= log_info[:log].timestamp.strftime('%d/%m/%Y %H:%M:%S') %></td>
-                    <td><%= log_info[:log].action %></td>
-                    <td><%= log_info[:log].locker_object %></td>
-                    <td><%= log_info[:log].locker_name %></td>
-                    <td><%= log_info[:log].locker_serial %></td>
-                    <td><%= log_info[:log].comments %></td>
-                    <td>
-                      <% if log_info[:log].action == 'retirada' %>
-                        <% if log_info[:alert] %>  <!-- Verifica se o alerta deve ser exibido -->
-                          <button class="btn btn-danger">Objeto Retirado</button>
-                        <% end %>
-                      <% elsif log_info[:log].action == 'devolução' %>
-                        <button class="btn btn-success">Objeto Devolvido</button>
-                      <% else %>
-                        <%= log_info[:log].action %>  <!-- Caso não seja "retirada" nem "devolução" -->
-                      <% end %>
-                    </td>
+                    <th><i class="fas fa-user"></i> Colaborador</th>
+                    <th><i class="fas fa-calendar-alt"></i> Data e Hora</th>
+                    <th><i class="fas fa-clipboard-check"></i> Ação</th>
+                    <th><i class="fas fa-cogs"></i> Objeto</th>
+                    <th><i class="fas fa-box-open"></i> Nome do Locker</th>
+                    <th><i class="fas fa-lock"></i> Serial do Locker</th>
+                    <th><i class="fas fa-comment-dots"></i> Comentários</th>
+                    <th><i class="fas fa-exclamation-triangle"></i> Alerta</th>
                   </tr>
-                <% end %>
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  <% @logs_with_alert.each do |log_info| %>
+                    <tr>
+                      <td><%= log_info[:log].employee.name %> <%= log_info[:log].employee.lastname %></td>
+                      <td><%= log_info[:log].timestamp.strftime('%d/%m/%Y %H:%M:%S') %></td>
+                      <td><%= log_info[:log].action %></td>
+                      <td><%= log_info[:log].locker_object %></td>
+                      <td><%= log_info[:log].locker_name %></td>
+                      <td><%= log_info[:log].locker_serial %></td>
+                      <td><%= log_info[:log].comments %></td>
+                      <td>
+                        <% if log_info[:log].action == 'retirada' %>
+                          <% if log_info[:alert] %>
+                            <button class="btn btn-danger">Objeto Retirado</button>
+                          <% end %>
+                        <% elsif log_info[:log].action == 'devolução' %>
+                          <button class="btn btn-success">Objeto Devolvido</button>
+                        <% else %>
+                          <%= log_info[:log].action %>
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 
 <div class="text-center mt-3 d-flex justify-content-center">
   <nav aria-label="Page navigation">
@@ -71,3 +72,22 @@
     </ul>
   </nav>
 </div>
+
+<script>
+  function loadLogs() {
+    $.ajax({
+      url: "<%= entrada_key_usages_path %>",
+      dataType: "html",
+      success: function(data) {
+        var html = $('<div>').html(data);
+        var innerContent = html.find('#logs_table_container').html();
+        $('#logs_table_container').html(innerContent);
+      }
+    });
+  }
+
+  $(document).ready(function() {
+    loadLogs(); // carrega logo que abre a página
+    setInterval(loadLogs, 5000); // atualiza a cada 5 segundos
+  });
+</script>

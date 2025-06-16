@@ -1,33 +1,72 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   "true": "foo"
-#
-# To learn more, please read the Rails Internationalization guide
-# available at https://guides.rubyonrails.org/i18n.html.
+pt:
+  date:
+    day_names:
+      - Domingo
+      - Segunda
+      - Terça
+      - Quarta
+      - Quinta
+      - Sexta
+      - Sábado
+    order:
+      - :day
+      - :month
+      - :year
 
-en:
-  hello: "Hello world"
+  time:
+    formats:
+      default: "%d/%m/%Y %H:%M"
+      short: "%H:%M"
+      long: "%d de %B de %Y %H:%M"
+
+  activerecord:
+    errors:
+      models:
+        keylocker:
+          attributes:
+            owner:
+              taken: "já está em uso"
+        key_usage:
+          attributes:
+            email:
+              blank: "O campo e-mail não pode ficar em branco"
+            employee:
+              required: "Funcionário é obrigatório"
+            employee_id:
+              blank: "O campo Employee ID não pode estar em branco"
+            keylocker:
+              required: "Keylocker é obrigatório"
+            keys:
+              required: "Chaves são obrigatórias"
+            status:
+              required: "Status é obrigatório"
+            action_time:
+              required: "Hora da ação é obrigatória"
+    messages:
+      record_invalid: "O registro não é válido"
+
+  devise:
+    registrations:
+      signed_up: "Cadastro realizado com sucesso."
+      updated: "Sua conta foi atualizada com sucesso."
+      destroyed: "Sua conta foi excluída com sucesso."
+
+    passwords:
+      new:
+        title: "Esqueci sua senha?"
+        send_instructions: "Instruções de recuperação de senha foram enviadas para seu e-mail."
+      edit:
+        title: "Alterar sua senha"
+        password: "Nova senha"
+        confirm_password: "Confirmar senha"
+        submit: "Alterar senha"
+
+    failure:
+      not_found_in_database: "E-mail ou senha inválidos."
+
+  errors:
+    messages:
+      not_saved:
+        one: "Não foi possível salvar %{resource} por um erro:"
+        other: "Não foi possível salvar %{resource} por %{count} erros:"
+      blank: "não pode ficar em branco"

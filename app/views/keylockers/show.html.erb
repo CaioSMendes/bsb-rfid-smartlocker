@@ -116,30 +116,47 @@
 
       <!-- Detalhes dos nichos -->
       <h3 class="mb-4">Detalhes dos Nichos</h3>
+      <turbo-frame id="keylockerinfos_table" src="<%= keylockerinfos_reload_keylocker_path(@keylocker) %>">
       <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-          <thead class="thead-dark">
-            <tr>
-              <th>#</th>
-              <th>Objeto</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @keylocker.keylockerinfos.each_with_index do |info, index| %>
+          <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
               <tr>
-                <td><strong><%= index + 1 %></strong></td>
-                <td><%= info.object.presence || "Nenhum objeto" %></td>
-                <td>
-                  <span class="badge <%= info.empty == 1 ? 'badge-success' : 'badge-danger'%>">
-                    <%= info.empty == 1 ? 'Presente' : 'Ausente' %>
-                  </span>
-                </td>
+                <th>#</th>
+                <th>Objeto</th>
+                <th>Status</th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              <% @keylocker.keylockerinfos.each_with_index do |info, index| %>
+                <tr>
+                  <td><strong><%= info.posicion || "Sem posição" %></strong></td>
+                  <td><%= info.object.presence || "Nenhum objeto" %></td>
+                  <td>
+                    <span class="badge <%= info.empty == 1 ? 'badge-success' : 'badge-danger'%>">
+                      <%= info.empty == 1 ? 'Presente' : 'Ausente' %>
+                    </span>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </turbo-frame>
     </div>
   </div>
 </div>
+
+<script>
+  function loadKeylockerinfos() {
+    $.ajax({
+      url: "<%= keylockerinfos_reload_keylocker_path(@keylocker) %>",
+      dataType: "html",
+      success: function(data) {
+        $("#keylockerinfos_table").html(data);
+      }
+    });
+  }
+
+  // Atualiza a tabela a cada 5 segundos
+  setInterval(loadKeylockerinfos, 5000);
+</script>

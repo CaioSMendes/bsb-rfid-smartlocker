@@ -2,5 +2,46 @@ pt:
   devise:
     sessions:
       signed_in: "Login realizado com sucesso."
-      user:
-        signed_in: "Bem-vindo! Você entrou com sucesso."
+      signed_out: "Logout realizado com sucesso."
+      new:
+        sign_in: "Entrar"
+        forgot_your_password: "Esqueceu sua senha?"
+        remember_me: "Lembrar-me"
+        submit: "Entrar"
+
+    registrations:
+      signed_up: "Cadastro realizado com sucesso."
+      updated: "Sua conta foi atualizada com sucesso."
+      destroyed: "Sua conta foi excluída com sucesso."
+      new:
+        sign_up: "Cadastrar-se"
+
+    passwords:
+      new:
+        title: "Esqueci minha senha"
+        submit: "Enviar instruções de redefinição de senha"
+        send_instructions: "Instruções de recuperação de senha foram enviadas para seu e-mail."
+      edit:
+        title: "Alterar sua senha"
+        password: "Nova senha"
+        confirm_password: "Confirmar nova senha"
+        submit: "Alterar senha"
+      updated: "Sua senha foi alterada com sucesso."
+      send_paranoid_instructions: "Se o seu e-mail existir em nosso sistema, você receberá instruções para redefinir sua senha em instantes."
+
+    confirmations:
+      send_instructions: "Instruções de confirmação foram enviadas para seu e-mail."
+      confirmed: "Sua conta foi confirmada com sucesso."
+
+    failure:
+      not_found_in_database: "E-mail ou senha inválidos."
+      invalid: "E-mail ou senha inválidos."
+      unconfirmed: "Sua conta ainda não foi confirmada."
+      locked: "Sua conta está bloqueada."
+      last_attempt: "Você tem mais uma tentativa antes da sua conta ser bloqueada."
+      already_authenticated: "Você já está autenticado."
+
+  errors:
+    messages:
+      not_saved: "Não foi possível salvar."
+      blank: "não pode ficar em branco."

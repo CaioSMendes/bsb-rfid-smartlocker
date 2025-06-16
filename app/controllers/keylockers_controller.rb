@@ -57,6 +57,11 @@ class KeylockersController < ApplicationController
     end
   end
 
+  def keylockerinfos_reload
+    @keylocker = Keylocker.find(params[:id])
+    render layout: false  # Só renderiza o frame mesmo
+  end
+
   # DELETE /keylockers/1 or /keylockers/1.json
   def destroy
     @keylocker.destroy

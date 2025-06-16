@@ -81,17 +81,16 @@ user = User.create!(
 )
 puts 'User criado'
 
-# Criando 4 keylockers com 8 nichos criativos e diferentes
-
-Keylocker.create!(
+# Admin criando o Keylocker
+locker = admin1.keylockers.create!(
   owner: 'Luiz Reis', 
   nameDevice: 'Brasilia RFID', 
-  cnpjCpf: '12345678909', 
+  cnpjCpf: '27.928.993/0001-12', 
   qtd: 8, 
-  serial: 'SL3SIGJZPK', 
+  serial: 'WEE7JSPHIA', 
   door: 'fechado', 
   status: 'desbloqueado', 
-  lockertype: ['Armário de chaves', 'Armário de encomendas', 'Guarda Volume'].sample,
+  lockertype: 'Armário de chaves',
   keylockerinfos_attributes: [
     { object: 'Notebook Gamer', posicion: 1, empty: 1 },
     { object: 'Celular iPhone 14', posicion: 2, empty: 1 },
@@ -103,7 +102,38 @@ Keylocker.create!(
     { object: 'Fones de ouvido Bose', posicion: 8, empty: 1 }
   ]
 )
+puts 'Locker criado pelo admin'
 
+# Atribuindo o Locker ao User
+user.keylockers << locker
+puts "Locker '#{locker.nameDevice}' atribuído ao usuário '#{user.email}'"
+
+# Criando funcionário já com locker
+locker_for_employee = user.keylockers.sample
+  if locker_for_employee
+    employee = user.create_employee!(
+      name: "Luiz",
+      lastname: "Reis",
+      companyID: "Brasilia RFID",
+      phone: "4599999-8888",
+      email: "luizreis@brasiliarfid.com.br",
+      function: "Operador",
+      PIN: "8A60CA",
+      cpf: "361.904.840-18",
+      pswdSmartlocker: "6205",
+      cardRFID: "816f1948",
+      status: "ativo",
+      delivery: false,
+      enabled: false,
+      keylockers: [locker_for_employee]
+    )
+    puts "Keylocker '#{employee.keylockers.last.nameDevice}' atribuído ao funcionário '#{employee.name}'"
+    puts "Funcionário '#{employee.name} #{employee.lastname}' criado para o usuário '#{user.email}'"
+  else
+    puts "Erro: User '#{user.email}' não tem lockers atribuídos, não foi possível criar o employee"
+  end
+
+# Criando 4 keylockers com 8 nichos criativos e diferentes
 Keylocker.create!(
   owner: 'Empresa A', 
   nameDevice: 'Sao Paulo RFID', 

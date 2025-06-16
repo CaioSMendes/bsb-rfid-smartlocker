@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   post 'deliverers/verify_access', to: 'deliverers#verify_access', as: 'deliverers_verify_access'
   post '/products/save_serial', to: 'products#save_serial'
   mount ActionCable.server => '/cable'
+  get 'key_usages/entrada_reload', to: 'key_usages#entrada_reload', as: :entrada_reload_key_usages
 
   resources :deliveries
   resources :deliverers do
@@ -57,6 +58,7 @@ Rails.application.routes.draw do
     member do
       patch 'toggle_and_save_status'
       get 'generate_qr_delivery'
+      get 'keylockerinfos_reload'
     end
   end
 
