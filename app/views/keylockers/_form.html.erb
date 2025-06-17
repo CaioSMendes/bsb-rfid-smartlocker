@@ -1,7 +1,8 @@
+
 <%= form_with(model: keylocker) do |form| %>
   <% if keylocker.errors.any? %>
     <div class="alert alert-danger">
-      <h2><%= pluralize(keylocker.errors.count, "error") %> prohibited this keylocker from being saved:</h2>
+      <h4><%= pluralize(keylocker.errors.count, "erro") %> impediram o cadastro do locker:</h4>
       <ul>
         <% keylocker.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
@@ -23,10 +24,10 @@
             <%= form.text_field :owner, id: 'form7Example1', class: 'form-control' %>
           </div>
 
-          <!-- Text input para Nome do Locker -->
+          <!-- Text input para Tipo de Armário -->
           <div class="form-outline mb-4">
             <%= form.label :lockertype, "Tipo de Armário", class: "form-label" %>
-            <%= form.select :lockertype, ['Armário  de chaves', 'Armário de encomendas', 'Guarda Volume'], prompt: "Selecione o tipo de armário", id: 'form7Example2', class: 'form-control' %>
+            <%= form.select :lockertype, ['Armário de chaves', 'Armário de encomendas', 'Guarda Volume'], prompt: "Selecione o tipo de armário", id: 'form7Example2', class: 'form-control' %>
           </div>
 
           <!-- Text input para Nome do Locker -->
@@ -41,12 +42,14 @@
             <%= form.text_field :cnpjCpf, id: 'form7Example3', class: 'form-control' %>
           </div>
 
-          <!-- Text input para Quantidade de Nichos -->
+          <!-- Campos Dinâmicos para Nichos -->
           <div class="form-outline mb-4">
-            <%= form.label :qtd, 'Quantidade de Nichos', class: "form-label" %>
-            <%= form.text_field :qtd, id: 'form7Example4', class: 'form-control', oninput: 'updateNiches()' %>
+            <%= form.label :niches, 'Posições (Nichos)', class: "form-label" %>
+            <div id="keylockerinfos-container"></div>
+            <button type="button" class="btn btn-secondary mt-2" onclick="addNiche()">+ Adicionar posição</button>
           </div>
 
+          
           <!-- Placeholder para Nested Attributes de Keylockerinfos -->
           <div id="keylockerinfos-container"></div>
 
@@ -66,30 +69,53 @@
 <% end %>
 
 <script>
-function updateNiches() {
-  var qtd = document.getElementById('form7Example4').value;
-  var container = document.getElementById('keylockerinfos-container');
+let nicheIndex = 0;
 
-  // Limpa o container atual
-  container.innerHTML = '';
+function addNiche() {
+  const container = document.getElementById('keylockerinfos-container');
 
-  // Cria os campos com base na quantidade
-  for (var i = 0; i < qtd; i++) {
-    var nestedFields = `
-      <div class="nested-fields">
-       <div class="form-group mb-4">
-          <label for="keylockerinfos_${i}_posicion">Posição: ${i + 1}</label>
-          <input type="hidden" name="keylocker[keylockerinfos_attributes][${i}][posicion]" 
-            id="keylockerinfos_${i}_posicion" 
-            value="${i + 1}" />
-        </div>
-        <div class="form-group mb-4">
-          <label for="keylockerinfos_${i}_object">Descrição da Posição: ${i + 1}</label>
-          <input type="text" name="keylocker[keylockerinfos_attributes][${i}][object]" id="keylockerinfos_${i}_object" class="form-control">
-        </div>
-      </div>
-    `;
-    container.insertAdjacentHTML('beforeend', nestedFields);
-  }
+  const nicheField = document.createElement('div');
+  nicheField.className = 'nested-fields mb-3 border rounded p-2 position-relative';
+  nicheField.setAttribute('data-index', nicheIndex);
+
+  nicheField.innerHTML = `
+    <div class="form-group">
+      <label>Posição: <span class="position-number">${nicheIndex + 1}</span></label>
+      <input type="hidden" name="keylocker[keylockerinfos_attributes][${nicheIndex}][posicion]" value="${nicheIndex + 1}" />
+      <input type="text" name="keylocker[keylockerinfos_attributes][${nicheIndex}][object]" class="form-control" placeholder="Descrição da Posição">
+    </div>
+    <button type="button" class="btn btn-danger btn-sm position-absolute" style="top: 5px; right: 5px;" onclick="removeNiche(this)">
+      <i class="fas fa-times"></i>
+    </button>
+  `;
+
+  container.appendChild(nicheField);
+  nicheIndex++;
+  updatePositions();
+}
+
+function removeNiche(button) {
+  const nicheField = button.closest('.nested-fields');
+  nicheField.remove();
+  updatePositions();
+}
+
+function updatePositions() {
+  const container = document.getElementById('keylockerinfos-container');
+  const fields = container.querySelectorAll('.nested-fields');
+
+  fields.forEach((field, index) => {
+    field.querySelector('.position-number').innerText = index + 1;
+    field.querySelector('input[type="hidden"]').value = index + 1;
+
+    // Atualiza os name attributes
+    const objectInput = field.querySelector('input[type="text"]');
+    objectInput.name = `keylocker[keylockerinfos_attributes][${index}][object]`;
+
+    const hiddenInput = field.querySelector('input[type="hidden"]');
+    hiddenInput.name = `keylocker[keylockerinfos_attributes][${index}][posicion]`;
+  });
+
+  nicheIndex = fields.length;
 }
 </script>
