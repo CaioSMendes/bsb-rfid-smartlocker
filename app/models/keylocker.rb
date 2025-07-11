@@ -14,6 +14,7 @@ class Keylocker < ApplicationRecord
   has_and_belongs_to_many :employees
   
   before_create :generate_serial
+  before_validation :set_default_status, on: :create
 
   def toggle_and_save_status!
     # Implemente a lógica para alternar e salvar o status no banco de dados
@@ -25,5 +26,9 @@ class Keylocker < ApplicationRecord
 
   def generate_serial
     self.serial ||= SecureRandom.alphanumeric(10).upcase
+  end
+
+  def set_default_status
+    self.status ||= "desbloqueado"
   end
 end

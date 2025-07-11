@@ -68,7 +68,6 @@
         <p><strong>Proprietário do locker:</strong> <%= @keylocker.owner %></p>
         <p><strong>CNPJ ou CPF:</strong> <%= @keylocker.cnpjCpf %></p>
         <p><strong>Serial do locker:</strong> <%= @keylocker.serial %></p>
-        <p><strong>Quantidade de Nichos:</strong> <%= @keylocker.qtd %></p>
         <p>
           <strong>Status:</strong>
           <button class="btn <%= @keylocker.status == 'bloqueado' ? 'btn-danger' : 'btn-success' %>">

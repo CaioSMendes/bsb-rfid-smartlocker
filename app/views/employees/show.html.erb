@@ -51,6 +51,14 @@
               <strong>Email:</strong>
               <%= @employee.email %>
             </p>
+
+             <p>
+              <strong>Status:</strong>
+              <button class="toggle-status-btn btn <%= @employee.status == 'bloqueado' ? 'btn-danger' : 'btn-primary' %>" data-employee-id="<%= @employee.id %>">
+                <i class="lock-icon <%= @employee.status == 'bloqueado' ? 'fa fa-lock' : 'fa fa-unlock' %>"></i>
+                <%= @employee.status %>
+              </button>
+            </p>
           
         <% else %>
             <p>

@@ -24,7 +24,7 @@ module Api
           return
         end
 
-        employees = keylocker.employees
+        employees = keylocker.employees.where(status: 'desbloqueado')
 
         render json: {
           status: "SUCCESS",
