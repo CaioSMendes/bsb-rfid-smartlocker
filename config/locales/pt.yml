@@ -42,6 +42,10 @@ pt:
               required: "Status é obrigatório"
             action_time:
               required: "Hora da ação é obrigatória"
+        user:
+          attributes:
+            email:
+              not_found: "não cadastrado ou colaborador não existe"
     messages:
       record_invalid: "O registro não é válido"
 
@@ -53,7 +57,7 @@ pt:
 
     passwords:
       new:
-        title: "Esqueci sua senha?"
+        title: "Esqueceu sua senha?"
         send_instructions: "Instruções de recuperação de senha foram enviadas para seu e-mail."
       edit:
         title: "Alterar sua senha"

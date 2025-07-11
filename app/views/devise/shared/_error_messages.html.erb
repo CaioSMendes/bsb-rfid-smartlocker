@@ -5,6 +5,15 @@
             count: resource.errors.count,
             resource: resource.class.model_name.human.downcase) %>
     </h2>
-  
+
+    <ul>
+      <% if resource.errors.full_messages.any? %>
+        <% resource.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      <% else %>
+        <li>Usuário ou colaborador não cadastrado.</li>
+      <% end %>
+    </ul>
   </div>
 <% end %>
