@@ -17,6 +17,7 @@ gem 'rqrcode'
 gem 'activesupport', '7.0.8'
 gem 'chartkick'
 gem 'groupdate' 
+gem 'bcrypt', '~> 3.1.7'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.8"

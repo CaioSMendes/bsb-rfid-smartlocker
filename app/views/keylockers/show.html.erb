@@ -11,7 +11,20 @@
   }
 </style>
 
-<p class="alert alert-success"><%= notice %></p>
+<% if @keylocker.status == 'desbloqueado' %>
+  <span class="badge bg-success">
+    <i class="fas fa-unlock"></i> Desbloqueado
+  </span>
+  <p class="alert alert-success"><%= notice %></p>
+<% elsif @keylocker.status == 'bloqueado' %>
+  <span class="badge bg-danger">
+    <i class="fas fa-lock"></i> Bloqueado
+  </span>
+  <p class="alert alert-danger"><%= notice %></p>
+<% else %>
+  <span class="badge bg-secondary">Indefinido</span>
+  <p class="alert alert-warning"><%= notice %></p>
+<% end %>
 
 <div id="page-wrapper">
   <div class="container-fluid">
@@ -58,7 +71,7 @@
         <p><strong>Quantidade de Nichos:</strong> <%= @keylocker.qtd %></p>
         <p>
           <strong>Status:</strong>
-          <button class="btn <%= @keylocker.status == 'bloqueado' ? 'btn-danger' : 'btn-primary' %>">
+          <button class="btn <%= @keylocker.status == 'bloqueado' ? 'btn-danger' : 'btn-success' %>">
             <i class="fas <%= @keylocker.status == 'bloqueado' ? 'fa-lock' : 'fa-unlock' %>"></i>
             <%= @keylocker.status%>
           </button>

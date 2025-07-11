@@ -310,6 +310,7 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport (= 7.0.8)
+  bcrypt (~> 3.1.7)
   bootsnap
   bootstrap (~> 5.3.2)
   capybara

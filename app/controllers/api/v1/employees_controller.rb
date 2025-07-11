@@ -16,7 +16,6 @@ module Api
 
       def check_employee_access
         serial = params[:serial]
-
         # Busca o Keylocker pelo serial
         keylocker = Keylocker.find_by(serial: serial)
 
@@ -24,8 +23,6 @@ module Api
           render json: { status: "ERROR", message: "Keylocker não encontrado" }, status: :not_found
           return
         end
-
-       
 
         employees = keylocker.employees
 
@@ -544,13 +541,18 @@ module Api
       end
       
       
-      def check_card_access
+     def check_card_access
         serial = params[:serial]
-        snh_card_usr = params[:SNH_RFID_USR]  # Altere para SNH_KEYPAD_USR, já que é o campo enviado pelo parâmetro
-      
+        snh_card_usr = params[:SNH_CARD_USR]&.strip
+
+        puts "Params recebidos: #{params.inspect}"
+        puts "Serial: #{serial.inspect}"
+        puts "SNH_RFID_USR: #{snh_card_usr.inspect}"
+
+
         # Encontra o Keylocker pelo serial
         keylocker = Keylocker.find_by(serial: serial)
-      
+
         # Retorna erro se o keylocker não for encontrado ou estiver bloqueado
         if keylocker.nil?
           render json: { status: 'Keylocker não encontrado' }, status: :not_found
@@ -559,20 +561,26 @@ module Api
           render json: { status: 'Locker está bloqueado' }, status: :unauthorized
           return
         end
-      
+
         # Verifica se o cartão RFID corresponde ao funcionário
         employee = Employee.find_by(cardRFID: snh_card_usr)
-      
-        # Verifica se o Employee foi encontrado e se o cartão RFID é válido
+
+        # Verifica se o employee foi encontrado
         if employee.nil?
-          render json: { status: 'Funcionário não encontrado ou cartão RFID inválido' }, status: :unauthorized
+          render json: { status: 'Funcionário não encontrado' }, status: :unauthorized
           return
-        else
-          puts "Employee cartão RFID encontrado: #{employee.inspect}"
         end
-      
+
+        # Verifica se o employee está bloqueado
+        if employee.status == 'bloqueado'
+          render json: { status: 'Funcionário bloqueado' }, status: :unauthorized
+          return
+        end
+
+        puts "Employee cartão RFID encontrado: #{employee.inspect}"
+
         # Verifica se o Employee tem permissão para acessar o keylocker
-        if keylocker && employee && employee.keylockers.include?(keylocker)
+        if employee.keylockers.include?(keylocker)
           # Salva o employee na sessão
           session[:employee] = {
             id: employee.id,
@@ -582,7 +590,7 @@ module Api
             email: employee.email
           }
           puts "Sessão salva com sucesso! Employee: #{session[:employee]}"
-      
+
           # Verifica horários de trabalho
           if employee.workdays.exists? && employee.workdays.any?(&:enabled)
             if employee_working_now?(employee)
@@ -597,6 +605,7 @@ module Api
           render json: { status: 'Acesso não autorizado ou credenciais inválidas' }, status: :unauthorized
         end
       end
+
       
       def check_keypad_access
         serial = params[:serial]
@@ -613,13 +622,25 @@ module Api
           render json: { status: 'Locker está bloqueado' }, status: :unauthorized
           return
         end
-      
+
         # Encontra o Employee pela senha do Smartlocker
         employee = Employee.find_by(pswdSmartlocker: snh_keypad_usr)
         puts "Employee encontrado: #{employee.inspect}"
-      
+
+        # Verifica se o Employee foi encontrado
+        if employee.nil?
+          render json: { status: 'Funcionário não encontrado' }, status: :unauthorized
+          return
+        end
+
+        # Verifica se o Employee está bloqueado
+        if employee.status == 'bloqueado'
+          render json: { status: 'Funcionário bloqueado' }, status: :unauthorized
+          return
+        end
+
         # Verifica se o Employee é autorizado a acessar o keylocker
-        if keylocker && employee && employee.keylockers.include?(keylocker)
+        if employee.keylockers.include?(keylocker)
           # Salva o employee na sessão
           session[:employee] = {
             id: employee.id,
@@ -644,7 +665,6 @@ module Api
           render json: { status: 'Acesso não autorizado ou credenciais inválidas' }, status: :unauthorized
         end
       end
-      
 
       def check_access
         # Determina o serial e a credencial (pode ser RFID ou senha)
