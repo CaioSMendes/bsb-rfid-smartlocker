@@ -1,7 +1,7 @@
 class Employee < ApplicationRecord
   before_create :set_default_status
   before_save :normalize_phone
-  #before_validation :set_default_status, on: :create
+  before_validation :set_default_status, on: :create
   has_many :workdays, dependent: :destroy
   belongs_to :user
   has_and_belongs_to_many :keylockers
@@ -34,7 +34,7 @@ class Employee < ApplicationRecord
     end
   end
 
-  #def set_default_status
-    #self.status ||= "desbloqueado"
-  #end
+  def set_default_status
+    self.status ||= "desbloqueado"
+  end
 end
