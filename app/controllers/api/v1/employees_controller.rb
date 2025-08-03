@@ -3,8 +3,8 @@ I18n.locale = :pt
 module Api
   module V1
     class EmployeesController < ApplicationController
-      skip_before_action :verify_authenticity_token, only: [:list_employees, :check_access, :control_locker_key, :control_exit_keypad, :control_exit_card, :locker_security, :toggle_door, :employees_by_keylocker, :process_locker_code, :check_card_access, :check_keypad_access, :employees_by_keylocker_card,:information_locker, :esp8288params, :check_user, :check_employee_access]
-      skip_before_action :authenticate_user!, only: [:list_employees, :check_access, :control_locker_key, :control_exit_keypad, :control_exit_card, :locker_security, :toggle_door, :employees_by_keylocker, :process_locker_code, :check_card_access, :check_keypad_access, :employees_by_keylocker_card, :information_locker, :esp8288params, :check_user, :check_employee_access] 
+      skip_before_action :verify_authenticity_token, only: [:authenticate_c72_app, :list_employees, :check_access, :control_locker_key, :control_exit_keypad, :control_exit_card, :locker_security, :toggle_door, :employees_by_keylocker, :process_locker_code, :check_card_access, :check_keypad_access, :employees_by_keylocker_card,:information_locker, :esp8288params, :check_user, :check_employee_access]
+      skip_before_action :authenticate_user!, only: [:authenticate_c72_app, :list_employees, :check_access, :control_locker_key, :control_exit_keypad, :control_exit_card, :locker_security, :toggle_door, :employees_by_keylocker, :process_locker_code, :check_card_access, :check_keypad_access, :employees_by_keylocker_card, :information_locker, :esp8288params, :check_user, :check_employee_access] 
 
       # Define a localização padrão como português do Brasil
       before_action :set_locale
@@ -12,6 +12,15 @@ module Api
       def index
         @employees = Employee.all
         render json: @employees
+      end
+
+      def authenticate_c72_app
+        employee = Employee.find_by(email: params[:email], pswdSmartlocker: params[:pswdSmartlocker])
+        if employee
+          render json: { message: 'Autenticação bem-sucedida!' }, status: :ok
+        else
+          render json: { message: 'Erro: Email ou RFID incorretos!' }, status: :unauthorized
+        end
       end
 
       def check_employee_access

@@ -54,21 +54,46 @@
 
               <!-- Campos Dinâmicos - Keylocker Infos -->
               <div id="keylockerinfos-container">
-              <% @keylocker.keylockerinfos.each_with_index do |info, index| %>
-                <div class="nested-fields mb-3 border rounded p-2 position-relative" data-index="<%= index %>">
-                  <%= hidden_field_tag "keylocker[keylockerinfos_attributes][#{index}][id]", info.id %>
-                  <div class="form-group">
-                    <label>Posição: <span class="position-number"><%= index + 1 %></span></label>
-                    <%= hidden_field_tag "keylocker[keylockerinfos_attributes][#{index}][posicion]", index + 1 %>
-                    <%= text_field_tag "keylocker[keylockerinfos_attributes][#{index}][object]", info.object, class: "form-control", placeholder: "Descrição da Posição" %>
+                <% @keylocker.keylockerinfos.each_with_index do |info, index| %>
+                  <div class="nested-fields mb-3 border rounded p-2 position-relative" data-index="<%= index %>">
+                    <%= hidden_field_tag "keylocker[keylockerinfos_attributes][#{index}][id]", info.id %>
+
+                    <div class="form-group">
+                      <label>Posição: <span class="position-number"><%= index + 1 %></span></label>
+                      <%= hidden_field_tag "keylocker[keylockerinfos_attributes][#{index}][posicion]", index + 1 %>
+                      <%= text_field_tag "keylocker[keylockerinfos_attributes][#{index}][object]", info.object, class: "form-control", placeholder: "Descrição da Posição" %>
+                    </div>
+
+                    <!-- Tag RFID -->
+                    <div class="form-group">
+                      <label>Tag RFID:</label>
+                      <%= text_field_tag "keylocker[keylockerinfos_attributes][#{index}][tagRFID]", info.tagRFID, class: "form-control", placeholder: "Tag RFID" %>
+                    </div>
+
+                    <!-- ID Interno -->
+                    <div class="form-group">
+                      <label>ID Interno:</label>
+                      <%= text_field_tag "keylocker[keylockerinfos_attributes][#{index}][idInterno]", info.idInterno, class: "form-control", placeholder: "ID Interno" %>
+                    </div>
+
+                    <!-- Descrição -->
+                    <div class="form-group">
+                      <label>Descrição:</label>
+                      <%= text_field_tag "keylocker[keylockerinfos_attributes][#{index}][description]", info.description, class: "form-control", placeholder: "Descrição" %>
+                    </div>
+
+                    <!-- Imagem -->
+                    <div class="form-group">
+                      <label>Imagem:</label>
+                      <%= file_field_tag "keylocker[keylockerinfos_attributes][#{index}][image]", class: "form-control" %>
+                    </div>
+
+                    <button type="button" class="btn btn-danger btn-sm position-absolute" style="top: 5px; right: 5px;" onclick="removeNiche(this)">
+                      <i class="fas fa-times"></i>
+                    </button>
                   </div>
-                  <button type="button" class="btn btn-danger btn-sm position-absolute" style="top: 5px; right: 5px;" onclick="removeNiche(this)">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-              <% end %>
-            </div>
-            
+                <% end %>
+              </div>
 
               <button type="button" class="btn btn-secondary mt-2" onclick="addNiche()">+ Adicionar posição</button>
 
@@ -86,21 +111,49 @@
 </div>
 
 <script>
-let nicheIndex = <%= @keylocker.keylockerinfos.size %>;
+let nicheIndex = 0;
 
 function addNiche() {
   const container = document.getElementById('keylockerinfos-container');
 
   const nicheField = document.createElement('div');
   nicheField.className = 'nested-fields mb-3 border rounded p-2 position-relative';
+  nicheField.setAttribute('data-index', nicheIndex);
 
   nicheField.innerHTML = `
     <div class="form-group">
-      <label>Posição <span class="position-number">${nicheIndex + 1}</span></label>
+      <label>Posição: <span class="position-number">${nicheIndex + 1}</span></label>
       <input type="hidden" name="keylocker[keylockerinfos_attributes][${nicheIndex}][posicion]" value="${nicheIndex + 1}" />
       <input type="text" name="keylocker[keylockerinfos_attributes][${nicheIndex}][object]" class="form-control" placeholder="Descrição da Posição">
     </div>
-    <button type="button" class="btn btn-danger btn-sm position-absolute" style="top: 5px; right: 5px;" onclick="removeNiche(this)">🗑️</button>
+
+    <!-- Novo campo para tagRFID -->
+    <div class="form-group">
+      <label>Tag RFID:</label>
+      <input type="text" name="keylocker[keylockerinfos_attributes][${nicheIndex}][tagRFID]" class="form-control" placeholder="Tag RFID">
+    </div>
+
+    <!-- Novo campo para idInterno -->
+    <div class="form-group">
+      <label>ID Interno:</label>
+      <input type="text" name="keylocker[keylockerinfos_attributes][${nicheIndex}][idInterno]" class="form-control" placeholder="ID Interno">
+    </div>
+
+    <!-- Novo campo para descrição -->
+    <div class="form-group">
+      <label>Descrição:</label>
+      <input type="text" name="keylocker[keylockerinfos_attributes][${nicheIndex}][description]" class="form-control" placeholder="Descrição">
+    </div>
+
+    <!-- Novo campo para imagem -->
+    <div class="form-group">
+      <label>Imagem:</label>
+      <input type="file" name="keylocker[keylockerinfos_attributes][${nicheIndex}][image]" class="form-control">
+    </div>
+
+    <button type="button" class="btn btn-danger btn-sm position-absolute" style="top: 5px; right: 5px;" onclick="removeNiche(this)">
+      <i class="fas fa-times"></i>
+    </button>
   `;
 
   container.appendChild(nicheField);
@@ -110,22 +163,7 @@ function addNiche() {
 
 function removeNiche(button) {
   const nicheField = button.closest('.nested-fields');
-  const idInput = nicheField.querySelector('input[name*="[id]"]');
-  
-  if (idInput) {
-    let destroyInput = nicheField.querySelector('input[name*="[_destroy]"]');
-    if (!destroyInput) {
-      destroyInput = document.createElement('input');
-      destroyInput.type = 'hidden';
-      destroyInput.name = idInput.name.replace('[id]', '[_destroy]');
-      destroyInput.value = '1';
-      nicheField.appendChild(destroyInput);
-    }
-    nicheField.style.display = 'none';
-  } else {
-    nicheField.remove();
-  }
-
+  nicheField.remove();
   updatePositions();
 }
 
@@ -135,17 +173,27 @@ function updatePositions() {
 
   fields.forEach((field, index) => {
     field.querySelector('.position-number').innerText = index + 1;
+    field.querySelector('input[type="hidden"]').value = index + 1;
 
-    const hiddenPos = field.querySelector('input[type="hidden"][name*="[posicion]"]');
-    if (hiddenPos) hiddenPos.value = index + 1;
+    // Atualiza os name attributes
+    const objectInput = field.querySelector('input[name*="[object]"]');
+    objectInput.name = `keylocker[keylockerinfos_attributes][${index}][object]`;
 
-    const objectInput = field.querySelector('input[type="text"]');
-    if (objectInput) objectInput.name = `keylocker[keylockerinfos_attributes][${index}][object]`;
+    const hiddenInput = field.querySelector('input[type="hidden"]');
+    hiddenInput.name = `keylocker[keylockerinfos_attributes][${index}][posicion]`;
 
-    const hiddenIdInput = field.querySelector('input[type="hidden"][name*="[id]"]');
-    if (hiddenIdInput) hiddenIdInput.name = `keylocker[keylockerinfos_attributes][${index}][id]`;
+    // Atualiza os name attributes para os novos campos
+    const tagRFIDInput = field.querySelector('input[name*="[tagRFID]"]');
+    tagRFIDInput.name = `keylocker[keylockerinfos_attributes][${index}][tagRFID]`;
 
-    if (hiddenPos) hiddenPos.name = `keylocker[keylockerinfos_attributes][${index}][posicion]`;
+    const idInternoInput = field.querySelector('input[name*="[idInterno]"]');
+    idInternoInput.name = `keylocker[keylockerinfos_attributes][${index}][idInterno]`;
+
+    const descriptionInput = field.querySelector('input[name*="[description]"]');
+    descriptionInput.name = `keylocker[keylockerinfos_attributes][${index}][description]`;
+
+    const imageInput = field.querySelector('input[name*="[image]"]');
+    imageInput.name = `keylocker[keylockerinfos_attributes][${index}][image]`;
   });
 
   nicheIndex = fields.length;

@@ -7,6 +7,7 @@ class User < ApplicationRecord
   has_many :keylockers, through: :user_lockers
   has_one :employee #funciona
 
+
   has_one :keylocker  # Adicione esta linha
   has_one :address
 

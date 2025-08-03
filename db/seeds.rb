@@ -92,14 +92,14 @@ locker = admin1.keylockers.create!(
   status: 'desbloqueado', 
   lockertype: 'Armário de chaves',
   keylockerinfos_attributes: [
-    { object: 'Notebook Gamer', posicion: 1, empty: 1 },
-    { object: 'Celular iPhone 14', posicion: 2, empty: 1 },
-    { object: 'Câmera Canon EOS', posicion: 3, empty: 1 },
-    { object: 'Kindle Paperwhite', posicion: 4, empty: 1 },
-    { object: 'Tablet Samsung Galaxy', posicion: 5, empty: 1 },
-    { object: 'Smartwatch Apple Watch', posicion: 6, empty: 1 },
-    { object: 'SmartTV Samsung 55"', posicion: 7, empty: 1 },
-    { object: 'Fones de ouvido Bose', posicion: 8, empty: 1 }
+    { object: 'Laptop Dell Inspiron 15', posicion: 1, empty: 1, tagRFID: 'RFID-12345', idInterno: 'ID-001', description: 'Laptop para uso corporativo'},
+    { object: 'Samsung Galaxy S21', posicion: 2, empty: 1, tagRFID: 'RFID-67890', idInterno: 'ID-002', description: 'Celular de última geração'},
+    { object: 'GoPro HERO9 Black', posicion: 3, empty: 1, tagRFID: 'RFID-11223', idInterno: 'ID-003', description: 'Câmera de ação para esportes radicais' },
+    { object: 'iPad Pro 11"', posicion: 4, empty: 1, tagRFID: 'RFID-44556', idInterno: 'ID-004', description: 'Tablet com performance de notebook'},
+    { object: 'Nintendo Switch', posicion: 5, empty: 1, tagRFID: 'RFID-78901', idInterno: 'ID-005', description: 'Console portátil para jogos'},
+    { object: 'Sony WH-1000XM4', posicion: 6, empty: 1, tagRFID: 'RFID-23456', idInterno: 'ID-006', description: 'Fones de ouvido com cancelamento de ruído'},
+    { object: 'Canon EOS 90D', posicion: 7, empty: 1, tagRFID: 'RFID-34567', idInterno: 'ID-007', description: 'Câmera profissional DSLR'},
+    { object: 'Smartwatch Garmin Forerunner 945', posicion: 8, empty: 1, tagRFID: 'RFID-45678', idInterno: 'ID-008', description: 'Relógio inteligente para atletas' }
   ]
 )
 puts 'Locker criado pelo admin'

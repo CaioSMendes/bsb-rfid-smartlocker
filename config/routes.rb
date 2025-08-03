@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :keylockerinfos, only: [:index, :show]
   resources :products
   get 'debug_logs/index'
   get 'email_settings/new'
@@ -131,6 +132,7 @@ Rails.application.routes.draw do
       post 'control_locker_key', to: 'employees#control_locker_key'
       post '/check_access', to: 'employees#check_access'
       get 'list_employees', to: 'employees#list_employees'
+      post 'authenticate_c72_app', to: 'employees#authenticate_c72_app'
 
       resources :keylockers  # Ajuste para o novo nome do controlador
       #post '/auth/sign_in', to: 'authentication#sign_in'

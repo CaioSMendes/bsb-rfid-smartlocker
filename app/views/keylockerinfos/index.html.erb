@@ -1,0 +1,34 @@
+<h1>Keylockerinfos#index</h1>
+<p>Find me in app/views/keylockerinfos/index.html.erb</p>
+
+
+
+<h3>Detalhes dos Nichos</h3>
+
+<table class="table table-bordered table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th>#</th>
+      <th>Objeto</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @keylockerinfos.each_with_index do |info, index| %>
+      <tr>
+        <td><strong><%= info.posicion || "Sem posição" %></strong></td>
+        <td><%= info.object.presence || "Nenhum objeto" %></td>
+        <td>
+          <span class="badge <%= info.empty == 1 ? 'badge-success' : 'badge-danger'%>">
+            <%= info.empty == 1 ? 'Presente' : 'Ausente' %>
+          </span>
+        </td>
+        <td>
+          <%= link_to 'Ver Detalhes', keylockerinfo_path(info), class: 'btn btn-info btn-sm' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
