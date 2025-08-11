@@ -1,7 +1,7 @@
 class KeylockersController < ApplicationController
   before_action :set_keylocker, only: %i[ show edit update destroy ]
   #before_action :authenticate_admin_user! # Certifique-se de ter um método de autenticação de admin
-  skip_before_action :verify_authenticity_token, only: [:toggle_and_save_status]
+  skip_before_action :verify_authenticity_token, only: [:toggle_and_save_status, :update]
   skip_before_action :authenticate_user!, only: [:toggle_and_save_status]
 
   # GET /keylockers or /keylockers.json
@@ -45,17 +45,19 @@ class KeylockersController < ApplicationController
   end
 
   # PATCH/PUT /keylockers/1 or /keylockers/1.json
-  def update
-    respond_to do |format|
-      if @keylocker.update(keylocker_params)
-        format.html { redirect_to keylocker_url(@keylocker), notice: "O Keylocker foi editado." }
-        format.json { render :show, status: :ok, location: @keylocker }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @keylocker.errors, status: :unprocessable_entity }
-      end
+def update
+  logger.debug "Params: #{params.inspect}"  # Adicione isso para ver os parâmetros
+  respond_to do |format|
+    if @keylocker.update(keylocker_params)
+      format.html { redirect_to keylocker_url(@keylocker), notice: "O Keylocker foi editado." }
+      format.json { render :show, status: :ok, location: @keylocker }
+    else
+      format.html { render :edit, status: :unprocessable_entity }
+      format.json { render json: @keylocker.errors, status: :unprocessable_entity }
     end
   end
+end
+
 
   def keylockerinfos_reload
     @keylocker = Keylocker.find(params[:id])
@@ -140,9 +142,14 @@ class KeylockersController < ApplicationController
       # Você pode usar Devise's current_user ou outra lógica personalizada.
     end
 
-    # Only allow a list of trusted parameters through.
     def keylocker_params
-      params.require(:keylocker).permit(:owner, :nameDevice, :cnpjCpf, :qtd, :serial, :lockertype, :status, keylockerinfos_attributes: [:id, :object, :posicion, :_destroy])
+      # Limpar imagens vazias dos nested attributes (opcional e recomendado
+      params.require(:keylocker).permit(
+        :owner, :nameDevice, :cnpjCpf, :qtd, :serial, :lockertype, :status, 
+        keylockerinfos_attributes: [
+          :id, :object, :posicion, :tagRFID, :idInterno, :description, :image, :_destroy
+        ]
+      )
     end
 end
 

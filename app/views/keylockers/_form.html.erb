@@ -1,5 +1,5 @@
 
-<%= form_with(model: keylocker) do |form| %>
+<%= form_with(model: @keylocker, local: false, html: { multipart: true, id: 'keylocker-form' }) do |form| %>
   <% if keylocker.errors.any? %>
     <div class="alert alert-danger">
       <h4><%= pluralize(keylocker.errors.count, "erro") %> impediram o cadastro do locker:</h4>
@@ -70,6 +70,11 @@
 
 <script>
 let nicheIndex = 0;
+
+document.addEventListener("DOMContentLoaded", function() {
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  window.csrfToken = csrfToken;  // Armazena o token CSRF globalmente
+})
 
 function addNiche() {
   const container = document.getElementById('keylockerinfos-container');

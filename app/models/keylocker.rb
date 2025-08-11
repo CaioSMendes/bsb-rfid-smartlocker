@@ -9,7 +9,7 @@ class Keylocker < ApplicationRecord
   has_many :deliverers
   has_many :logs
   accepts_nested_attributes_for :keylockerinfos, allow_destroy: true
-  
+
   has_many :employees_keylockers
   has_and_belongs_to_many :employees
   

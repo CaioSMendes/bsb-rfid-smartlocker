@@ -1,34 +1,90 @@
-<h1>Keylockerinfos#index</h1>
-<p>Find me in app/views/keylockerinfos/index.html.erb</p>
+<p style="color: green"><%= notice %></p>
 
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <ol class="breadcrumb">
+          <li class="active">
+            <h1><i class="fas fa-archive"></i> Meu Inventário</h1>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12"> <!-- Garantir que a linha ocupe toda a largura disponível -->
+      <div class="right_col mt-3" role="main">
+        <div class="row">
+          <% @keylockerinfos.each do |info| %>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3"> <!-- Responsividade para diferentes tamanhos de tela -->
+              <div class="card mb-4">
 
-<h3>Detalhes dos Nichos</h3>
+                <div class="text-center">
+                  <p>
+                    <% if info.image.attached? %>
+                      <%= image_tag info.image, size: '288x288', class: "img-fluid rounded" %>
+                    <% else %>
+                      <%= image_tag 'img-indisponivel.jpg', size: '288x288', class: "img-fluid rounded" %>
+                    <% end %>
+                  </p>
+                </div>
 
-<table class="table table-bordered table-striped">
-  <thead class="thead-dark">
-    <tr>
-      <th>#</th>
-      <th>Objeto</th>
-      <th>Status</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @keylockerinfos.each_with_index do |info, index| %>
-      <tr>
-        <td><strong><%= info.posicion || "Sem posição" %></strong></td>
-        <td><%= info.object.presence || "Nenhum objeto" %></td>
-        <td>
-          <span class="badge <%= info.empty == 1 ? 'badge-success' : 'badge-danger'%>">
-            <%= info.empty == 1 ? 'Presente' : 'Ausente' %>
-          </span>
-        </td>
-        <td>
-          <%= link_to 'Ver Detalhes', keylockerinfo_path(info), class: 'btn btn-info btn-sm' %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+                <div class="card-body">
+                  <h5 class="mb-0">
+                    <i class="fa fa-cube"></i>
+                    <%= info.object %>
+                  </h5>
 
+                  <p>
+                    <strong>Posição:</strong>
+                    <%= info.posicion || "Sem posição" %>
+                  </p>
+
+                  <p>
+                    <strong>Tag RFID:</strong>
+                    <%= info.tagRFID || 'Não disponível' %>
+                  </p>
+
+                  <p>
+                    <strong>ID Interno:</strong>
+                    <%= info.idInterno || 'Não disponível' %>
+                  </p>
+
+                  <p>
+                    <strong>Descrição:</strong>
+                    <%= info.description || 'Não disponível' %>
+                  </p>
+
+                  <p>
+                    <h3>
+                      <span class="badge <%= info.empty == 1 ? 'badge-success' : 'badge-danger'%>">
+                        <%= info.empty == 1 ? 'Presente' : 'Ausente' %>
+                      </span>
+                    </h3>
+                  </p>
+
+                  <p>
+                    <%= link_to 'Ver Detalhes', keylockerinfo_path(info), class: 'btn btn-info btn-sm' %>
+                  </p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Paginação Responsiva -->
+<div class="text-center mt-3 d-flex justify-content-center">
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <%= will_paginate @keylockerinfos, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+    </ul>
+  </nav>
+</div>

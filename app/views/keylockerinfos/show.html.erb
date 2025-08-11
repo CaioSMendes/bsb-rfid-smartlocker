@@ -1,29 +1,44 @@
-<h1>Keylockerinfos#show</h1>
-<p>Find me in app/views/keylockerinfos/show.html.erb</p>
+<p style="color: green"><%= notice %></p>
 
-
-<h3>Detalhes do Nicho</h3>
-
-<div class="card">
-  <div class="card-header">
-    <h5 class="mb-0"><%= @info.object %></h5>
-  </div>
-  <div class="card-body">
-    <p><strong>Posição:</strong> <%= @info.posicion || "Sem posição" %></p>
-    <p><strong>Tag RFID:</strong> <%= @info.tagRFID || 'Não disponível' %></p>
-    <p><strong>ID Interno:</strong> <%= @info.idInterno || 'Não disponível' %></p>
-    <p><strong>Descrição:</strong> <%= @info.description || 'Não disponível' %></p>
-    <p><strong>Status:</strong> <%= @info.empty == 1 ? 'Presente' : 'Ausente' %></p>
-    <% if @info.image.attached? %>
-      <div>
-        <strong>Imagem:</strong>
-        <%= image_tag @info.image %>
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <ol class="breadcrumb">
+          <li class="active">
+            <h1><i class="fas fa-archive"></i> Meu Inventário</h1>
+          </li>
+        </ol>
       </div>
-    <% else %>
-      <p><strong>Imagem:</strong> Nenhuma imagem disponível.</p>
-    <% end %>
-
-    <%= link_to 'Voltar', keylockerinfos_path, class: 'btn btn-secondary mt-3' %>
+    </div>
   </div>
 </div>
 
+<div class="container-fluid">
+  <div class="row">
+    <!-- Coluna da imagem (Responsiva) -->
+    <div class="col-12 col-md-3 mb-3"> <!-- 12 colunas em telas pequenas, 3 colunas em telas médias ou maiores -->
+      <% if @info.image.attached? %>
+        <div>
+          <strong>Imagem:</strong>
+          <%= image_tag @info.image, class: "img-fluid rounded" %>
+        </div>
+      <% else %>
+        <%= image_tag 'img-indisponivel.jpg', size: '288x288', class: "img-fluid rounded" %>
+      <% end %>
+    </div>
+
+    <!-- Coluna dos detalhes (Responsiva) -->
+    <div class="col-12 col-md-9 mb-3"> <!-- 12 colunas em telas pequenas, 9 colunas em telas médias ou maiores -->
+      <div class="card p-4 mb-4">
+        <h3>Detalhes do Objeto</h3>
+        <p><strong>Objeto:</strong> <%= @info.object %></p>
+        <p><strong>Posição:</strong> <%= @info.posicion || "Sem posição" %></p>
+        <p><strong>Tag RFID:</strong> <%= @info.tagRFID || 'Não disponível' %></p>
+        <p><strong>ID Interno:</strong> <%= @info.idInterno || 'Não disponível' %></p>
+        <p><strong>Descrição:</strong> <%= @info.description || 'Não disponível' %></p>
+        <p><strong>Status:</strong> <%= @info.empty == 1 ? 'Presente' : 'Ausente' %></p>
+      </div>
+    </div>
+  </div>
+</div>

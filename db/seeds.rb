@@ -92,14 +92,14 @@ locker = admin1.keylockers.create!(
   status: 'desbloqueado', 
   lockertype: 'Armário de chaves',
   keylockerinfos_attributes: [
-    { object: 'Laptop Dell Inspiron 15', posicion: 1, empty: 1, tagRFID: 'RFID-12345', idInterno: 'ID-001', description: 'Laptop para uso corporativo'},
-    { object: 'Samsung Galaxy S21', posicion: 2, empty: 1, tagRFID: 'RFID-67890', idInterno: 'ID-002', description: 'Celular de última geração'},
-    { object: 'GoPro HERO9 Black', posicion: 3, empty: 1, tagRFID: 'RFID-11223', idInterno: 'ID-003', description: 'Câmera de ação para esportes radicais' },
-    { object: 'iPad Pro 11"', posicion: 4, empty: 1, tagRFID: 'RFID-44556', idInterno: 'ID-004', description: 'Tablet com performance de notebook'},
-    { object: 'Nintendo Switch', posicion: 5, empty: 1, tagRFID: 'RFID-78901', idInterno: 'ID-005', description: 'Console portátil para jogos'},
-    { object: 'Sony WH-1000XM4', posicion: 6, empty: 1, tagRFID: 'RFID-23456', idInterno: 'ID-006', description: 'Fones de ouvido com cancelamento de ruído'},
-    { object: 'Canon EOS 90D', posicion: 7, empty: 1, tagRFID: 'RFID-34567', idInterno: 'ID-007', description: 'Câmera profissional DSLR'},
-    { object: 'Smartwatch Garmin Forerunner 945', posicion: 8, empty: 1, tagRFID: 'RFID-45678', idInterno: 'ID-008', description: 'Relógio inteligente para atletas' }
+    { object: 'Ferrari 458 Italia', posicion: 1, empty: 1, tagRFID: '04A2B1C3D4E5F607', idInterno: 'ABC-1234', description: '4.5 V8 GASOLINA F1-DCT'},
+    { object: 'Audi RS6', posicion: 2, empty: 1, tagRFID: '04B5C6D7E8F9A0B1', idInterno: 'XYZ-5678', description: '4.0 AVANT V8 32V BI-TURBO GASOLINA 4P TIPTRONIC'},
+    { object: 'Porsche 911 Turbo S', posicion: 3, empty: 1, tagRFID: '04F2A3B4C5D6E7F8', idInterno: 'QWE-9876', description: '3.8 24V H6 GASOLINA TURBO S PDK'},
+    { object: 'BMW M2 Competition', posicion: 4, empty: 1, tagRFID: '05D4E3F2A1B6C7D9', idInterno: 'JKL-4321', description: 'BMW M2 COMPETITION 3.0 BI-TURBO 410CV C/TETO AUT./2019'},
+    { object: 'Mercedes AMG GT-S', posicion: 5, empty: 1, tagRFID: '06C8D9E0F1A2B3C4', idInterno: 'MNB-2468', description: 'Mercedes-benz Amg Gt-s 4.0bi-tb 510cv Aut.2015'},
+    { object: 'Ducati Panigale', posicion: 6, empty: 1, tagRFID: '07F1A9B2C3D4E5F7', idInterno: 'POI-1357', description: 'Ducati Panigale 1199 195cv 2014'},
+    { object: 'Dodge RAM 3500', posicion: 7, empty: 1, tagRFID: '08E0D2C1B3A4F6B8', idInterno: 'RST-8642', description: '6.7 I6 TURBO DIESEL LARAMIE CD 4X4 AUTOMÁTICO'},
+    { object: 'Nissan GTR', posicion: 8, empty: 1, tagRFID: '09B5F6A7C8E0D1F9', idInterno: 'DFG-1230', description: '3.8 PREMIUM V6 24V BI-TURBO GASOLINA 2P AUTOMÁTICO'}
   ]
 )
 puts 'Locker criado pelo admin'
@@ -144,14 +144,14 @@ Keylocker.create!(
   status: 'desbloqueado', 
   lockertype: ['Armário de chaves', 'Armário de encomendas', 'Guarda Volume'].sample,
   keylockerinfos_attributes: [
-    { object: 'Microfone Wireless', posicion: 1, empty: 1 },
-    { object: 'Câmera GoPro HERO', posicion: 2, empty: 1 },
-    { object: 'Laptop Dell XPS', posicion: 3, empty: 1 },
-    { object: 'Kindle Oasis', posicion: 4, empty: 1 },
-    { object: 'Carregador portátil Anker', posicion: 5, empty: 1 },
-    { object: 'AirPods Pro', posicion: 6, empty: 1 },
-    { object: 'Roteador Wi-Fi Mesh', posicion: 7, empty: 1 },
-    { object: 'Drone DJI Mavic Air', posicion: 8, empty: 1 }
+    { object: 'Laptop Dell Inspiron 15', posicion: 1, empty: 1, tagRFID: 'RFID-12345', idInterno: 'ID-001', description: 'Laptop para uso corporativo'},
+    { object: 'Samsung Galaxy S21', posicion: 2, empty: 1, tagRFID: 'RFID-67890', idInterno: 'ID-002', description: 'Celular de última geração'},
+    { object: 'GoPro HERO9 Black', posicion: 3, empty: 1, tagRFID: 'RFID-11223', idInterno: 'ID-003', description: 'Câmera de ação para esportes radicais' },
+    { object: 'iPad Pro 11"', posicion: 4, empty: 1, tagRFID: 'RFID-44556', idInterno: 'ID-004', description: 'Tablet com performance de notebook'},
+    { object: 'Nintendo Switch', posicion: 5, empty: 1, tagRFID: 'RFID-78901', idInterno: 'ID-005', description: 'Console portátil para jogos'},
+    { object: 'Sony WH-1000XM4', posicion: 6, empty: 1, tagRFID: 'RFID-23456', idInterno: 'ID-006', description: 'Fones de ouvido com cancelamento de ruído'},
+    { object: 'Canon EOS 90D', posicion: 7, empty: 1, tagRFID: 'RFID-34567', idInterno: 'ID-007', description: 'Câmera profissional DSLR'},
+    { object: 'Smartwatch Garmin Forerunner 945', posicion: 8, empty: 1, tagRFID: 'RFID-45678', idInterno: 'ID-008', description: 'Relógio inteligente para atletas' }
   ]
 )
 
@@ -165,14 +165,14 @@ Keylocker.create!(
   status: 'desbloqueado', 
   lockertype: ['Armário de chaves', 'Armário de encomendas', 'Guarda Volume'].sample,
   keylockerinfos_attributes: [
-    { object: 'Projetor Epson', posicion: 1, empty: 1 },
-    { object: 'Monitor LG 27"', posicion: 2, empty: 1 },
-    { object: 'Notebook HP Spectre', posicion: 3, empty: 1 },
-    { object: 'Carregador de laptop MacBook', posicion: 4, empty: 1 },
-    { object: 'Smartphone Samsung Galaxy S21', posicion: 5, empty: 1 },
-    { object: 'Câmera de Segurança Arlo', posicion: 6, empty: 1 },
-    { object: 'Powerbank Xiaomi', posicion: 7, empty: 1 },
-    { object: 'Assinatura Netflix (cartão)', posicion: 8, empty: 1 }
+ { object: 'Laptop Dell Inspiron 15', posicion: 1, empty: 1, tagRFID: 'RFID-12345', idInterno: 'ID-001', description: 'Laptop para uso corporativo'},
+    { object: 'Samsung Galaxy S21', posicion: 2, empty: 1, tagRFID: 'RFID-67890', idInterno: 'ID-002', description: 'Celular de última geração'},
+    { object: 'GoPro HERO9 Black', posicion: 3, empty: 1, tagRFID: 'RFID-11223', idInterno: 'ID-003', description: 'Câmera de ação para esportes radicais' },
+    { object: 'iPad Pro 11"', posicion: 4, empty: 1, tagRFID: 'RFID-44556', idInterno: 'ID-004', description: 'Tablet com performance de notebook'},
+    { object: 'Nintendo Switch', posicion: 5, empty: 1, tagRFID: 'RFID-78901', idInterno: 'ID-005', description: 'Console portátil para jogos'},
+    { object: 'Sony WH-1000XM4', posicion: 6, empty: 1, tagRFID: 'RFID-23456', idInterno: 'ID-006', description: 'Fones de ouvido com cancelamento de ruído'},
+    { object: 'Canon EOS 90D', posicion: 7, empty: 1, tagRFID: 'RFID-34567', idInterno: 'ID-007', description: 'Câmera profissional DSLR'},
+    { object: 'Smartwatch Garmin Forerunner 945', posicion: 8, empty: 1, tagRFID: 'RFID-45678', idInterno: 'ID-008', description: 'Relógio inteligente para atletas' }
   ]
 )
 
@@ -186,14 +186,14 @@ Keylocker.create!(
   status: 'desbloqueado', 
   lockertype: ['Armário de chaves', 'Armário de encomendas', 'Guarda Volume'].sample,
   keylockerinfos_attributes: [
-    { object: 'Câmera Digital Sony', posicion: 1, empty: 1 },
-    { object: 'Fones de ouvido Sennheiser', posicion: 2, empty: 1 },
-    { object: 'Carregador rápido OnePlus', posicion: 3, empty: 1 },
-    { object: 'Tablet Microsoft Surface', posicion: 4, empty: 1 },
-    { object: 'Smartphone Xiaomi Mi 11', posicion: 5, empty: 1 },
-    { object: 'Smartwatch Garmin Fenix', posicion: 6, empty: 1 },
-    { object: 'Cartão de Memória SanDisk', posicion: 7, empty: 1 },
-    { object: 'Drone DJI Phantom 4', posicion: 8, empty: 1 }
+   { object: 'Laptop Dell Inspiron 15', posicion: 1, empty: 1, tagRFID: 'RFID-12345', idInterno: 'ID-001', description: 'Laptop para uso corporativo'},
+    { object: 'Samsung Galaxy S21', posicion: 2, empty: 1, tagRFID: 'RFID-67890', idInterno: 'ID-002', description: 'Celular de última geração'},
+    { object: 'GoPro HERO9 Black', posicion: 3, empty: 1, tagRFID: 'RFID-11223', idInterno: 'ID-003', description: 'Câmera de ação para esportes radicais' },
+    { object: 'iPad Pro 11"', posicion: 4, empty: 1, tagRFID: 'RFID-44556', idInterno: 'ID-004', description: 'Tablet com performance de notebook'},
+    { object: 'Nintendo Switch', posicion: 5, empty: 1, tagRFID: 'RFID-78901', idInterno: 'ID-005', description: 'Console portátil para jogos'},
+    { object: 'Sony WH-1000XM4', posicion: 6, empty: 1, tagRFID: 'RFID-23456', idInterno: 'ID-006', description: 'Fones de ouvido com cancelamento de ruído'},
+    { object: 'Canon EOS 90D', posicion: 7, empty: 1, tagRFID: 'RFID-34567', idInterno: 'ID-007', description: 'Câmera profissional DSLR'},
+    { object: 'Smartwatch Garmin Forerunner 945', posicion: 8, empty: 1, tagRFID: 'RFID-45678', idInterno: 'ID-008', description: 'Relógio inteligente para atletas' }
   ]
 )
 
