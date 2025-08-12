@@ -16,63 +16,48 @@
 
 <div class="container-fluid">
   <div class="row">
-    <div class="col-12"> <!-- Garantir que a linha ocupe toda a largura disponível -->
+    <div class="col-12"> <!-- Linha ocupa toda a largura -->
       <div class="right_col mt-3" role="main">
         <div class="row">
-          <% @keylockerinfos.each do |info| %>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3"> <!-- Responsividade para diferentes tamanhos de tela -->
-              <div class="card mb-4">
-
-                <div class="text-center">
-                  <p>
+          <% @keylockers.each do |keylocker| %>
+            <% keylocker.keylockerinfos.each do |info| %>
+              <div class="col-12 col-sm-6 col-md-4 col-lg-3"> <!-- 4 cards por linha -->
+                <div class="card mb-4">
+                  <div class="text-center">
                     <% if info.image.attached? %>
                       <%= image_tag info.image, size: '288x288', class: "img-fluid rounded" %>
                     <% else %>
                       <%= image_tag 'img-indisponivel.jpg', size: '288x288', class: "img-fluid rounded" %>
                     <% end %>
-                  </p>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="mb-0">
-                    <i class="fa fa-cube"></i>
-                    <%= info.object %>
-                  </h5>
-
-                  <p>
-                    <strong>Posição:</strong>
-                    <%= info.posicion || "Sem posição" %>
-                  </p>
-
-                  <p>
-                    <strong>Tag RFID:</strong>
-                    <%= info.tagRFID || 'Não disponível' %>
-                  </p>
-
-                  <p>
-                    <strong>ID Interno:</strong>
-                    <%= info.idInterno || 'Não disponível' %>
-                  </p>
-
-                  <p>
-                    <strong>Descrição:</strong>
-                    <%= info.description || 'Não disponível' %>
-                  </p>
-
-                  <p>
-                    <h3>
-                      <span class="badge <%= info.empty == 1 ? 'badge-success' : 'badge-danger'%>">
-                        <%= info.empty == 1 ? 'Presente' : 'Ausente' %>
-                      </span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="mb-0">
+                      <i class="fa fa-cube"></i>
+                      <%= info.object %>
                     </h3>
-                  </p>
 
-                  <p>
-                    <%= link_to 'Ver Detalhes', keylockerinfo_path(info), class: 'btn btn-info btn-sm' %>
-                  </p>
+                    <div class="text-center mt-3">
+                      <h4>
+                        <span class="badge <%= info.empty == 1 ? 'badge-success' : 'badge-danger' %>">
+                          <%= info.empty == 1 ? 'Presente' : 'Ausente' %>
+                        </span>
+                      </h4>
+                    </div>
+
+                    <p><strong>Posição:</strong> <%= info.posicion || "Sem posição" %></p>
+                    <p><strong>Tag RFID:</strong> <%= info.tagRFID || 'Não disponível' %></p>
+                    <p><strong>ID Interno:</strong> <%= info.idInterno || 'Não disponível' %></p>
+                    <p><strong>Descrição:</strong> <%= info.description || 'Não disponível' %></p>
+                
+                    <div class="text-center mt-3">
+                      <%= link_to keylockerinfo_path(info), class: 'btn btn-warning btn-sm' do %>
+                        <i class="fa fa-search"></i> Ver Detalhes
+                      <% end %>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            <% end %>
           <% end %>
         </div>
       </div>
@@ -84,7 +69,7 @@
 <div class="text-center mt-3 d-flex justify-content-center">
   <nav aria-label="Page navigation">
     <ul class="pagination">
-      <%= will_paginate @keylockerinfos, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+      <%= will_paginate @keylockers, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
     </ul>
   </nav>
 </div>

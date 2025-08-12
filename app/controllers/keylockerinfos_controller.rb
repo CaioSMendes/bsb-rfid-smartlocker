@@ -1,13 +1,17 @@
 class KeylockerinfosController < ApplicationController
     before_action :set_keylockerinfo, only: [:show, :edit, :update, :destroy]
 
+ 
   def index
-    @keylockerinfos = Keylockerinfo.all.paginate(page: params[:page], per_page: 12)
+    if current_user.admin?
+      @keylockers = Keylocker.all.paginate(page: params[:page], per_page: 12)
+    else
+      @keylockers = current_user.keylockers.paginate(page: params[:page], per_page: 12)
+    end
   end
 
   def show
     @info = Keylockerinfo.find(params[:id])
-    #@users = @info.user  # Aqui você pode acessar o user associado ao keylockerinfo
   end
 
   def create
