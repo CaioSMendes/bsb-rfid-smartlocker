@@ -1,0 +1,71 @@
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <ol class="breadcrumb">
+          <li class="active">
+            <h1><i class="fas fa-archive"></i> Meu Inventário</h1>
+          </li>
+        </ol>
+      </div>
+    </div>
+    <%= form_for @keylockerinfo do |form| %>
+        <% if @keylockerinfo.errors.any? %>
+            <div id="error_explanation">
+            <h2><%= pluralize(@keylockerinfo.errors.count, "error") %> prohibited this keylockerinfo from being saved:</h2>
+            <ul>
+                <% @keylockerinfo.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+                <% end %>
+            </ul>
+            </div>
+        <% end %>
+
+      <div class="row">
+        <div class="col-md-8 mb-4">
+          <div class="card mb-4">
+            <div class="card-header py-3">
+              <h5 class="mb-0">Editar Objeto do Inventário</h5>
+            </div>
+            <div class="card-body">
+              <!-- Objeto -->
+              <div class="form-outline mb-4">
+                <%= form.label :object, 'Objeto', class: "form-label" %>
+                <%= form.text_field :object, class: 'form-control' %>
+              </div>
+
+              <!-- Tag RFID -->
+              <div class="form-outline mb-4">
+                <%= form.label :tagRFID, 'Tag RFID', class: "form-label" %>
+                <%= form.text_field :tagRFID, class: 'form-control' %>
+              </div>
+
+              <!-- Id Interno -->
+              <div class="form-outline mb-4">
+                <%= form.label :idInterno, 'Id Interno', class: "form-label" %>
+                <%= form.text_field :idInterno, class: 'form-control' %>
+              </div>
+
+              <!-- Descrição -->
+              <div class="form-outline mb-4">
+                <%= form.label :description, 'Descrição', class: "form-label" %>
+                <%= form.text_field :description, class: 'form-control' %>
+              </div>
+
+               <!-- Imagem -->
+              <div class="form-outline mb-4">
+                <%= form.label :image, 'Imagem', class: "form-label" %>
+                <%= form.file_field :image, class: 'form-control' %>
+              </div>
+
+              <!-- Botões -->
+              <div class="d-flex mt-3">
+                <%= form.submit 'Salvar Alterações', class: 'btn btn-primary mr-2' %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

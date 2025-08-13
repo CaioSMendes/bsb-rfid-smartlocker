@@ -1,5 +1,6 @@
 class KeylockersController < ApplicationController
   before_action :set_keylocker, only: %i[ show edit update destroy ]
+
   #before_action :authenticate_admin_user! # Certifique-se de ter um método de autenticação de admin
   skip_before_action :verify_authenticity_token, only: [:toggle_and_save_status, :update]
   skip_before_action :authenticate_user!, only: [:toggle_and_save_status]
@@ -143,11 +144,10 @@ end
     end
 
     def keylocker_params
-      # Limpar imagens vazias dos nested attributes (opcional e recomendado
       params.require(:keylocker).permit(
         :owner, :nameDevice, :cnpjCpf, :qtd, :serial, :lockertype, :status, 
         keylockerinfos_attributes: [
-          :id, :object, :posicion, :tagRFID, :idInterno, :description, :image, :_destroy
+          :id, :object, :posicion, :tagRFID, :idInterno, :description, :_destroy
         ]
       )
     end

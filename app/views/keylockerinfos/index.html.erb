@@ -49,10 +49,19 @@
                     <p><strong>ID Interno:</strong> <%= info.idInterno || 'Não disponível' %></p>
                     <p><strong>Descrição:</strong> <%= info.description || 'Não disponível' %></p>
                 
-                    <div class="text-center mt-3">
-                      <%= link_to keylockerinfo_path(info), class: 'btn btn-warning btn-sm' do %>
-                        <i class="fa fa-search"></i> Ver Detalhes
+                    <div class="text-center mt-3 d-flex justify-content-center">
+                      <%= link_to keylockerinfo_path(info), class: 'btn btn-warning mr-3' do %>
+                        <i class="fa fa-search"></i> Exibir
                       <% end %>
+                      
+                      <%= link_to edit_keylockerinfo_path(info), class: 'btn btn-success mr-3' do %>
+                        <i class="fa fa-edit"></i> Editar
+                      <% end %>
+
+                      <%= button_to keylockerinfo_path(info), method: :delete, data: { confirm: "Você tem certeza que deseja excluir?" }, class: "btn btn-danger" do %>
+                        <i class="fas fa-trash-alt"></i> Excluir
+                      <% end %>
+
                     </div>
                   </div>
                 </div>

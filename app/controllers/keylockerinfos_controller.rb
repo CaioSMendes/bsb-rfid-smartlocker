@@ -24,6 +24,25 @@ class KeylockerinfosController < ApplicationController
     end
   end
 
+  def edit
+    # O Rails já vai usar o `set_keylockerinfo` para carregar o objeto correto.
+  end
+
+  # DELETE /keylockers/:keylocker_id/keylockerinfos/:id
+  def destroy
+    # Adicionando um log para verificar se o Keylockerinfo foi encontrado
+    Rails.logger.debug "Excluindo KeylockerInfo com ID: #{params[:id]}"
+    
+    # Verificando se o Keylockerinfo foi encontrado e está sendo destruído
+    if @keylockerinfo.destroy
+      Rails.logger.debug "KeylockerInfo com ID #{params[:id]} foi excluído com sucesso!"
+      redirect_to keylockerinfos_path, notice: "O Keylocker Info foi deletado com sucesso."
+    else
+      Rails.logger.debug "Falha ao excluir o KeylockerInfo com ID: #{params[:id]}"
+      redirect_to keylockerinfos_path, alert: "Falha ao excluir o Keylocker Info."
+    end
+  end
+
   def update
     if @keylockerinfo.update(keylockerinfo_params)
       redirect_to @keylockerinfo, notice: 'Keylockerinfo was successfully updated.'
@@ -49,7 +68,7 @@ class KeylockerinfosController < ApplicationController
       :description, 
       :empty, 
       :keylocker_id,
-      image: [], # Para permitir a imagem ser carregada como um arquivo
+      :image,
       keylockerinfos_attributes: [:object, :posicion, :tagRFID, :idInterno, :description, :empty, :image] # Adiciona a imagem aqui também
     )
   end

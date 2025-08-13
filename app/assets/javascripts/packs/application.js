@@ -3,6 +3,8 @@
 import 'intl-tel-input';
 import 'intl-tel-input/build/js/utils';
 import 'intl-tel-input/build/css/intlTelInput.css';
+import Rails from '@rails/ujs';
+Rails.start();
 
 document.addEventListener('turbolinks:load', function() {
   var input = document.querySelector("#user_phone"); // Certifique-se de substituir "user_phone" pelo ID real do seu campo de telefone

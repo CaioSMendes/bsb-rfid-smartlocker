@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :keylockerinfos, only: [:index, :show]
+  resources :keylockerinfos
   resources :products
   get 'debug_logs/index'
   get 'email_settings/new'

@@ -20,7 +20,6 @@
     <div class="col-12 col-md-3 mb-3"> <!-- 12 colunas em telas pequenas, 3 colunas em telas médias ou maiores -->
       <% if @info.image.attached? %>
         <div>
-          <strong>Imagem:</strong>
           <%= image_tag @info.image, class: "img-fluid rounded" %>
         </div>
       <% else %>
