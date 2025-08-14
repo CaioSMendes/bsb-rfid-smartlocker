@@ -98,7 +98,7 @@ user = User.create!(
   role: 'user',
   complement: "Casa 27",
   password: 'caveira123',
-  password_confirmation: 'cavaeira123'
+  password_confirmation: 'caveira123'
 )
 puts 'User criado'
 
