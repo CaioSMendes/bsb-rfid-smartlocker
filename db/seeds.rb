@@ -81,6 +81,27 @@ user = User.create!(
 )
 puts 'User criado'
 
+# Crie um usuário regular
+user = User.create!(
+  email: 'bope@caveira.com',
+  name: "Major",
+  lastname: "Nascimento",
+  phone: "453526-3939",
+  cnpj: "26.958.914/0001-53",
+  nameCompany: "Batalhao de Operacoes Especiais",
+  street: "SPS",
+  city: "Brasilia",
+  state: "Distrito Federal",
+  zip_code: "71200-240 ",
+  neighborhood: "Brazil",
+  finance: "adimplente",
+  role: 'user',
+  complement: "Casa 27",
+  password: 'caveira123',
+  password_confirmation: 'cavaeira123'
+)
+puts 'User criado'
+
 # Admin criando o Keylocker
 locker = admin1.keylockers.create!(
   owner: 'Luiz Reis', 
@@ -177,23 +198,23 @@ Keylocker.create!(
 )
 
 Keylocker.create!(
-  owner: 'Global Enterprises', 
-  nameDevice: 'Salvador RFID', 
-  cnpjCpf: '22334455678', 
+  owner: 'Operacoes Especiais', 
+  nameDevice: 'Locker BOPE - DF', 
+  cnpjCpf: '08.942.610/0001-16', 
   qtd: 8, 
   serial: 'JKL012XYZ3', 
   door: 'fechado', 
   status: 'desbloqueado', 
   lockertype: ['Armário de chaves', 'Armário de encomendas', 'Guarda Volume'].sample,
   keylockerinfos_attributes: [
-   { object: 'Laptop Dell Inspiron 15', posicion: 1, empty: 1, tagRFID: 'RFID-12345', idInterno: 'ID-001', description: 'Laptop para uso corporativo'},
-    { object: 'Samsung Galaxy S21', posicion: 2, empty: 1, tagRFID: 'RFID-67890', idInterno: 'ID-002', description: 'Celular de última geração'},
-    { object: 'GoPro HERO9 Black', posicion: 3, empty: 1, tagRFID: 'RFID-11223', idInterno: 'ID-003', description: 'Câmera de ação para esportes radicais' },
-    { object: 'iPad Pro 11"', posicion: 4, empty: 1, tagRFID: 'RFID-44556', idInterno: 'ID-004', description: 'Tablet com performance de notebook'},
-    { object: 'Nintendo Switch', posicion: 5, empty: 1, tagRFID: 'RFID-78901', idInterno: 'ID-005', description: 'Console portátil para jogos'},
-    { object: 'Sony WH-1000XM4', posicion: 6, empty: 1, tagRFID: 'RFID-23456', idInterno: 'ID-006', description: 'Fones de ouvido com cancelamento de ruído'},
-    { object: 'Canon EOS 90D', posicion: 7, empty: 1, tagRFID: 'RFID-34567', idInterno: 'ID-007', description: 'Câmera profissional DSLR'},
-    { object: 'Smartwatch Garmin Forerunner 945', posicion: 8, empty: 1, tagRFID: 'RFID-45678', idInterno: 'ID-008', description: 'Relógio inteligente para atletas' }
+    { object: 'Capacete Tatico', posicion: 1, empty: 1, tagRFID: '00047400000000000000000000', idInterno: 'ID-001', description: 'Capacete tático reforçado para proteção da cabeça em operações policiais e militares.'},
+    { object: 'Escudo Antitumulto', posicion: 2, empty: 1, tagRFID: '123456789012345678901234', idInterno: 'ID-002', description: 'Escudo utilizado para proteção em situações de distúrbios e controle de multidões.'},
+    { object: 'Spray de Pimenta', posicion: 3, empty: 1, tagRFID: '14465000000000000000000000', idInterno: 'ID-003', description: 'Dispositivo de spray de pimenta para imobilização não letal em confrontos.' },
+    { object: 'Submetralhadora MP5"', posicion: 4, empty: 1, tagRFID: '14470000000000000000000000', idInterno: 'ID-004', description: 'Arma de fogo compacta ideal para combate próximo e operações especiais.'},
+    { object: 'Pistola IMBEL 9 GC MD1', posicion: 5, empty: 1, tagRFID: '3035E2B7B04F6DC0000000AE', idInterno: 'ID-005', description: 'Pistola semi-automática de padrão militar para defesa e segurança.'},
+    { object: 'Colete Kevlar Prova de Balas', posicion: 6, empty: 1, tagRFID: '32411234000000000000000000', idInterno: 'ID-006', description: 'Colete resistente a balas feito de Kevlar para proteção corporal.'},
+    { object: 'Bastão Cassetete', posicion: 7, empty: 1, tagRFID: '3BE1000000B44EFB00000757', idInterno: 'ID-007', description: 'Bastão policial usado para controle de distúrbios e defesa pessoal.'},
+    { object: 'Granada de fumaca', posicion: 8, empty: 1, tagRFID: '3BE9000000B18E963B9AD0F0', idInterno: 'ID-008', description: 'Dispositivo utilizado para gerar fumaça, ideal para táticas de distração ou cobertura operacional.' }
   ]
 )
 

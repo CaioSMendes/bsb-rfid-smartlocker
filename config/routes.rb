@@ -133,6 +133,9 @@ Rails.application.routes.draw do
       post '/check_access', to: 'employees#check_access'
       get 'list_employees', to: 'employees#list_employees'
       post 'authenticate_c72_app', to: 'employees#authenticate_c72_app'
+      # Adicionando rotas personalizadas para ações específicas
+      get 'employees/read_tags_rfid', to: 'employees#read_tags_rfid'
+      post 'handle_tag_action', to: 'employees#handle_tag_action'
 
       resources :keylockers  # Ajuste para o novo nome do controlador
       #post '/auth/sign_in', to: 'authentication#sign_in'

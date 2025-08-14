@@ -147,7 +147,7 @@ end
       params.require(:keylocker).permit(
         :owner, :nameDevice, :cnpjCpf, :qtd, :serial, :lockertype, :status, 
         keylockerinfos_attributes: [
-          :id, :object, :posicion, :tagRFID, :idInterno, :description, :_destroy
+          :id, :object, :posicion, :tagRFID, :idInterno, :description,:image, :_destroy
         ]
       )
     end
