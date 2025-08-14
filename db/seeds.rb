@@ -165,14 +165,14 @@ Keylocker.create!(
   status: 'desbloqueado', 
   lockertype: ['Armário de chaves', 'Armário de encomendas', 'Guarda Volume'].sample,
   keylockerinfos_attributes: [
-    { object: 'Laptop Dell Inspiron 15', posicion: 1, empty: 1, tagRFID: 'RFID-12345', idInterno: 'ID-001', description: 'Laptop para uso corporativo'},
-    { object: 'Samsung Galaxy S21', posicion: 2, empty: 1, tagRFID: 'RFID-67890', idInterno: 'ID-002', description: 'Celular de última geração'},
-    { object: 'GoPro HERO9 Black', posicion: 3, empty: 1, tagRFID: 'RFID-11223', idInterno: 'ID-003', description: 'Câmera de ação para esportes radicais' },
-    { object: 'iPad Pro 11"', posicion: 4, empty: 1, tagRFID: 'RFID-44556', idInterno: 'ID-004', description: 'Tablet com performance de notebook'},
-    { object: 'Nintendo Switch', posicion: 5, empty: 1, tagRFID: 'RFID-78901', idInterno: 'ID-005', description: 'Console portátil para jogos'},
-    { object: 'Sony WH-1000XM4', posicion: 6, empty: 1, tagRFID: 'RFID-23456', idInterno: 'ID-006', description: 'Fones de ouvido com cancelamento de ruído'},
-    { object: 'Canon EOS 90D', posicion: 7, empty: 1, tagRFID: 'RFID-34567', idInterno: 'ID-007', description: 'Câmera profissional DSLR'},
-    { object: 'Smartwatch Garmin Forerunner 945', posicion: 8, empty: 1, tagRFID: 'RFID-45678', idInterno: 'ID-008', description: 'Relógio inteligente para atletas' }
+    { object: 'Laptop Dell Inspiron 15', posicion: 1, empty: 1, tagRFID: '0004650000000000000000000000', idInterno: 'ID-001', description: 'Laptop para uso corporativo'},
+    { object: 'Samsung Galaxy S21', posicion: 2, empty: 1, tagRFID: '0004660000000000000000000000', idInterno: 'ID-002', description: 'Celular de última geração'},
+    { object: 'GoPro HERO9 Black', posicion: 3, empty: 1, tagRFID: '0004670000000000000000000000', idInterno: 'ID-003', description: 'Câmera de ação para esportes radicais' },
+    { object: 'iPad Pro 11"', posicion: 4, empty: 1, tagRFID: '0004680000000000000000000000', idInterno: 'ID-004', description: 'Tablet com performance de notebook'},
+    { object: 'Nintendo Switch', posicion: 5, empty: 1, tagRFID: '0004690000000000000000000000', idInterno: 'ID-005', description: 'Console portátil para jogos'},
+    { object: 'Sony WH-1000XM4', posicion: 6, empty: 1, tagRFID: '0004700000000000000000000000', idInterno: 'ID-006', description: 'Fones de ouvido com cancelamento de ruído'},
+    { object: 'Canon EOS 90D', posicion: 7, empty: 1, tagRFID: '0004710000000000000000000000', idInterno: 'ID-007', description: 'Câmera profissional DSLR'},
+    { object: 'Smartwatch Garmin Forerunner 945', posicion: 8, empty: 1, tagRFID: '0004720000000000000000000000', idInterno: 'ID-008', description: 'Relógio inteligente para atletas' }
   ]
 )
 
