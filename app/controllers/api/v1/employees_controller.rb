@@ -3,8 +3,8 @@ I18n.locale = :pt
 module Api
   module V1
     class EmployeesController < ApplicationController
-      skip_before_action :verify_authenticity_token, only: [:handle_tag_action, :find_tag, :authenticate_c72_app, :list_employees, :check_access, :control_locker_key, :control_exit_keypad, :control_exit_card, :locker_security, :toggle_door, :employees_by_keylocker, :process_locker_code, :check_card_access, :check_keypad_access, :employees_by_keylocker_card,:information_locker, :esp8288params, :check_user, :check_employee_access]
-      skip_before_action :authenticate_user!, only: [:handle_tag_action, :find_tag, :authenticate_c72_app, :list_employees, :check_access, :control_locker_key, :control_exit_keypad, :control_exit_card, :locker_security, :toggle_door, :employees_by_keylocker, :process_locker_code, :check_card_access, :check_keypad_access, :employees_by_keylocker_card, :information_locker, :esp8288params, :check_user, :check_employee_access] 
+      skip_before_action :verify_authenticity_token, only: [:check_operator_access, :handle_tag_action, :find_tag, :authenticate_c72_app, :list_employees, :check_access, :control_locker_key, :control_exit_keypad, :control_exit_card, :locker_security, :toggle_door, :employees_by_keylocker, :process_locker_code, :check_card_access, :check_keypad_access, :employees_by_keylocker_card,:information_locker, :esp8288params, :check_user, :check_employee_access]
+      skip_before_action :authenticate_user!, only: [:check_operator_access, :handle_tag_action, :find_tag, :authenticate_c72_app, :list_employees, :check_access, :control_locker_key, :control_exit_keypad, :control_exit_card, :locker_security, :toggle_door, :employees_by_keylocker, :process_locker_code, :check_card_access, :check_keypad_access, :employees_by_keylocker_card, :information_locker, :esp8288params, :check_user, :check_employee_access] 
 
       # Define a localização padrão como português do Brasil
       before_action :set_locale
@@ -15,118 +15,118 @@ module Api
       end
 
       def handle_tag_action
-  email           = params[:email]
-  pswdSmartlocker = params[:pswdSmartlocker]
-  serial          = params[:serial]
-  tag_rfid        = params[:tagRFID]
-  action_type     = params[:action_type] # "devolver" ou "retirar"
+        email           = params[:email]
+        pswdSmartlocker = params[:pswdSmartlocker]
+        serial          = params[:serial]
+        tag_rfid        = params[:tagRFID]
+        action_type     = params[:action_type] # "devolver" ou "retirar"
 
-  puts "=== PARÂMETROS RECEBIDOS ==="
-  puts "Email: #{email}, Senha: #{pswdSmartlocker}, Serial: #{serial}, Tag RFID: #{tag_rfid}, Ação: #{action_type}"
+        puts "=== PARÂMETROS RECEBIDOS ==="
+        puts "Email: #{email}, Senha: #{pswdSmartlocker}, Serial: #{serial}, Tag RFID: #{tag_rfid}, Ação: #{action_type}"
 
-  # 1️⃣ Verificar credenciais
-  employee = Employee.find_by(email: email, pswdSmartlocker: pswdSmartlocker)
-  if employee.nil?
-    return render json: { status: 'ERROR', message: 'Erro: Email ou senha incorretos!' }, status: :unauthorized
-  end
-  puts "Funcionário autenticado: #{employee.id}"
+        # 1️⃣ Verificar credenciais
+        employee = Employee.find_by(email: email, pswdSmartlocker: pswdSmartlocker)
+        if employee.nil?
+          return render json: { status: 'ERROR', message: 'Erro: Email ou senha incorretos!' }, status: :unauthorized
+        end
+        puts "Funcionário autenticado: #{employee.id}"
 
-  # 2️⃣ Verificar status do funcionário
-  if employee.status.to_s.downcase == "bloqueado"
-    puts "❌ Funcionário bloqueado - acesso negado"
-    return render json: { status: 'ERROR', message: 'Usuário não tem acesso - conta bloqueada' }, status: :forbidden
-  elsif employee.status.to_s.downcase == "desbloqueado"
-    puts "✅ Funcionário desbloqueado - acesso permitido"
-  else
-    puts "⚠️ Status do funcionário não reconhecido: #{employee.status.inspect}"
-  end
+        # 2️⃣ Verificar status do funcionário
+        if employee.status.to_s.downcase == "bloqueado"
+          puts "❌ Funcionário bloqueado - acesso negado"
+          return render json: { status: 'ERROR', message: 'Usuário não tem acesso - conta bloqueada' }, status: :forbidden
+        elsif employee.status.to_s.downcase == "desbloqueado"
+          puts "✅ Funcionário desbloqueado - acesso permitido"
+        else
+          puts "⚠️ Status do funcionário não reconhecido: #{employee.status.inspect}"
+        end
 
-  # Buscar keylocker
-  keylocker = Keylocker.includes(:keylockerinfos).find_by(serial: serial)
-  return render json: { status: 'ERROR', message: 'Keylocker não encontrado' }, status: :not_found unless keylocker
-  puts "Keylocker encontrado: #{keylocker.id}"
+        # Buscar keylocker
+        keylocker = Keylocker.includes(:keylockerinfos).find_by(serial: serial)
+        return render json: { status: 'ERROR', message: 'Keylocker não encontrado' }, status: :not_found unless keylocker
+        puts "Keylocker encontrado: #{keylocker.id}"
 
-  # Buscar tag
-  keylocker_info = keylocker.keylockerinfos.find_by(tagRFID: tag_rfid)
-  return render json: { status: 'ERROR', message: 'Tag RFID não encontrada' }, status: :not_found unless keylocker_info
-  puts "Tag RFID encontrada: #{keylocker_info.id}"
+        # Buscar tag
+        keylocker_info = keylocker.keylockerinfos.find_by(tagRFID: tag_rfid)
+        return render json: { status: 'ERROR', message: 'Tag RFID não encontrada' }, status: :not_found unless keylocker_info
+        puts "Tag RFID encontrada: #{keylocker_info.id}"
 
-  # Array de mudanças para logs
-  changes = []
-  locker_object = keylocker_info.object
-  comments = ""
-  status = ""
-  action = ""
+        # Array de mudanças para logs
+        changes = []
+        locker_object = keylocker_info.object
+        comments = ""
+        status = ""
+        action = ""
 
-  case action_type
-  when 'devolver'
-    puts "Ação: DEVOLVER"
-    if keylocker_info.empty == 0
-      keylocker_info.update(empty: 1)
-      status = "Ocupado"
-      action = "devolução"
-      comments = "Chave #{keylocker_info.posicion} registrada como #{action} por #{employee.email}"
+        case action_type
+        when 'devolver'
+          puts "Ação: DEVOLVER"
+          if keylocker_info.empty == 0
+            keylocker_info.update(empty: 1)
+            status = "Ocupado"
+            action = "devolução"
+            comments = "Chave #{keylocker_info.posicion} registrada como #{action} por #{employee.email}"
 
-      changes << {
-        employee_id: employee.id,
-        action: action,
-        keylocker_id: keylocker.id,
-        locker_serial: keylocker.serial,
-        locker_object: locker_object,
-        locker_name: keylocker.nameDevice,
-        timestamp: Time.now,
-        status: status,
-        comments: comments
-      }
+            changes << {
+              employee_id: employee.id,
+              action: action,
+              keylocker_id: keylocker.id,
+              locker_serial: keylocker.serial,
+              locker_object: locker_object,
+              locker_name: keylocker.nameDevice,
+              timestamp: Time.now,
+              status: status,
+              comments: comments
+            }
 
-      render json: {
-        status: 'SUCCESS',
-        message: 'Tag RFID devolvida com sucesso',
-        data: keylocker_info.as_json(only: [:id, :object, :posicion, :empty, :tagRFID])
-      }
-    else
-      render json: { status: 'INFO', message: 'Tag RFID já foi devolvida' }, status: :unprocessable_entity
-    end
+            render json: {
+              status: 'SUCCESS',
+              message: 'Tag RFID devolvida com sucesso',
+              data: keylocker_info.as_json(only: [:id, :object, :posicion, :empty, :tagRFID])
+            }
+          else
+            render json: { status: 'INFO', message: 'Tag RFID já foi devolvida' }, status: :unprocessable_entity
+          end
 
-  when 'retirar'
-    puts "Ação: RETIRAR"
-    if keylocker_info.empty == 1
-      keylocker_info.update(empty: 0)
-      status = "Disponível"
-      action = "retirada"
-      comments = "Chave #{keylocker_info.posicion} registrada como #{action} por #{employee.email}"
+        when 'retirar'
+          puts "Ação: RETIRAR"
+          if keylocker_info.empty == 1
+            keylocker_info.update(empty: 0)
+            status = "Disponível"
+            action = "retirada"
+            comments = "Chave #{keylocker_info.posicion} registrada como #{action} por #{employee.email}"
 
-      changes << {
-        employee_id: employee.id,
-        action: action,
-        keylocker_id: keylocker.id,
-        locker_serial: keylocker.serial,
-        locker_object: locker_object,
-        locker_name: keylocker.nameDevice,
-        timestamp: Time.now,
-        status: status,
-        comments: comments
-      }
+            changes << {
+              employee_id: employee.id,
+              action: action,
+              keylocker_id: keylocker.id,
+              locker_serial: keylocker.serial,
+              locker_object: locker_object,
+              locker_name: keylocker.nameDevice,
+              timestamp: Time.now,
+              status: status,
+              comments: comments
+            }
 
-      render json: {
-        status: 'SUCCESS',
-        message: 'Tag RFID retirada com sucesso',
-        data: keylocker_info.as_json(only: [:id, :object, :posicion, :empty, :tagRFID])
-      }
-    else
-      render json: { status: 'INFO', message: 'Tag RFID não disponível para retirada' }, status: :unprocessable_entity
-    end
+            render json: {
+              status: 'SUCCESS',
+              message: 'Tag RFID retirada com sucesso',
+              data: keylocker_info.as_json(only: [:id, :object, :posicion, :empty, :tagRFID])
+            }
+          else
+            render json: { status: 'INFO', message: 'Tag RFID não disponível para retirada' }, status: :unprocessable_entity
+          end
 
-  else
-    return render json: { status: 'ERROR', message: 'Ação inválida, use "devolver" ou "retirar"' }, status: :unprocessable_entity
-  end
+        else
+          return render json: { status: 'ERROR', message: 'Ação inválida, use "devolver" ou "retirar"' }, status: :unprocessable_entity
+        end
 
-  # Criar logs
-  unless changes.empty?
-    Log.insert_all(changes)
-    puts "✅ #{changes.size} log(s) inserido(s) com sucesso"
-  end
-end
+        # Criar logs
+        unless changes.empty?
+          Log.insert_all(changes)
+          puts "✅ #{changes.size} log(s) inserido(s) com sucesso"
+        end
+      end
 
       
       def find_tag
@@ -171,6 +171,30 @@ end
           render json: { message: 'Erro: Email ou RFID incorretos!' }, status: :unauthorized
         end
       end
+
+     def check_operator_access
+        serial = params[:serial]
+        only_operators = ActiveModel::Type::Boolean.new.cast(params[:only_operators])
+        
+        # Busca o Keylocker pelo serial
+        keylocker = Keylocker.find_by(serial: serial)
+        if keylocker.nil?
+          render json: { status: "ERROR", message: "Keylocker não encontrado" }, status: :not_found
+          return
+        end
+
+        # Filtra apenas funcionários desbloqueados e conforme operador ou não
+        employees = keylocker.employees.where(status: 'desbloqueado', operator: only_operators)
+
+        render json: {
+          status: "SUCCESS",
+          message: "Funcionários relacionados ao Keylocker com serial #{serial}",
+          data: employees.as_json(only: [
+            :id, :name, :lastname, :matricula, :email, :operator
+          ])
+        }, status: :ok
+      end
+
 
       def check_employee_access
         serial = params[:serial]

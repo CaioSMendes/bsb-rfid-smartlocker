@@ -22,6 +22,12 @@
             <%= form.label :delivery, "Entregador Delivery", class: 'form-check-label' %>
           </div>
 
+          <!-- Campo para selecionar se o colaborador é operador -->
+          <div class="form-check mb-4">
+            <%= form.check_box :operator, class: 'form-check-input', id: 'operatorCheckbox' %>
+            <%= form.label :operator, "Operador", class: 'form-check-label' %>
+          </div>
+
           <!-- Campos para nome, sobrenome -->
           <div class="row mb-4">
             <div class="col">
@@ -48,6 +54,12 @@
           <div class="form-outline mb-4">
             <%= form.label :email, "Email", class: "form-label" %>
             <%= form.text_field :email, id: 'form7Example3', class: 'form-control' %>
+          </div>
+
+          <!-- Campo para o matricula -->
+          <div class="form-outline mb-4">
+            <%= form.label :matricula, "Matrícula", class: "form-label" %>
+            <%= form.text_field :matricula, id: 'form7Example3', class: 'form-control' %>
           </div>
 
           <!-- Campos para CPF -->

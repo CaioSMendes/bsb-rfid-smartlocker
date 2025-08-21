@@ -136,6 +136,7 @@ Rails.application.routes.draw do
       # Adicionando rotas personalizadas para ações específicas
       post  'find_tag', to: 'employees#find_tag'
       post 'handle_tag_action', to: 'employees#handle_tag_action'
+      get '/check_operator_access', to: 'employees#check_operator_access'
 
       resources :keylockers  # Ajuste para o novo nome do controlador
       #post '/auth/sign_in', to: 'authentication#sign_in'

@@ -90,6 +90,7 @@ GEM
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
     chartkick (5.1.4)
+    choice (0.2.0)
     chunky_png (1.4.0)
     concurrent-ruby (1.2.2)
     crass (1.0.6)
@@ -217,6 +218,11 @@ GEM
       activesupport (>= 5.0.0)
       minitest
       nokogiri (>= 1.6)
+    rails-erd (1.7.2)
+      activerecord (>= 4.2)
+      activesupport (>= 4.2)
+      choice (~> 0.2.0)
+      ruby-graphviz (~> 1.2)
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
       nokogiri (~> 1.14)
@@ -246,6 +252,8 @@ GEM
       chunky_png (~> 1.0)
       rqrcode_core (~> 1.0)
     rqrcode_core (1.2.0)
+    ruby-graphviz (1.2.5)
+      rexml
     rubyzip (2.3.2)
     sassc (2.4.0)
       ffi (~> 1.9)
@@ -329,6 +337,7 @@ DEPENDENCIES
   puma (~> 5.0)
   rack-cors
   rails (~> 7.0.8)
+  rails-erd
   rest-client
   rqrcode
   sassc-rails

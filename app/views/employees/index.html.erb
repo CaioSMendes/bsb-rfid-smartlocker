@@ -32,27 +32,34 @@
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3"> <!-- 4 elementos por linha em telas grandes -->
                 <div class="card mb-4">
 
-                    <div class="text-center">
-                      <p>
-                        <% if employee.delivery %>
-                          <%= image_tag "moto.jpg", size: '288x288', class: "img-fluid rounded" %>
-                        <% elsif employee&.profile_picture&.attached? %>
-                          <%= image_tag employee.profile_picture, size: '288x288', class: "img-fluid rounded" %>
-                        <% else %>
-                          <%= image_tag "user.jpg", size: '288x288', class: "img-fluid rounded" %>
-                        <% end %>
-                      </p>
-                    </div>
-                
+                  <div class="text-center">
+                    <p>
+                      <% if employee.operator %>
+                        <%= image_tag "gestor.jpg", size: '288x288', class: "img-fluid rounded" %>
+                      <% elsif employee.delivery %>
+                        <%= image_tag "moto.jpg", size: '288x288', class: "img-fluid rounded" %>
+                      <% elsif employee&.profile_picture&.attached? %>
+                        <%= image_tag employee.profile_picture, size: '288x288', class: "img-fluid rounded" %>
+                      <% else %>
+                        <%= image_tag "user.jpg", size: '288x288', class: "img-fluid rounded" %>
+                      <% end %>
+                    </p>
+                  </div>
+
+                      
+               
 
                     <div class="card-body">
                         <p>
-                          <% if employee.delivery %>
+                          <% if employee.operator %>
+                            <i class="fas fa-user-shield" style="font-size: 24px; color: #28a745;"></i>
+                            <span style="font-size: 18px;"><strong> Operador</strong></span>
+                          <% elsif employee.delivery %>
                             <i class="fas fa-motorcycle" style="font-size: 24px; color: #007bff;"></i>
-                            <span style="font-size: 18px;"><strong>Entregador Delivery</strong></span>
+                            <span style="font-size: 18px;"><strong> Entregador Delivery</strong></span>
                           <% else %>
-                              <i class="fa fa-user-tie" style="font-size: 24px; color: #007bff;"></i>
-                              <span style="font-size: 18px;"><strong>Usuário do Locker</strong></span>
+                            <i class="fa fa-user-tie" style="font-size: 24px; color: #007bff;"></i>
+                            <span style="font-size: 18px;"><strong> Usuário do Locker</strong></span>
                           <% end %>
                         </p>
 
@@ -79,6 +86,11 @@
                         <p>
                             <strong>Empresa:</strong>
                             <%= employee.companyID %>
+                        </p>
+
+                        <p>
+                            <strong>Matrícula:</strong>
+                            <%= employee.matricula %>
                         </p>
 
                         <% if current_user.admin? %>

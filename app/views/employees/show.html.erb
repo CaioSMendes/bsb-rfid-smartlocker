@@ -21,7 +21,9 @@
         <div class="row">
 
         <div class="col-md-3">
-          <% if @employee.delivery %>
+          <% if @employee.operator %>
+            <%= image_tag "gestor.jpg", class: "img-fluid rounded", style: "max-width: 100%;" %>
+          <% elsif @employee.delivery %>
             <%= image_tag "moto.jpg", class: "img-fluid rounded", style: "max-width: 100%;" %>
           <% elsif @employee&.profile_picture&.attached? %>
             <%= image_tag @employee.profile_picture, class: "img-fluid rounded", style: "max-width: 100%;" %>
@@ -31,8 +33,11 @@
         </div>
         <div class="col-md-9">
 
-        <p>
-          <% if @employee.delivery %>
+       <p>
+          <% if @employee.operator %>
+            <i class="fas fa-user-shield" style="font-size: 24px; color: #28a745;"></i>
+            <span style="font-size: 18px;"><strong>Operador</strong></span>
+          <% elsif @employee.delivery %>
             <i class="fas fa-motorcycle" style="font-size: 24px; color: #007bff;"></i>
             <span style="font-size: 18px;"><strong>Entregador Delivery</strong></span>
           <% else %>
@@ -50,6 +55,11 @@
             <p>
               <strong>Email:</strong>
               <%= @employee.email %>
+            </p>
+
+            <p>
+              <strong>Matrícula:</strong>
+              <%= @employee.matricula %>
             </p>
 
              <p>
@@ -112,6 +122,11 @@
             <p>
               <strong>Empresa:</strong>
               <%= @employee.companyID %>
+            </p>
+
+             <p>
+              <strong>Matrícula:</strong>
+              <%= @employee.matricula %>
             </p>
                   
             <p>

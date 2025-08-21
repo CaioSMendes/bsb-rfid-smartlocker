@@ -12,6 +12,8 @@ class CreateEmployees < ActiveRecord::Migration[7.0]
       t.string :pswdSmartlocker
       t.string :cardRFID
       t.string :status
+      t.string :matricula
+      t.boolean :operator, default: true, null: false 
       t.boolean :delivery, default: true, null: false 
       t.boolean :enabled, default: true, null: false
 

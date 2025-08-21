@@ -94,6 +94,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_03_145151) do
     t.string "pswdSmartlocker"
     t.string "cardRFID"
     t.string "status"
+    t.string "matricula"
+    t.boolean "operator", default: true, null: false
     t.boolean "delivery", default: true, null: false
     t.boolean "enabled", default: true, null: false
     t.datetime "created_at", null: false

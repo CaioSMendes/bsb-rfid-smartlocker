@@ -237,7 +237,7 @@ class EmployeesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def employee_params
       params.require(:employee).permit(
-        :name, :email, :lastname, :delivery, :enabled, :companyID, :phone, :cpf, :PIN, :function, :pswdSmartlocker, :cardRFID, :status, :profile_picture,
+        :name, :email, :lastname, :delivery, :enabled, :companyID, :phone, :cpf, :PIN, :function, :pswdSmartlocker, :cardRFID, :status, :matricula, :operator, :profile_picture,
         workdays_attributes: [:id, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :start, :end, :enabled, :_destroy]
       ).tap do |whitelisted|
         # Verifica se o parâmetro 'enabled' foi enviado como 'true'
