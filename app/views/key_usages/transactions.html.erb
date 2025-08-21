@@ -1,0 +1,82 @@
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row align-items-center mb-3">
+      <div class="col-lg-6">
+        <h1>
+          <i class="fas fa-exchange-alt"></i> Histórico de Movimentações
+        </h1>
+      </div>
+      <div class="col-lg-6 text-right">
+        <!-- Botões lado a lado -->
+        <div class="btn-group" role="group" aria-label="Histórico Botões">
+          <%= link_to entrada_key_usages_path, class: "btn btn-primary" do %>
+            <i class="fas fa-list-alt"></i> Movimentações
+          <% end %>
+
+           <%= link_to key_usages_transactions_path, class: "btn btn-secondary" do %>
+            <i class="fas fa-exchange-alt"></i> Transações
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card shadow mb-4">
+      <div class="card-body p-0">
+        <table class="table table-bordered table-striped table-hover">
+          <thead class="thead-dark">
+            <tr>
+              <th>Objeto</th>
+              <th>Posição</th>
+              <th>Movimentação</th>
+              <th>Data / Hora</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @transactions.each do |t| %>
+  <% if t.keylockerinfo.empty == 1 %>
+    <% action_text = "Devolvido" %>
+    <% badge_class = "badge-success" %>
+  <% else %>
+    <% action_text = "Retirado" %>
+    <% badge_class = "badge-danger" %>
+  <% end %>
+
+  <% movement_description = "#{action_text} por #{t.giver.email} para #{t.receiver.email} no locker #{t.keylocker&.serial}" %>
+
+  <tr>
+    <td>
+      <i class="fas fa-box-open text-primary"></i>
+      <strong><%= t.keylockerinfo.object %></strong>
+    </td>
+    <td>
+      <strong><%= t.keylockerinfo.posicion %></strong>
+    </td>
+    <td><%= movement_description %></td>
+    <td><%= t.delivered_at.strftime("%d/%m/%Y %H:%M") %></td>
+    <td>
+      <span class="badge <%= badge_class %> p-2">
+        <%= action_text %>
+      </span>
+    </td>
+  </tr>
+<% end %>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer">
+        <%= will_paginate @transactions, class: "pagination justify-content-end mb-0" %>
+      </div>
+    </div>
+  </div>
+</div>

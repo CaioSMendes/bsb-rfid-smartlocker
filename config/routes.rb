@@ -27,6 +27,8 @@ Rails.application.routes.draw do
   post '/products/save_serial', to: 'products#save_serial'
   mount ActionCable.server => '/cable'
   get 'key_usages/entrada_reload', to: 'key_usages#entrada_reload', as: :entrada_reload_key_usages
+    get 'key_usages/transactions', to: 'key_usages#transactions'
+
 
   resources :deliveries
   resources :deliverers do
@@ -102,7 +104,15 @@ Rails.application.routes.draw do
     end
   end
 
-  
+  namespace :api do
+    namespace :v1 do
+      resources :keylocker_transactions, only: [:create] do
+        collection do
+          get ':tagRFID', action: :show
+        end
+      end
+    end
+  end
 
   #resources :keylockers, defaults: { format: 'json' }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

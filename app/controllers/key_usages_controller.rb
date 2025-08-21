@@ -40,5 +40,12 @@ class KeyUsagesController < ApplicationController
       { log: log, alert: log_alert }
     end
   end  
+
+  def transactions
+    # Aqui você pode buscar apenas logs de transações
+    @transactions = KeylockerTransaction.includes(:giver, :receiver, :keylocker, :keylockerinfo)
+                                        .order(delivered_at: :desc)
+                                        .paginate(page: params[:page], per_page: 20)
+  end
 end
   

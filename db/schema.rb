@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_08_03_145151) do
+ActiveRecord::Schema[7.0].define(version: 2025_08_21_054145) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -136,6 +136,20 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_03_145151) do
     t.datetime "updated_at", null: false
     t.index ["employee_id"], name: "index_key_usages_on_employee_id"
     t.index ["keylocker_id"], name: "index_key_usages_on_keylocker_id"
+  end
+
+  create_table "keylocker_transactions", force: :cascade do |t|
+    t.bigint "keylocker_info_id", null: false
+    t.bigint "giver_employee_id", null: false
+    t.bigint "receiver_employee_id", null: false
+    t.bigint "keylocker_id"
+    t.datetime "delivered_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["giver_employee_id"], name: "index_keylocker_transactions_on_giver_employee_id"
+    t.index ["keylocker_id"], name: "index_keylocker_transactions_on_keylocker_id"
+    t.index ["keylocker_info_id"], name: "index_keylocker_transactions_on_keylocker_info_id"
+    t.index ["receiver_employee_id"], name: "index_keylocker_transactions_on_receiver_employee_id"
   end
 
   create_table "keylockerinfos", force: :cascade do |t|
