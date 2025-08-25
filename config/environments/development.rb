@@ -17,6 +17,7 @@ Rails.application.configure do
   # Enable server timing
   config.server_timing = true
   config.hosts << "smartlockerbrasiliarfid.com.br"  
+  config.hosts << "silent-cases-feel.loca.lt"
   #config.force_ssl = true #NIGINX
   #config.action_controller.asset_host = 'smartlockerbrasiliarfid.com.br' #NIGINX
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?

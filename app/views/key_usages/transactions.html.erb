@@ -36,6 +36,7 @@
             <tr>
               <th>Objeto</th>
               <th>Posição</th>
+              <th>Serial Locker</th>
               <th>Movimentação</th>
               <th>Data / Hora</th>
               <th>Status</th>
@@ -47,11 +48,11 @@
     <% action_text = "Devolvido" %>
     <% badge_class = "badge-success" %>
   <% else %>
-    <% action_text = "Retirado" %>
+    <% action_text = "Entregue" %>
     <% badge_class = "badge-danger" %>
   <% end %>
 
-  <% movement_description = "#{action_text} por #{t.giver.email} para #{t.receiver.email} no locker #{t.keylocker&.serial}" %>
+  <% movement_description = "#{action_text} por #{t.giver.email} para #{t.receiver.email}" %>
 
   <tr>
     <td>
@@ -60,6 +61,10 @@
     </td>
     <td>
       <strong><%= t.keylockerinfo.posicion %></strong>
+    </td>
+     <td>
+      <i class="fas fa-box-open text-primary"></i>
+      <strong><%= t.keylocker&.serial%></strong>
     </td>
     <td><%= movement_description %></td>
     <td><%= t.delivered_at.strftime("%d/%m/%Y %H:%M") %></td>

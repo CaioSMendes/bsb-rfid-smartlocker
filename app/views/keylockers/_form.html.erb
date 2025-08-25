@@ -42,13 +42,21 @@
             <%= form.text_field :cnpjCpf, id: 'form7Example3', class: 'form-control' %>
           </div>
 
+           <!-- Text input para quantidade de nichos -->
+          <div class="form-outline mb-4">
+            <%= form.label :qtd, 'Quantidade Total de Nichos', class: "form-label" %>
+            <%= form.text_field :qtd, id: 'form7Example3', class: 'form-control' %>
+          </div>
+
           <!-- Campos Dinâmicos para Nichos -->
           <div class="form-outline mb-4">
             <%= form.label :niches, 'Posições (Nichos)', class: "form-label" %>
             <div id="keylockerinfos-container"></div>
-            <button type="button" class="btn btn-secondary mt-2" onclick="addNiche()">+ Adicionar posição</button>
-          </div>
 
+            <% unless current_user.admin? %>
+              <button type="button" class="btn btn-secondary mt-2" onclick="addNiche()">+ Adicionar posição</button>
+            <% end %>
+          </div>
           
           <!-- Placeholder para Nested Attributes de Keylockerinfos -->
           <div id="keylockerinfos-container"></div>

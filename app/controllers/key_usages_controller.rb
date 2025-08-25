@@ -42,9 +42,15 @@ class KeyUsagesController < ApplicationController
   end  
 
   def transactions
-    # Aqui você pode buscar apenas logs de transações
+    employee = Employee.find_by(user_id: current_user.id)
+
+    # pega todos os keylockers que esse employee tem acesso
+    keylockers = employee.keylockers.pluck(:id)
+
     @transactions = KeylockerTransaction.includes(:giver, :receiver, :keylocker, :keylockerinfo)
-                                        .order(delivered_at: :desc)
+                                        .where(keylocker_id: keylockers)
+                                        .where("giver_employee_id = :eid OR receiver_employee_id = :eid", eid: employee.id)
+                                        .order(created_at: :desc)
                                         .paginate(page: params[:page], per_page: 20)
   end
 end

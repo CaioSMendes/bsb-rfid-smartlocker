@@ -9,8 +9,7 @@
         </ol>
       </div>
     </div>
-
-    <%= form_with(model: @keylocker, local: true) do |form| %>
+    <%= form_with(model: @keylocker, local: true, html: { multipart: true }) do |form| %>
       <% if @keylocker.errors.any? %>
         <div class="alert alert-danger">
           <h4><%= pluralize(@keylocker.errors.count, "erro") %> impediram o cadastro do locker:</h4>
@@ -32,25 +31,51 @@
               <!-- Proprietário -->
               <div class="form-outline mb-4">
                 <%= form.label :owner, 'Proprietário do Locker', class: "form-label" %>
-                <%= form.text_field :owner, class: 'form-control' %>
+                <% if current_user.admin? %>
+                  <%= form.text_field :owner, class: 'form-control' %>
+                <% else %>
+                  <%= form.text_field :owner, class: 'form-control', readonly: true %>
+                <% end %>
               </div>
 
               <!-- Tipo de Armário -->
               <div class="form-outline mb-4">
                 <%= form.label :lockertype, "Tipo de Armário", class: "form-label" %>
-                <%= form.select :lockertype, ['Armário de chaves', 'Armário de encomendas', 'Guarda Volume'], prompt: "Selecione o tipo de armário", class: 'form-control' %>
+                <% if current_user.admin? %>
+                  <%= form.select :lockertype, ['Armário de chaves', 'Armário de encomendas', 'Guarda Volume'], prompt: "Selecione o tipo de armário", class: 'form-control' %>
+                <% else %>
+                  <%= form.text_field :lockertype, value: @keylocker.lockertype, class: 'form-control', readonly: true %>
+                <% end %>
               </div>
 
               <!-- Nome do Locker -->
               <div class="form-outline mb-4">
                 <%= form.label :nameDevice, 'Nome do Locker', class: "form-label" %>
-                <%= form.text_field :nameDevice, class: 'form-control' %>
+                <% if current_user.admin? %>
+                  <%= form.text_field :nameDevice, class: 'form-control' %>
+                <% else %>
+                  <%= form.text_field :nameDevice, class: 'form-control', readonly: true %>
+                <% end %>
+              </div>
+
+              <!-- Quantidade Total de Nichos -->
+              <div class="form-outline mb-4">
+                <%= form.label :qtd, 'Quantidade Total de Nichos', class: "form-label" %>
+                <% if current_user.admin? %>
+                  <%= form.text_field :qtd, class: 'form-control' %>
+                <% else %>
+                  <%= form.text_field :qtd, class: 'form-control', readonly: true %>
+                <% end %>
               </div>
 
               <!-- CNPJ ou CPF -->
               <div class="form-outline mb-4">
                 <%= form.label :cnpjCpf, 'CNPJ ou CPF', class: "form-label" %>
-                <%= form.text_field :cnpjCpf, class: 'form-control' %>
+                <% if current_user.admin? %>
+                  <%= form.text_field :cnpjCpf, class: 'form-control' %>
+                <% else %>
+                  <%= form.text_field :cnpjCpf, class: 'form-control', readonly: true %>
+                <% end %>
               </div>
 
               <!-- Campos Dinâmicos - Keylocker Infos -->
@@ -87,15 +112,21 @@
                     <!-- Imagem -->
                     <div class="form-group">
                       <label>Imagem:</label>
-                      <%= file_field_tag "keylocker[keylockerinfos_attributes][#{index}][image]", class: "form-control" %>
+                       <%= form.fields_for :keylockerinfos, info do |k_info| %>
+                        <%= k_info.file_field :image, class: "form-control" %>
+                      <% end %>
                     </div>
                     <!-- Botão de Remoção -->
-                    <%= button_to 'Excluir', keylockerinfo_path(info.id) + "?keylocker_id=#{@keylocker.id}", method: :delete, data: { confirm: 'Você tem certeza que deseja excluir?' }, class: 'btn btn-danger btn-sm position-absolute', style: 'top: 5px; right: 5px;' %>
+                    <button type="button" class="btn btn-danger btn-sm position-absolute" style="top: 5px; right: 5px;" onclick="removeNiche(this)">
+                      <i class="fas fa-times"></i>
+                    </button>
                   </div>
                 <% end %>
               </div>
 
-              <button type="button" class="btn btn-secondary mt-2" onclick="addNiche()">+ Adicionar posição</button>
+              <% unless current_user.admin? %>
+                <button type="button" class="btn btn-secondary mt-2" onclick="addNiche()">+ Adicionar posição</button>
+              <% end %>
 
               <!-- Botões -->
               <div class="d-flex mt-3">
@@ -111,48 +142,58 @@
 </div>
 
 <script type="text/javascript">
-  function addNiche() {
-    const container = document.getElementById('keylockerinfos-container');
-    const newIndex = container.children.length;
+function removeNiche(button) {
+  button.closest('.nested-fields').remove();
+}
 
-    const newField = `
-      <div class="nested-fields mb-3 border rounded p-2 position-relative" data-index="${newIndex}">
-        <input type="hidden" name="keylocker[keylockerinfos_attributes][${newIndex}][id]" value="">
-        <input type="hidden" name="keylocker[keylockerinfos_attributes][${newIndex}][_destroy]" value="0"> <!-- Campo _destroy -->
+function addNiche() {
+  const container = document.getElementById('keylockerinfos-container');
+  const newIndex = container.children.length;
+  const maxNiches = <%= @keylocker.qtd %>; // quantidade máxima de nichos
 
-        <div class="form-group">
-          <label>Posição: <span class="position-number">${newIndex + 1}</span></label>
-          <input type="hidden" name="keylocker[keylockerinfos_attributes][${newIndex}][posicion]" value="${newIndex + 1}">
-          <input type="text" name="keylocker[keylockerinfos_attributes][${newIndex}][object]" class="form-control" placeholder="Descrição da Posição">
-        </div>
-
-        <div class="form-group">
-          <label>Tag RFID:</label>
-          <input type="text" name="keylocker[keylockerinfos_attributes][${newIndex}][tagRFID]" class="form-control" placeholder="Tag RFID">
-        </div>
-
-        <div class="form-group">
-          <label>ID Interno:</label>
-          <input type="text" name="keylocker[keylockerinfos_attributes][${newIndex}][idInterno]" class="form-control" placeholder="ID Interno">
-        </div>
-
-        <div class="form-group">
-          <label>Descrição:</label>
-          <input type="text" name="keylocker[keylockerinfos_attributes][${newIndex}][description]" class="form-control" placeholder="Descrição">
-        </div>
-
-        <div class="form-group">
-          <label>Imagem:</label>
-          <input type="file" name="keylocker[keylockerinfos_attributes][${newIndex}][image]" class="form-control">
-        </div>
-
-        <button type="button" class="btn btn-danger btn-sm position-absolute" style="top: 5px; right: 5px;" onclick="removeNiche(this)">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>`;
-
-    container.insertAdjacentHTML('beforeend', newField);
+  if (newIndex >= maxNiches) {
+    alert(`Não é possível adicionar mais de ${maxNiches} posições.`);
+    return;
   }
+
+  const newField = `
+    <div class="nested-fields mb-3 border rounded p-2 position-relative" data-index="${newIndex}">
+      <input type="hidden" name="keylocker[keylockerinfos_attributes][${newIndex}][id]" value="">
+      <input type="hidden" name="keylocker[keylockerinfos_attributes][${newIndex}][_destroy]" value="0">
+
+      <div class="form-group">
+        <label>Posição: <span class="position-number">${newIndex + 1}</span></label>
+        <input type="hidden" name="keylocker[keylockerinfos_attributes][${newIndex}][posicion]" value="${newIndex + 1}">
+        <input type="text" name="keylocker[keylockerinfos_attributes][${newIndex}][object]" class="form-control" placeholder="Descrição da Posição">
+      </div>
+
+      <div class="form-group">
+        <label>Tag RFID:</label>
+        <input type="text" name="keylocker[keylockerinfos_attributes][${newIndex}][tagRFID]" class="form-control" placeholder="Tag RFID">
+      </div>
+
+      <div class="form-group">
+        <label>ID Interno:</label>
+        <input type="text" name="keylocker[keylockerinfos_attributes][${newIndex}][idInterno]" class="form-control" placeholder="ID Interno">
+      </div>
+
+      <div class="form-group">
+        <label>Descrição:</label>
+        <input type="text" name="keylocker[keylockerinfos_attributes][${newIndex}][description]" class="form-control" placeholder="Descrição">
+      </div>
+
+      <div class="form-group">
+        <label>Imagem:</label>
+        <input type="file" name="keylocker[keylockerinfos_attributes][${newIndex}][image]" class="form-control">
+      </div>
+
+      <button type="button" class="btn btn-danger btn-sm position-absolute" style="top: 5px; right: 5px;" onclick="removeNiche(this)">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>`;
+
+  container.insertAdjacentHTML('beforeend', newField);
+  }  
 
   function removeNiche(button) {
     button.closest('.nested-fields').remove();

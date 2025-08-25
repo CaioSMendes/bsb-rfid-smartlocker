@@ -67,6 +67,7 @@
         <p><strong>Nome do dispositivo:</strong> <%= @keylocker.nameDevice %></p>
         <p><strong>Proprietário do locker:</strong> <%= @keylocker.owner %></p>
         <p><strong>CNPJ ou CPF:</strong> <%= @keylocker.cnpjCpf %></p>
+        <p><strong>Total de nichos:</strong> <%= @keylocker.qtd %></p>
         <p><strong>Serial do locker:</strong> <%= @keylocker.serial %></p>
         <p>
           <strong>Status:</strong>
@@ -80,7 +81,7 @@
       <!-- Botões de ações -->
       <div class="d-flex gap-2 mb-4">
         <%= link_to edit_keylocker_path(@keylocker), class: "btn btn-primary" do %>
-          <i class="fas fa-edit"></i> Editar
+          <i class="fas fa-edit"></i> Cadastrar Objetos
         <% end %>
       
         <%= link_to keylockers_path, class: "btn btn-secondary" do %>
