@@ -1,11 +1,12 @@
 class Keylockerinfo < ApplicationRecord
   belongs_to :keylocker
   has_one_attached :image
-  # Exemplo de um callback para definir o status de 'empty' ao criar um registro.
-  after_initialize :set_empty_default
+
+  # Define empty = 1 somente na criação do registro
+  before_validation :set_empty_default, on: :create
 
   def set_empty_default
-    self.empty ||= 1  # Define 1 como valor padrão para 'empty' se não for especificado
+    self.empty ||= 1
   end
 
   # Método para alterar o status de 'empty'

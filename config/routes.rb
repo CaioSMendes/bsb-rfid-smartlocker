@@ -109,6 +109,7 @@ Rails.application.routes.draw do
       resources :keylocker_transactions, only: [:create] do
         collection do
           get ':tagRFID', action: :show
+          post :add_object   # Novo endpoint POST
         end
       end
     end
