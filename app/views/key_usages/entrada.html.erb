@@ -26,7 +26,7 @@
 <div id="logs_table_container"> <!-- Esse id é importante para o JS -->
   <div class="container-fluid">
     <div class="row">
-      <div class="col-12"> <!-- Garantir que a linha ocupe toda a largura disponível -->
+      <div class="col-12">
         <div class="right_col mt-3" role="main">
           <div class="row">
             <div class="table-responsive">
@@ -46,22 +46,68 @@
                 <tbody>
                   <% @logs_with_alert.each do |log_info| %>
                     <tr>
-                      <td><%= log_info[:log].employee.name %> <%= log_info[:log].employee.lastname %></td>
-                      <td><%= log_info[:log].timestamp.strftime('%d/%m/%Y %H:%M:%S') %></td>
-                      <td><%= log_info[:log].action %></td>
-                      <td><%= log_info[:log].locker_object %></td>
-                      <td><%= log_info[:log].locker_name %></td>
-                      <td><%= log_info[:log].locker_serial %></td>
-                      <td><%= log_info[:log].comments %></td>
+                      <!-- Colaborador -->
+                      <td>
+                        <i class="fas fa-user text-primary"></i>
+                        <%= log_info[:log].employee.name %> <%= log_info[:log].employee.lastname %>
+                      </td>
+
+                      <!-- Data e Hora -->
+                      <td>
+                        <i class="fas fa-calendar-alt text-info"></i>
+                        <%= log_info[:log].timestamp.strftime('%d/%m/%Y %H:%M:%S') %>
+                      </td>
+
+                      <!-- Ação -->
+                      <td>
+                        <% case log_info[:log].action %>
+                        <% when 'retirada' %>
+                          <i class="fas fa-sign-out-alt text-warning"></i> Retirada
+                        <% when 'devolução' %>
+                          <i class="fas fa-undo text-success"></i> Devolução
+                        <% else %>
+                          <i class="fas fa-question-circle text-secondary"></i> <%= log_info[:log].action %>
+                        <% end %>
+                      </td>
+
+                      <!-- Objeto -->
+                      <td>
+                        <i class="fas fa-cogs text-dark"></i>
+                        <%= log_info[:log].locker_object %>
+                      </td>
+
+                      <!-- Nome do Locker -->
+                      <td>
+                        <i class="fas fa-box-open text-primary"></i>
+                        <%= log_info[:log].locker_name %>
+                      </td>
+
+                      <!-- Serial do Locker -->
+                      <td>
+                        <i class="fas fa-lock text-warning"></i>
+                        <%= log_info[:log].locker_serial %>
+                      </td>
+
+                      <!-- Comentários -->
+                      <td>
+                        <i class="fas fa-comment-dots text-secondary"></i>
+                        <%= log_info[:log].comments %>
+                      </td>
+
+                      <!-- Alerta / Status -->
                       <td>
                         <% if log_info[:log].action == 'retirada' %>
                           <% if log_info[:alert] %>
-                            <button class="btn btn-danger">Objeto Retirado</button>
+                            <button class="btn btn-danger">
+                              <i class="fas fa-exclamation-triangle"></i> Objeto Retirado
+                            </button>
                           <% end %>
                         <% elsif log_info[:log].action == 'devolução' %>
-                          <button class="btn btn-success">Objeto Devolvido</button>
+                          <button class="btn btn-success">
+                            <i class="fas fa-check-circle"></i> Objeto Devolvido
+                          </button>
                         <% else %>
-                          <%= log_info[:log].action %>
+                          <i class="fas fa-info-circle"></i> <%= log_info[:log].action %>
                         <% end %>
                       </td>
                     </tr>

@@ -42,16 +42,16 @@ class KeyUsagesController < ApplicationController
   end  
 
   def transactions
-    employee = Employee.find_by(user_id: current_user.id)
+    employee = Employee.find_by(user_id: current_user.id) # <- adiciona isso
+    puts "=== Employee ID: #{employee&.id} / User ID: #{current_user.id} ==="
 
-    # pega todos os keylockers que esse employee tem acesso
-    keylockers = employee.keylockers.pluck(:id)
+    keylockers = employee&.keylockers&.pluck(:id)
+    puts "=== Keylockers IDs: #{keylockers.inspect} ==="
 
     @transactions = KeylockerTransaction.includes(:giver, :receiver, :keylocker, :keylockerinfo)
-                                        .where(keylocker_id: keylockers)
-                                        .where("giver_employee_id = :eid OR receiver_employee_id = :eid", eid: employee.id)
-                                        .order(created_at: :desc)
-                                        .paginate(page: params[:page], per_page: 20)
+                                    .where("giver_employee_id = :eid OR receiver_employee_id = :eid", eid: employee.id)
+                                    .order(created_at: :desc)
+                                    .paginate(page: params[:transactions_page], per_page: 20)
   end
 end
   

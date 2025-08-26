@@ -74,6 +74,7 @@ def create
   changes << {
     employee_id: employee.id,
     action: action,
+    tagrfid: keylocker_info.tagRFID, # <-- Aqui
     keylocker_id: keylocker.id,
     locker_serial: keylocker.serial,
     locker_object: locker_object,
@@ -85,7 +86,7 @@ def create
   puts "🔹 Array de mudanças: #{changes.inspect}"
 
   # 6️⃣ Salva todos os logs de uma vez
-  Log.insert_all(changes) unless changes.empty?
+  Logsmovimetation.insert_all(changes) unless changes.empty?
   puts "✅ Logs inseridos com sucesso"
 
   # 7️⃣ Retorna a resposta

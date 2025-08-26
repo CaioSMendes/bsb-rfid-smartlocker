@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_08_21_054145) do
+ActiveRecord::Schema[7.0].define(version: 2025_08_26_084002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -203,6 +203,24 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_21_054145) do
     t.index ["employee_id"], name: "index_logs_on_employee_id"
   end
 
+  create_table "logsmovimetations", force: :cascade do |t|
+    t.bigint "employee_id", null: false
+    t.string "action"
+    t.string "tagrfid"
+    t.string "key_id"
+    t.string "locker_name"
+    t.string "locker_serial"
+    t.string "locker_object"
+    t.datetime "timestamp"
+    t.string "status"
+    t.text "comments"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "keylocker_id", null: false
+    t.index ["employee_id"], name: "index_logsmovimetations_on_employee_id"
+    t.index ["keylocker_id"], name: "index_logsmovimetations_on_keylocker_id"
+  end
+
   create_table "products", force: :cascade do |t|
     t.string "package_description"
     t.string "locker_code"
@@ -287,6 +305,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_21_054145) do
   add_foreign_key "key_usages", "keylockers"
   add_foreign_key "keylockerinfos", "keylockers"
   add_foreign_key "logs", "employees"
+  add_foreign_key "logsmovimetations", "employees"
+  add_foreign_key "logsmovimetations", "keylockers"
   add_foreign_key "user_lockers", "keylockers"
   add_foreign_key "user_lockers", "users"
   add_foreign_key "workdays", "employees"

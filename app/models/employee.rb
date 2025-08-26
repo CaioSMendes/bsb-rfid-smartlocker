@@ -7,6 +7,8 @@ class Employee < ApplicationRecord
   has_and_belongs_to_many :keylockers
   has_one_attached :profile_picture
   has_many :logs
+  has_many :logsmovimetations
+
 
   accepts_nested_attributes_for :workdays, reject_if: :all_blank, allow_destroy: true
   
