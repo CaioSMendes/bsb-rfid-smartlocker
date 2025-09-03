@@ -45,7 +45,7 @@
                     </div>
 
                     <p><strong>Posição:</strong> <%= info.posicion || "Sem posição" %></p>
-                    <p><strong>Tag RFID:</strong> <%= info.tagRFID || 'Não disponível' %></p>
+                    <p><strong>Tag RFID:</strong> <%= info.tagRFID ? info.tagRFID.slice(0, 6) : 'Não disponível' %></p>
                     <p><strong>ID Interno:</strong> <%= info.idInterno || 'Não disponível' %></p>
                     <p><strong>Descrição:</strong> <%= info.description || 'Não disponível' %></p>
                 

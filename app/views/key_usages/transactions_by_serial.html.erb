@@ -1,0 +1,155 @@
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row align-items-center mb-3">
+      <div class="col-lg-6">
+        <h1>
+          <i class="fas fa-exchange-alt"></i> Histórico de Transações
+        </h1>
+      </div>
+      <div class="col-lg-6 text-right">
+        <!-- Botões lado a lado -->
+        <div class="btn-group" role="group" aria-label="Histórico Botões">
+          <%= link_to entrada_key_usages_path, class: "btn btn-primary" do %>
+            <i class="fas fa-list-alt"></i> Movimentações
+          <% end %>
+
+           <%= link_to key_usages_transactions_by_serial_path, class: "btn btn-secondary" do %>
+            <i class="fas fa-exchange-alt"></i> Transações
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="logs_table_container">
+  <div class="container-fluid mt-3">
+
+   <!-- Filtros -->
+<div class="row mb-2">
+  <%= form_with url: key_usages_transactions_by_serial_path, method: :get, local: true, class: "row g-2 align-items-end" do |f| %>
+
+    <div class="col-md">
+      <%= f.label :tagRFID, "Tag RFID" %>
+      <%= f.text_field :tagRFID, value: params[:tagRFID], class: "form-control form-control-sm", placeholder: "Tag RFID" %>
+    </div>
+
+    <div class="col-md">
+      <%= f.label :giver, "Entregue por" %>
+      <%= f.text_field :giver, value: params[:giver], class: "form-control form-control-sm", placeholder: "Nome ou email" %>
+    </div>
+
+    <div class="col-md">
+      <%= f.label :receiver, "Para" %>
+      <%= f.text_field :receiver, value: params[:receiver], class: "form-control form-control-sm", placeholder: "Nome ou email" %>
+    </div>
+
+    <div class="col-md">
+      <%= f.label :date, "Data" %>
+      <%= f.date_field :date, value: params[:date], class: "form-control form-control-sm" %>
+    </div>
+
+    <div class="col-md">
+      <%= f.label :status, "Status" %>
+      <%= f.select :status, options_for_select([["Todos", ""], ["Disponível", "disponivel"], ["Em Uso", "em_uso"]], params[:status]), {}, class: "form-select form-select-sm" %>
+    </div>
+
+    <div class="col-md-auto">
+      <%= f.submit "Filtrar", class: "btn btn-primary btn-sm w-100" %>
+    </div>
+
+    <div class="col-md-auto">
+      <%= link_to "📊 Exportar Excel", key_usages_transactions_by_serial_path(request.query_parameters.merge(format: :xlsx)), class: "btn btn-success btn-sm w-100" %>
+    </div>
+
+  <% end %>
+</div>
+
+
+    <!-- Tabela de transações -->
+    <div class="row">
+      <div class="col-12">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th><i class="fas fa-box-open text-primary"></i> Objeto</th>
+                <th><i class="fas fa-map-marker-alt text-info"></i> Posição</th>
+                <th><i class="fas fa-lock text-warning"></i> Serial Locker</th>
+                <th><i class="fas fa-id-card text-secondary"></i> Tag RFID</th>
+                <th><i class="fas fa-exchange-alt text-dark"></i> Ação</th>
+                <th><i class="fas fa-exchange-alt text-dark"></i> Movimentação</th>
+                <th><i class="fas fa-user-check text-success"></i> Entregue por</th>
+                <th><i class="fas fa-user-clock text-danger"></i> Para</th>
+                <th><i class="fas fa-calendar-alt text-info"></i> Data / Hora</th>
+                <th><i class="fas fa-check-circle text-primary"></i> Status</th>
+                <th>  </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% (@transactions || []).each do |t| %>
+                <% action_text = t.keylockerinfo&.empty == 1 ? "Devolvido" : "Entregue" %>
+                <% badge_class = t.keylockerinfo&.empty == 1 ? "badge-success" : "badge-secondary" %>
+                <tr>
+                  <!-- Objeto -->
+                  <td><strong><%= t.keylockerinfo&.object || 'N/A' %></strong></td>
+
+                  <!-- Posição -->
+                  <td><strong><%= t.keylockerinfo&.posicion || 'N/A' %></strong></td>
+
+                  <!-- Serial do locker -->
+                  <td><strong><%= t.keylocker&.serial || 'N/A' %></strong></td>
+
+                  <!-- Tag RFID -->
+                  <td><strong><%= t.keylockerinfo&.tagRFID&.slice(0,6) || 'N/A' %></strong></td>
+
+                  <!-- Ação -->
+                  <td><%= t.status %></td>
+
+                  <!-- Movimentação -->
+                  <td><%= t.movement_description %></td>
+
+                  <!-- Entregue por -->
+                  <td><%= "#{t.giver&.name} #{t.giver&.lastname} (#{t.giver&.email})" %></td>
+
+                  <!-- Para -->
+                  <td><%= "#{t.receiver&.name} #{t.receiver&.lastname} (#{t.receiver&.email})" %></td>
+
+                  <!-- Data / Hora -->
+                  <td><%= t.delivered_at&.strftime("%d/%m/%Y %H:%M") || 'N/A' %></td>
+
+                  <!-- Status -->
+                  <td>
+                    <span class="badge <%= badge_class %> p-2">
+                      <%= t.keylockerinfo&.empty == 1 ? "Disponível" : "Em Uso" %>
+                    </span>
+                  </td>
+                  <td>
+                    <%= button_to destroy_transaction_key_usage_path(t.id),
+                                method: :delete, 
+                                data: { confirm: "Deseja realmente deletar esta transação?" },
+                                class: "btn btn-sm btn-danger" do %>
+                          <i class="fas fa-trash"></i>
+                      <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paginação -->
+    <div class="text-center mt-3 d-flex justify-content-center">
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <%= will_paginate @transactions, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+        </ul>
+      </nav>
+    </div>
+
+  </div>
+</div>

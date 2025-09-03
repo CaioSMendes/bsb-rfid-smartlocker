@@ -7,103 +7,81 @@ class Api::V1::KeylockerTransactionsController < ApplicationController
 
   # POST /api/v1/keylocker_transactions
   # app/controllers/api/v1/keylocker_transactions_controller.rb
-  def create
-    puts "➡️ Params recebidos: #{params.inspect}"
+def create
+  keylocker = Keylocker.find_by(serial: params[:locker_serial])
+  keylocker_info = Keylockerinfo.find_by(tagRFID: params[:tagRFID])
+  giver = Employee.find_by(id: params[:giver_id])
+  receiver = Employee.find_by(id: params[:receiver_id])
+  action_type = params[:action_type]
 
-    # 1️⃣ Busca os registros
-    keylocker = Keylocker.find_by(serial: params[:locker_serial])
-    puts "🔹 Keylocker encontrado: #{keylocker.inspect}"
-
-    keylocker_info = Keylockerinfo.find_by(tagRFID: params[:tagRFID])
-    puts "🔹 KeylockerInfo encontrado: #{keylocker_info.inspect}"
-
-    giver = Employee.find(params[:giver_id])
-    puts "🔹 Giver encontrado: #{giver.inspect}"
-
-    receiver = Employee.find(params[:receiver_id])
-    puts "🔹 Receiver encontrado: #{receiver.inspect}"
-
-    action_type = params[:action_type]
-    puts "🔹 Action type: #{action_type}"
-
-    # 2️⃣ Validação
-    if keylocker_info.nil?
-      puts "❌ Objeto não encontrado"
-      render json: { status: "ERROR", message: "Objeto não encontrado" }, status: :not_found
-      return
-    end
-
-    unless %w[entregar devolver].include?(action_type)
-      puts "❌ Ação inválida"
-      render json: { status: "ERROR", message: "Ação inválida" }, status: :unprocessable_entity
-      return
-    end
-
-    # 3️⃣ Cria a transação no KeylockerTransaction
-    transaction = KeylockerTransaction.create!(
-      keylockerinfo: keylocker_info,
-      giver: giver,
-      receiver: receiver,
-      keylocker: keylocker,
-      delivered_at: Time.current
-    )
-    puts "✅ Transação criada: #{transaction.inspect}"
-
-    # 4️⃣ Prepara os dados para logs
-    changes = []
-    locker_object = keylocker_info.object
-    status, action, comments = "", "", ""
-    employee = giver
-
-    case action_type
-    when 'entregar'
-      keylocker_info.update(empty: 0)
-      status = "Entregue"
-      action = "entrega"
-      comments = "Objeto #{locker_object} entregue por #{giver.email} para #{receiver.email}"
-    when 'devolver'
-      keylocker_info.update(empty: 1)
-      status = "Disponível"
-      action = "devolução"
-      comments = "Objeto #{locker_object} devolvido por #{receiver.email} para #{giver.email}"
-      employee = receiver
-    end
-    puts "🔹 Status após atualização: #{status}, ação: #{action}, comments: #{comments}"
-
-    # 5️⃣ Adiciona no array de mudanças
-    changes << {
-      employee_id: employee.id,
-      action: action,
-      tagrfid: keylocker_info.tagRFID, # <-- Aqui
-      keylocker_id: keylocker.id,
-      locker_serial: keylocker.serial,
-      locker_object: locker_object,
-      locker_name: keylocker.nameDevice,
-      timestamp: Time.current,
-      status: status,
-      comments: comments
-    }
-    puts "🔹 Array de mudanças: #{changes.inspect}"
-
-    # 6️⃣ Salva todos os logs de uma vez
-    Logsmovimetation.insert_all(changes) unless changes.empty?
-    puts "✅ Logs inseridos com sucesso"
-
-    # 7️⃣ Retorna a resposta
-    render json: {
-      status: "SUCCESS",
-      message: "Transação registrada",
-      data: {
-        object: locker_object,
-        tagRFID: keylocker_info.tagRFID,
-        locker_serial: keylocker&.serial,
-        delivered_at: transaction.delivered_at,
-        action: action_type,
-        from: { id: giver.id, name: giver.name, lastname: giver.lastname },
-        to: { id: receiver.id, name: receiver.name, lastname: receiver.lastname }
-      }
-    }, status: :ok
+  # Validações básicas
+  if keylocker_info.nil?
+    render json: { status: "ERROR", message: "Objeto não encontrado" }, status: :not_found and return
   end
+
+  unless %w[entregar devolver].include?(action_type)
+    render json: { status: "ERROR", message: "Ação inválida" }, status: :unprocessable_entity and return
+  end
+
+  # Validação do estado do objeto
+  if action_type == 'entregar' && keylocker_info.empty == 0
+    render json: { status: "ERROR", message: "Objeto já está em uso, não pode ser retirado" }, status: :forbidden and return
+  elsif action_type == 'devolver' && keylocker_info.empty == 1
+    render json: { status: "ERROR", message: "Objeto já está disponível, não pode ser devolvido" }, status: :forbidden and return
+  end
+
+  # Verifica se quem está devolvendo realmente retirou o objeto
+  ultima_transacao = KeylockerTransaction.where(keylocker_info_id: keylocker_info.id)
+                                        .order(created_at: :desc)
+                                        .first
+  if action_type == 'devolver'
+    if ultima_transacao.nil? || ultima_transacao.receiver_employee_id != giver.id
+      render json: { status: "ERROR", message: "Somente quem retirou pode devolver" }, status: :forbidden and return
+    end
+  end
+
+  # Define status da transação e estado do objeto
+  status = action_type == 'entregar' ? "Entregue" : "Devolvido"
+  empty_value = action_type == 'devolver' ? 1 : 0
+  available_status = empty_value == 1 ? "Disponível" : "Em Uso"
+
+  # Cria a descrição completa da ação
+  movement_description = "#{status} por #{giver&.name || 'N/A'} #{giver&.lastname || ''} para #{receiver&.name || 'N/A'} #{receiver&.lastname || ''}"
+
+  # Cria a transação
+  transaction = KeylockerTransaction.create!(
+    keylockerinfo: keylocker_info,
+    giver: giver,
+    receiver: receiver,
+    keylocker: keylocker,
+    delivered_at: Time.current,
+    status: status,
+    movement_description: movement_description
+  )
+
+  # Atualiza o estado atual do objeto
+  keylocker_info.update(empty: empty_value)
+
+  # Retorna JSON com os dados da transação
+  render json: {
+    status: "SUCCESS",
+    message: "Transação registrada",
+    data: {
+      object: keylocker_info.object,
+      tagRFID: keylocker_info.tagRFID,
+      locker_serial: keylocker.serial,
+      delivered_at: transaction.delivered_at,
+      status: status,
+      action: action_type,
+      available: available_status,
+      movement_description: movement_description,
+      from: { id: giver.id, name: giver.name, lastname: giver.lastname },
+      to: { id: receiver.id, name: receiver.name, lastname: receiver.lastname }
+    }
+  }, status: :ok
+end
+
+
 
 def add_object
   keylocker = Keylocker.find_by(serial: params[:locker_serial])

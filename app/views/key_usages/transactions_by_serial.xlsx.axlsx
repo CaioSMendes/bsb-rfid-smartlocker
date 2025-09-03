@@ -1,0 +1,28 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Transações") do |sheet|
+  # Cabeçalho
+  sheet.add_row [
+    "Objeto", "Posição", "Serial do Locker", "Tag RFID",
+    "Movimentação", "Entregue por", "Para", "Data / Hora", "Status"
+  ]
+
+  # Percorrer todas as transações
+  (@transactions || []).each do |t|
+    action_text = t.keylockerinfo&.empty == 1 ? "Devolvido" : "Entregue"
+    movement_description = "#{action_text} por #{t.giver&.name || 'N/A'} #{t.giver&.lastname || ''} para #{t.receiver&.name || 'N/A'} #{t.receiver&.lastname || ''}"
+    status_text = t.keylockerinfo&.empty == 1 ? "Disponível" : "Em Uso"
+
+    sheet.add_row [
+      t.keylockerinfo&.object || 'N/A',
+      t.keylockerinfo&.posicion || 'N/A',
+      t.keylocker&.serial || 'N/A',
+      t.keylockerinfo&.tagRFID&.slice(0,6) || 'N/A',
+      movement_description,
+      "#{t.giver&.name} #{t.giver&.lastname} (#{t.giver&.email})",
+      "#{t.receiver&.name} #{t.receiver&.lastname} (#{t.receiver&.email})",
+      t.delivered_at&.strftime("%d/%m/%Y %H:%M") || 'N/A',
+      status_text
+    ]
+  end
+end

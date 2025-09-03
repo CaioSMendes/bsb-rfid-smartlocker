@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   post '/products/save_serial', to: 'products#save_serial'
   mount ActionCable.server => '/cable'
   get 'key_usages/entrada_reload', to: 'key_usages#entrada_reload', as: :entrada_reload_key_usages
-    get 'key_usages/transactions', to: 'key_usages#transactions'
+  get 'key_usages/transactions_by_serial', to: 'key_usages#transactions_by_serial', as: :key_usages_transactions_by_serial
 
 
   resources :deliveries
@@ -42,12 +42,17 @@ Rails.application.routes.draw do
   resources :keylockers 
   #resources :email_settings
 
-  resources :key_usages do
-    collection  do
-      get :saida
-      get :entrada
-    end
+resources :key_usages do
+  collection do
+    get :saida
+    get :entrada
   end
+
+  member do
+    delete :destroy_log
+    delete :destroy_transaction
+  end
+end
 
   resources :employees do
     member do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_08_26_084002) do
+ActiveRecord::Schema[7.0].define(version: 2025_09_03_052359) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -143,9 +143,12 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_26_084002) do
     t.bigint "giver_employee_id", null: false
     t.bigint "receiver_employee_id", null: false
     t.bigint "keylocker_id"
+    t.string "status", default: "disponível", null: false
     t.datetime "delivered_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "empty_at_moment"
+    t.string "movement_description"
     t.index ["giver_employee_id"], name: "index_keylocker_transactions_on_giver_employee_id"
     t.index ["keylocker_id"], name: "index_keylocker_transactions_on_keylocker_id"
     t.index ["keylocker_info_id"], name: "index_keylocker_transactions_on_keylocker_info_id"

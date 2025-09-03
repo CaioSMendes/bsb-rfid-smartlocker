@@ -1,0 +1,18 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Logs") do |sheet|
+  sheet.add_row ["Colaborador", "Data", "Ação", "Objeto", "Locker", "Serial", "Comentários", "Alerta"]
+
+  @logs_with_alert.each do |log_info|
+    sheet.add_row [
+      "#{log_info[:log].employee.name} #{log_info[:log].employee.lastname}",
+      log_info[:log].timestamp.strftime("%d/%m/%Y %H:%M"),
+      log_info[:log].action,
+      log_info[:log].locker_object,
+      log_info[:log].locker_name,
+      log_info[:log].locker_serial,
+      log_info[:log].comments,
+      log_info[:alert] ? "⚠️" : "OK"
+    ]
+  end
+end
