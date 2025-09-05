@@ -68,6 +68,16 @@
                 <% end %>
               </div>
 
+              <!-- Número de Dígitos da Tag de RFID -->
+              <div class="form-outline mb-4">
+                <%= form.label :qtdDigito , 'Número de Dígitos da Tag de RFID', class: "form-label" %>
+                <% if current_user.admin? %>
+                  <%= form.text_field :qtdDigito , class: 'form-control' %>
+                <% else %>
+                  <%= form.text_field :qtdDigito , class: 'form-control', readonly: true %>
+                <% end %>
+              </div>
+
               <!-- CNPJ ou CPF -->
               <div class="form-outline mb-4">
                 <%= form.label :cnpjCpf, 'CNPJ ou CPF', class: "form-label" %>

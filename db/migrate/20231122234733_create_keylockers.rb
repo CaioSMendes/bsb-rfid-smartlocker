@@ -5,6 +5,7 @@ class CreateKeylockers < ActiveRecord::Migration[7.0]
       t.string :nameDevice
       t.string :cnpjCpf
       t.integer :qtd
+      t.integer :qtdDigito
       t.string :serial
       t.string :status
       t.string :lockertype

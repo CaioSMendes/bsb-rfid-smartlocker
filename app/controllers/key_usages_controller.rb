@@ -12,24 +12,30 @@ class KeyUsagesController < ApplicationController
   # GET /key_usages/entrada
   def entrada
     @logs = filtered_logs
-
-    @latest_logs = @logs.limit(15)
+    @latest_logs = @logs.limit(40)
     flash[:notice] = "Você tem novos logs de movimentação!" if @latest_logs.any?
 
     @logs_with_alert = build_logs_with_alert(@logs)
 
     respond_to do |format|
       format.html
-      format.xlsx { export_logs_to_excel(@logs_with_alert) }
+      format.xlsx do
+        # Se nenhum filtro foi passado → exporta todos os logs
+        export_logs_to_excel(params_present? ? @logs_with_alert : build_logs_with_alert(Log.all))
+      end
     end
   end
 
   # GET /key_usages/transactions_by_serial
   def transactions_by_serial
     @transactions = filtered_transactions
+
     respond_to do |format|
       format.html
-      format.xlsx { export_transactions_to_excel(@transactions) }
+      format.xlsx do
+        # Se não houver filtros → exporta todas as transações do employee
+        export_transactions_to_excel(params_present_transactions? ? @transactions : all_transactions_for_employee)
+      end
     end
   end
 
@@ -45,14 +51,11 @@ class KeyUsagesController < ApplicationController
 
   # DELETE /key_usages/:id/destroy_transaction
   def destroy_transaction
-    @transaction = KeylockerTransaction.find(params[:id])
-
     if @transaction.destroy
       flash[:notice] = "Transação deletada com sucesso."
     else
       flash[:alert] = "Erro ao deletar transação."
     end
-
     redirect_back fallback_location: key_usages_transactions_by_serial_path
   end
 
@@ -62,21 +65,11 @@ class KeyUsagesController < ApplicationController
   def filtered_logs
     logs = Log.joins(:employee).where(employees: { user_id: current_user.id }).order(timestamp: :desc)
 
-    if params[:employee_name].present?
-      logs = logs.where("employees.name ILIKE ? OR employees.lastname ILIKE ?", "%#{params[:employee_name]}%", "%#{params[:employee_name]}%")
-    end
-
-    if params[:start_date].present? && params[:end_date].present?
-      logs = logs.where(timestamp: params[:start_date].to_date.beginning_of_day..params[:end_date].to_date.end_of_day)
-    elsif params[:start_date].present?
-      logs = logs.where("timestamp >= ?", params[:start_date].to_date.beginning_of_day)
-    elsif params[:end_date].present?
-      logs = logs.where("timestamp <= ?", params[:end_date].to_date.end_of_day)
-    end
-
-    if params[:log_action].present?
-      logs = logs.where(action: params[:log_action])
-    end
+    logs = logs.where("employees.name ILIKE ? OR employees.lastname ILIKE ?", "%#{params[:employee_name]}%", "%#{params[:employee_name]}%") if params[:employee_name].present?
+    logs = logs.where(timestamp: params[:start_date].to_date.beginning_of_day..params[:end_date].to_date.end_of_day) if params[:start_date].present? && params[:end_date].present?
+    logs = logs.where("timestamp >= ?", params[:start_date].to_date.beginning_of_day) if params[:start_date].present? && params[:end_date].blank?
+    logs = logs.where("timestamp <= ?", params[:end_date].to_date.end_of_day) if params[:end_date].present? && params[:start_date].blank?
+    logs = logs.where(action: params[:log_action]) if params[:log_action].present?
 
     logs.paginate(page: params[:page], per_page: 20)
   end
@@ -110,20 +103,24 @@ class KeyUsagesController < ApplicationController
   end
 
   def export_logs_to_excel(logs)
-    response.headers['Content-Disposition'] = "attachment; filename=logs_#{Time.now.strftime('%Y%m%d%H%M')}.xlsx"
-    xlsx_package = Axlsx::Package.new
-    wb = xlsx_package.workbook
+    timestamp = Time.now.strftime('%Y%m%d%H%M')
+    response.headers['Content-Disposition'] = "attachment; filename=logs_#{timestamp}.xlsx"
 
-    wb.add_worksheet(name: "Logs") do |sheet|
+    xlsx_package = Axlsx::Package.new
+    workbook = xlsx_package.workbook
+
+    workbook.add_worksheet(name: "Logs") do |sheet|
       sheet.add_row ["Colaborador", "Data/Hora", "Ação", "Objeto", "Locker", "Serial", "Comentários", "Alerta"]
+
       logs.each do |info|
         log = info[:log]
-        alert_text = log.action == 'retirada' && info[:alert] ? "ALERTA" : log.action.capitalize
+        alert_text = log.action == 'retirada' && info[:alert] ? "⚠️ ALERTA" : log.action.capitalize
+
         sheet.add_row [
           "#{log.employee.name} #{log.employee.lastname}",
           log.timestamp.strftime("%d/%m/%Y %H:%M:%S"),
           log.action.capitalize,
-          info[:object_name],
+          info[:object_name] || log.locker_object,
           log.locker_name,
           log.locker_serial,
           log.comments,
@@ -132,7 +129,8 @@ class KeyUsagesController < ApplicationController
       end
     end
 
-    send_data xlsx_package.to_stream.read, type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    send_data xlsx_package.to_stream.read,
+              type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
   # --- Helpers Transactions ---
@@ -143,7 +141,7 @@ class KeyUsagesController < ApplicationController
     return KeylockerTransaction.none.paginate(page: params[:page], per_page: 20) if keylockers.empty?
 
     transactions = KeylockerTransaction.joins(:keylockerinfo, :giver, :receiver, :keylocker)
-                                      .where(keylocker_id: keylockers.pluck(:id))
+                                       .where(keylocker_id: keylockers.pluck(:id))
 
     transactions = transactions.where('keylockerinfos."tagRFID" ILIKE ?', "%#{params[:tagRFID]}%") if params[:tagRFID].present?
     transactions = transactions.where("employees.name ILIKE :q OR employees.email ILIKE :q", q: "%#{params[:giver]}%").references(:giver) if params[:giver].present?
@@ -166,12 +164,24 @@ class KeyUsagesController < ApplicationController
     transactions.order(created_at: :desc).paginate(page: params[:page], per_page: 20)
   end
 
-  def export_transactions_to_excel(transactions)
-    response.headers['Content-Disposition'] = "attachment; filename=transacoes_#{Time.now.strftime('%Y%m%d%H%M')}.xlsx"
-    xlsx_package = Axlsx::Package.new
-    wb = xlsx_package.workbook
+  def all_transactions_for_employee
+    return KeylockerTransaction.none unless @employee
+    keylockers = @employee.keylockers
+    return KeylockerTransaction.none if keylockers.empty?
 
-    wb.add_worksheet(name: "Transações") do |sheet|
+    KeylockerTransaction.joins(:keylockerinfo, :giver, :receiver, :keylocker)
+                        .where(keylocker_id: keylockers.pluck(:id))
+                        .order(created_at: :desc)
+  end
+
+  def export_transactions_to_excel(transactions)
+    timestamp = Time.now.strftime('%Y%m%d%H%M')
+    response.headers['Content-Disposition'] = "attachment; filename=transacoes_#{timestamp}.xlsx"
+
+    xlsx_package = Axlsx::Package.new
+    workbook = xlsx_package.workbook
+
+    workbook.add_worksheet(name: "Transações") do |sheet|
       sheet.add_row ["Objeto", "Posição", "Serial Locker", "Tag RFID", "Movimentação", "Entregue por", "Para", "Data/Hora", "Status"]
 
       transactions.each do |t|
@@ -193,7 +203,8 @@ class KeyUsagesController < ApplicationController
       end
     end
 
-    send_data xlsx_package.to_stream.read, type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    send_data xlsx_package.to_stream.read,
+              type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
   # --- Callbacks ---
@@ -207,5 +218,16 @@ class KeyUsagesController < ApplicationController
 
   def set_transaction
     @transaction = KeylockerTransaction.find(params[:id])
+  end
+
+  # --- Params Checkers ---
+  def params_present?
+    params[:employee_name].present? || params[:start_date].present? ||
+    params[:end_date].present? || params[:log_action].present? || params[:status].present?
+  end
+
+  def params_present_transactions?
+    params[:tagRFID].present? || params[:giver].present? ||
+    params[:receiver].present? || params[:date].present? || params[:status].present?
   end
 end

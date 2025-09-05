@@ -17,6 +17,9 @@ class Keylocker < ApplicationRecord
   
   before_create :generate_serial
   before_validation :set_default_status, on: :create
+  before_validation :set_default_qtd_digito, on: :create  # ✅ Aqui
+
+  validates :qtdDigito, numericality: { greater_than_or_equal_to: 6, only_integer: true, message: "deve ser igual ou maior do que 6" }
 
   def toggle_and_save_status!
     # Implemente a lógica para alternar e salvar o status no banco de dados
@@ -32,5 +35,9 @@ class Keylocker < ApplicationRecord
 
   def set_default_status
     self.status ||= "desbloqueado"
+  end
+
+   def set_default_qtd_digito
+    self.qtdDigito ||= 6
   end
 end

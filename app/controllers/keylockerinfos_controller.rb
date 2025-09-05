@@ -12,6 +12,7 @@ class KeylockerinfosController < ApplicationController
 
   def show
     @info = Keylockerinfo.find(params[:id])
+    @keylocker = @info.keylocker  # Assumindo que Keylockerinfo pertence a Keylocker
   end
 
   def create

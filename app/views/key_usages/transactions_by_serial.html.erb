@@ -56,8 +56,11 @@
       <%= f.select :status, options_for_select([["Todos", ""], ["Disponível", "disponivel"], ["Em Uso", "em_uso"]], params[:status]), {}, class: "form-select form-select-sm" %>
     </div>
 
-    <div class="col-md-auto">
-      <%= f.submit "Filtrar", class: "btn btn-primary btn-sm w-100" %>
+    <!-- Botão Filtrar à direita com ícone -->
+    <div class="col-auto ms-auto">
+      <%= button_tag type: "submit", class: "btn btn-primary btn-sm mt-4" do %>
+        <i class="fas fa-filter"></i> Filtrar
+      <% end %>
     </div>
 
     <div class="col-md-auto">
@@ -102,8 +105,15 @@
                   <!-- Serial do locker -->
                   <td><strong><%= t.keylocker&.serial || 'N/A' %></strong></td>
 
-                  <!-- Tag RFID -->
-                  <td><strong><%= t.keylockerinfo&.tagRFID&.slice(0,6) || 'N/A' %></strong></td>
+                  <td>
+                    <strong>
+                      <%= if t.keylockerinfo&.tagRFID && t.keylockerinfo&.keylocker
+                            t.keylockerinfo.tagRFID.slice(0, t.keylockerinfo.keylocker.qtdDigito)
+                          else
+                            'N/A'
+                          end %>
+                    </strong>
+                  </td>
 
                   <!-- Ação -->
                   <td><%= t.status %></td>

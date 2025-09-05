@@ -175,6 +175,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_09_03_052359) do
     t.string "nameDevice"
     t.string "cnpjCpf"
     t.integer "qtd"
+    t.integer "qtdDigito"
     t.string "serial"
     t.string "status"
     t.string "lockertype"

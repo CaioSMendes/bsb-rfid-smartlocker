@@ -27,58 +27,57 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-
         <!-- 🔍 Formulário de Filtros -->
         <div class="mb-2">
-          <%= form_with url: entrada_key_usages_path, method: :get, local: true, class: "row g-2" do %>
+          <%= form_with url: entrada_key_usages_path, method: :get, local: true, class: "row g-2 align-items-end" do %>
+            
             <!-- Colaborador -->
-            <div class="col-md">
-              <%= label_tag :employee_name, "Colaborador" %>
-              <%= text_field_tag :employee_name, params[:employee_name], class: "form-control", placeholder: "Nome do colaborador" %>
+            <div class="col">
+              <%= label_tag :employee_name, "Colaborador", class: "form-label small" %>
+              <%= text_field_tag :employee_name, params[:employee_name], class: "form-control form-control-sm", placeholder: "Nome" %>
             </div>
 
             <!-- Data inicial -->
-            <div class="col-md">
-              <%= label_tag :start_date, "Data Inicial" %>
-              <%= date_field_tag :start_date, params[:start_date], class: "form-control" %>
+            <div class="col">
+              <%= label_tag :start_date, "Data Inicial", class: "form-label small" %>
+              <%= date_field_tag :start_date, params[:start_date], class: "form-control form-control-sm" %>
             </div>
 
             <!-- Data final -->
-            <div class="col-md">
-              <%= label_tag :end_date, "Data Final" %>
-              <%= date_field_tag :end_date, params[:end_date], class: "form-control" %>
+            <div class="col">
+              <%= label_tag :end_date, "Data Final", class: "form-label small" %>
+              <%= date_field_tag :end_date, params[:end_date], class: "form-control form-control-sm" %>
             </div>
 
             <!-- Ação -->
-            <div class="col-md">
-              <%= label_tag :action, "Ação" %>
-              <%= select_tag :action, options_for_select([["Todas", ""], ["Retirada", "retirada"], ["Devolução", "devolução"]], params[:action]), class: "form-control" %>
+            <div class="col">
+              <%= label_tag :action, "Ação", class: "form-label small" %>
+              <%= select_tag :action, options_for_select([["Todas", ""], ["Retirada", "retirada"], ["Devolução", "devolução"]], params[:action]), class: "form-select form-select-sm" %>
             </div>
 
             <!-- Status -->
-            <div class="col-md">
-              <%= label_tag :status, "Status" %>
-              <%= select_tag :status, options_for_select([["Todos", ""], ["Com Alerta", "alert"], ["Sem Alerta", "ok"]], params[:status]), class: "form-control" %>
+            <div class="col">
+              <%= label_tag :status, "Status", class: "form-label small" %>
+              <%= select_tag :status, options_for_select([["Todos", ""], ["Com Alerta", "alert"], ["Sem Alerta", "ok"]], params[:status]), class: "form-select form-select-sm" %>
             </div>
 
-            <div class="row">
-              <!-- Botão Filtrar -->
-              <div class="col-md-1 align-self-end">
-                <%= submit_tag "Filtrar", class: "btn btn-primary w-100 mb-3" %>
-              </div>
+            <!-- Botão Filtrar à direita com ícone -->
+            <div class="col-auto ms-auto">
+              <%= button_tag type: "submit", class: "btn btn-primary btn-sm mt-4" do %>
+                <i class="fas fa-filter"></i> Filtrar
+              <% end %>
+            </div>
 
-              <!-- Botão Exportar Excel -->
-              <div class="col-md-1 align-self-end">
-                <%= link_to entrada_key_usages_path(format: :xlsx, 
-                      employee_name: params[:employee_name], 
-                      start_date: params[:start_date], 
-                      end_date: params[:end_date], 
-                      log_action: params[:log_action], 
-                      status: params[:status]), 
-                      class: "btn btn-success w-100 mb-3" do %>
-                  <i class="fas fa-file-excel"></i> Excel
-                <% end %>
-              </div>
+            <div class="col-auto">
+              <%= link_to entrada_key_usages_path(format: :xlsx, 
+                    employee_name: params[:employee_name], 
+                    start_date: params[:start_date], 
+                    end_date: params[:end_date], 
+                    log_action: params[:log_action], 
+                    status: params[:status]), 
+                    class: "btn btn-success btn-sm" do %>
+                <i class=""></i> 📊 Exportar Excel
+              <% end %>
             </div>
           <% end %>
         </div>
@@ -98,7 +97,7 @@
                     <th><i class="fas fa-lock"></i> Serial do Locker</th>
                     <th><i class="fas fa-comment-dots"></i> Comentários</th>
                     <th><i class="fas fa-exclamation-triangle"></i> Alerta</th>
-                    <th>  </th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -155,23 +154,25 @@
                       <!-- Alerta / Status -->
                       <td>
                         <% if log_info[:log].action == 'retirada' %>
-                          <button class="btn <%= log_info[:alert] ? 'btn-danger' : 'btn-secondary' %>">
+                          <button class="btn <%= log_info[:alert] ? 'btn-danger btn-sm' : 'btn-secondary btn-sm' %>">
                             <i class="fas fa-exclamation-triangle"></i>
                             Objeto Retirado <%= "(⚠️ Alert!)" if log_info[:alert] %>
                           </button>
                         <% elsif log_info[:log].action == 'devolução' %>
-                          <button class="btn btn-success">
+                          <button class="btn btn-success btn-sm">
                             <i class="fas fa-check-circle"></i> Objeto Devolvido
                           </button>
                         <% else %>
                           <i class="fas fa-info-circle"></i> <%= log_info[:log].action %>
                         <% end %>
                       </td>
+
+                      <!-- Deletar -->
                       <td>
-                       <%= button_to destroy_log_key_usage_path(log_info[:log].id),
-                                      method: :delete, 
-                                      data: { confirm: "Tem certeza que deseja deletar este log?" }, 
-                                      class: "btn btn-sm btn-danger" do %>
+                        <%= button_to destroy_log_key_usage_path(log_info[:log].id),
+                                       method: :delete, 
+                                       data: { confirm: "Tem certeza que deseja deletar este log?" }, 
+                                       class: "btn btn-sm btn-danger" do %>
                           <i class="fas fa-trash"></i>
                         <% end %>
                       </td>
@@ -187,6 +188,7 @@
     </div>
   </div>
 </div>
+
 
 <div class="text-center mt-3 d-flex justify-content-center">
   <nav aria-label="Page navigation">
@@ -211,6 +213,6 @@
 
   $(document).ready(function() {
     loadLogs(); // carrega logo que abre a página
-    setInterval(loadLogs, 5000); // atualiza a cada 5 segundos
+    setInterval(loadLogs, 20000); // atualiza a cada 5 segundos
   });
 </script>
