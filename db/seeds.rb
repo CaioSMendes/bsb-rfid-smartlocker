@@ -61,7 +61,7 @@ admin3 = User.create!(
 puts 'Admins criados'
 
 # Crie um usuário regular
-user = User.create!(
+user1 = User.create!(
   email: 'user@user.com',
   name: "Caio",
   lastname: "Mendes",
@@ -82,7 +82,7 @@ user = User.create!(
 puts 'User criado'
 
 # Crie um usuário regular
-user = User.create!(
+user2 = User.create!(
   email: 'bope@caveira.com',
   name: "Major",
   lastname: "Nascimento",
@@ -103,7 +103,7 @@ user = User.create!(
 puts 'User criado'
 
 # Admin criando o Keylocker
-locker = admin1.keylockers.create!(
+locker = user1.keylockers.create!(
   owner: 'Luiz Reis', 
   nameDevice: 'Brasilia RFID', 
   cnpjCpf: '27.928.993/0001-12', 
@@ -125,14 +125,11 @@ locker = admin1.keylockers.create!(
 )
 puts 'Locker criado pelo admin'
 
-# Atribuindo o Locker ao User
-user.keylockers << locker
-puts "Locker '#{locker.nameDevice}' atribuído ao usuário '#{user.email}'"
 
 # Criando funcionário já com locker
-locker_for_employee = user.keylockers.sample
+locker_for_employee = user1.keylockers.sample
   if locker_for_employee
-    employee = user.create_employee!(
+    employee = user1.create_employee!(
       name: "Luiz",
       lastname: "Reis",
       companyID: "Brasilia RFID",
@@ -149,10 +146,11 @@ locker_for_employee = user.keylockers.sample
       keylockers: [locker_for_employee]
     )
     puts "Keylocker '#{employee.keylockers.last.nameDevice}' atribuído ao funcionário '#{employee.name}'"
-    puts "Funcionário '#{employee.name} #{employee.lastname}' criado para o usuário '#{user.email}'"
+    puts "Funcionário '#{employee.name} #{employee.lastname}' criado para o usuário '#{user1.email}'"
   else
-    puts "Erro: User '#{user.email}' não tem lockers atribuídos, não foi possível criar o employee"
+    puts "Erro: User '#{user1.email}' não tem lockers atribuídos, não foi possível criar o employee"
   end
+  
 
 # Criando 4 keylockers com 8 nichos criativos e diferentes
 Keylocker.create!(
