@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'historic_managements/index'
+  get 'historic_managements/show'
   resources :items
   resources :categories
   resources :locations
@@ -61,7 +63,9 @@ end
   resources :asset_managements do
     resources :locations
     resources :categories
-    resources :items
+    resources :items do
+      resources :historic_managements, only: [:index, :show]
+    end
   end
 
   resources :employees do

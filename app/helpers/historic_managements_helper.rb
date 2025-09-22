@@ -1,0 +1,2 @@
+module HistoricManagementsHelper
+end

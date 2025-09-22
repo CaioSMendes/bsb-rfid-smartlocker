@@ -40,7 +40,18 @@
             <i class="fas fa-align-left text-muted me-2"></i>
             <strong>Descrição:</strong> <%= @category.description %>
           </li>
+          
+          <!-- Data de Criação -->
+          <li class="list-group-item">
+            <i class="fas fa-calendar-plus text-info me-2"></i>
+            <strong>Criado em:</strong> <%= @category.created_at.strftime("%d/%m/%Y %H:%M") %>
+          </li>
 
+          <!-- Última Edição -->
+          <li class="list-group-item">
+            <i class="fas fa-edit text-warning me-2"></i>
+            <strong>Editado em:</strong> <%= @category.updated_at.strftime("%d/%m/%Y %H:%M") %>
+          </li>
          
         </ul>
       </div>
@@ -48,7 +59,7 @@
 
       <!-- Botões de ações -->
       <div class="d-flex gap-2 mb-4">
-        <%= link_to edit_asset_management_category_path(@category), class: "btn btn-primary" do %>
+        <%= link_to edit_asset_management_category_path(@category.asset_management, @category), class: 'btn btn-primary' do %>
           <i class="fas fa-edit"></i> Editar Categoria
         <% end %>
 
@@ -56,7 +67,7 @@
           <i class="fas fa-trash-alt"></i> Excluir
         <% end %>
 
-        <%= link_to items_path, class: "btn btn-secondary" do %>
+        <%= link_to asset_management_path(current_user.asset_managements.first), class: "btn btn-secondary" do %>
           <i class="fas fa-arrow-left"></i> Voltar
         <% end %>
       </div>

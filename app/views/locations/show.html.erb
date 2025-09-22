@@ -59,13 +59,25 @@
               <strong>Descrição:</strong> <%= @location.description.presence || "Sem descrição" %>
             </div>
           </li>
+
+          <!-- Data de Criação -->
+          <li class="list-group-item">
+            <i class="fas fa-calendar-plus text-info me-2"></i>
+            <strong>Criado em:</strong> <%= @location.created_at.strftime("%d/%m/%Y %H:%M") %>
+          </li>
+
+          <!-- Última Edição -->
+          <li class="list-group-item">
+            <i class="fas fa-edit text-warning me-2"></i>
+            <strong>Editado em:</strong> <%= @location.updated_at.strftime("%d/%m/%Y %H:%M") %>
+          </li>
         </ul>
       </div>
     </div>
 
       <!-- Botões de ações -->
       <div class="d-flex gap-2 mb-4">
-        <%= link_to edit_asset_management_location_path(@location), class: "btn btn-primary" do %>
+        <%= link_to edit_asset_management_location_path(@location.asset_management, @location), class: "btn btn-primary" do %>
           <i class="fas fa-edit"></i> Editar Localidade
         <% end %>
 
@@ -73,7 +85,7 @@
           <i class="fas fa-trash-alt"></i> Excluir
         <% end %>
 
-        <%= link_to items_path, class: "btn btn-secondary" do %>
+        <%= link_to asset_management_path(current_user.asset_managements.first), class: "btn btn-secondary" do %>
           <i class="fas fa-arrow-left"></i> Voltar
         <% end %>
       </div>

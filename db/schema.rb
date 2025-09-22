@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_09_22_191620) do
+ActiveRecord::Schema[7.0].define(version: 2025_09_22_212326) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -133,6 +133,18 @@ ActiveRecord::Schema[7.0].define(version: 2025_09_22_191620) do
     t.datetime "updated_at", null: false
     t.index ["employee_id"], name: "index_employees_keylockers_on_employee_id"
     t.index ["keylocker_id"], name: "index_employees_keylockers_on_keylocker_id"
+  end
+
+  create_table "historic_managements", force: :cascade do |t|
+    t.bigint "item_id", null: false
+    t.bigint "user_id", null: false
+    t.string "action"
+    t.text "description"
+    t.datetime "action_time"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_historic_managements_on_item_id"
+    t.index ["user_id"], name: "index_historic_managements_on_user_id"
   end
 
   create_table "history_entries", force: :cascade do |t|
@@ -361,6 +373,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_09_22_191620) do
   add_foreign_key "employees", "users"
   add_foreign_key "employees_keylockers", "employees"
   add_foreign_key "employees_keylockers", "keylockers"
+  add_foreign_key "historic_managements", "items"
+  add_foreign_key "historic_managements", "users"
   add_foreign_key "items", "asset_managements"
   add_foreign_key "items", "categories"
   add_foreign_key "items", "locations"

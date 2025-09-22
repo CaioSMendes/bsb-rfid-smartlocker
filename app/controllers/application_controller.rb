@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
     layout :layout_by_user_role
     before_action :carregar_notificacoes
     helper_method :contador_notificacoes
+    before_action :set_current_user
 
     def contador_notificacoes
       return 0 unless user_signed_in? # Garante que só conta se o usuário estiver logado
@@ -18,6 +19,11 @@ class ApplicationController < ActionController::Base
 
     private
     
+    def set_current_user
+      # Ajuste conforme sua autenticação
+      Current.user = current_user # current_user do Devise ou outro método
+    end
+
     def layout_by_user_role
       if user_signed_in?
         if current_user.admin?

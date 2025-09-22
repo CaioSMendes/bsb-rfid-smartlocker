@@ -13,7 +13,7 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <%= link_to new_asset_management_path, class: "btn btn-primary mt-3 mb-3" do %>
+        <%= link_to new_asset_management_path, class: "btn btn-success mt-3 mb-3" do %>
           <i class="fa fa-plus"></i> Cadastrar Depósito
         <% end %>
         </div>
@@ -24,43 +24,50 @@
 
 <div class="container-fluid">
   <div class="row">
-    <div class="col-12"> <!-- Linha ocupa toda a largura -->
+    <div class="col-12">
       <div class="right_col mt-3" role="main">
         <div class="row">
           <% @asset_managements.each do |asset_management| %>
-              <div class="col-12 col-sm-6 col-md-4 col-lg-3"> <!-- 4 cards por linha -->
-                <div class="card mb-4">
-                  <div class="text-center">
-                    <%= image_tag 'deposito.jpg', size: '288x288', class: "img-fluid rounded" %>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <div class="card mb-4">
+                <div class="text-center">
+                  <%= image_tag 'deposito.jpg', size: '288x288', class: "img-fluid rounded" %>
+                </div>
+                <div class="card-body">
+                  <p><strong>Nome:</strong> <%= asset_management.name || "Sem nome" %></p>
+                  <p><strong>Serial:</strong> <%= asset_management.serial || "Sem serial" %></p>
+                  <p><strong>Descrição:</strong> <%= asset_management.description || "Sem descrição" %></p>
+
+                  <div class="text-center mt-3 d-flex justify-content-center">
+                    <%= link_to asset_management_path(asset_management), class: 'btn btn-warning mr-3' do %>
+                      <i class="fa fa-search"></i> Exibir
+                    <% end %>
+                    
+                    <%= link_to edit_asset_management_path(asset_management), class: 'btn btn-success mr-3' do %>
+                      <i class="fa fa-edit"></i> Editar
+                    <% end %>
+
+                    <%= button_to asset_management_path(asset_management), method: :delete, data: { confirm: "Você tem certeza que deseja excluir?" }, class: "btn btn-danger" do %>
+                      <i class="fas fa-trash-alt"></i> Excluir
+                    <% end %>
                   </div>
-                  <div class="card-body">
-                    <p><strong>Nome:</strong> <%= asset_management.name || "Sem nome" %></p>
-                    <p><strong>Serial:</strong> <%= asset_management.serial || "Sem serial" %></p>
-                    <p><strong>Descrição:</strong> <%= asset_management.description || "Sem descrição" %></p>
 
-                    <div class="text-center mt-3 d-flex justify-content-center">
-                      <%= link_to asset_management_path(asset_management), class: 'btn btn-warning mr-3' do %>
-                        <i class="fa fa-search"></i> Exibir
-                      <% end %>
-                      
-                      <%= link_to edit_asset_management_path(asset_management), class: 'btn btn-success mr-3' do %>
-                        <i class="fa fa-edit"></i> Editar
-                      <% end %>
-
-                      <%= button_to asset_management_path(asset_management), method: :delete, data: { confirm: "Você tem certeza que deseja excluir?" }, class: "btn btn-danger" do %>
-                        <i class="fas fa-trash-alt"></i> Excluir
-                      <% end %>
-
-                    </div>
+                  <!-- Datas discretas no final do card -->
+                  <div class="text-center mt-2" style="font-size: 0.8rem; color: #6c757d;">
+                    <p class="mb-1"><strong>Criado:</strong> <%= asset_management.created_at.strftime("%d/%m/%Y %H:%M") %></p>
+                    <p class="mb-0"><strong>Editado:</strong> <%= asset_management.updated_at.strftime("%d/%m/%Y %H:%M") %></p>
                   </div>
+
                 </div>
               </div>
+            </div>
           <% end %>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 
 <!-- Paginação Responsiva -->
 <div class="text-center mt-3 d-flex justify-content-center">

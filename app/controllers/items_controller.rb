@@ -12,6 +12,15 @@ class ItemsController < ApplicationController
 
   # GET /items/1 or /items/1.json
   def show
+    @item = Item.find(params[:id])
+    
+    HistoricManagement.create(
+      item: @item,
+      user: current_user,
+      action: "view",
+      description: "Item visualizado",
+      action_time: Time.current
+    )
   end
 
   # GET /items/new
@@ -35,8 +44,19 @@ class ItemsController < ApplicationController
 
   # PATCH/PUT /items/1 or /items/1.json
   def update
+    @item = current_user.asset_managements.find(params[:asset_management_id]).items.find(params[:id])
+
     if @item.update(item_params)
-      redirect_to asset_management_item_path(@asset_management, @item), notice: "Item atualizado."
+      # Cria histórico
+      HistoricManagement.create(
+        item: @item,
+        user: current_user,        # <-- use current_user aqui
+        action: "Edição",
+        description: "Item atualizado",
+        action_time: Time.current
+      )
+
+      redirect_to asset_management_item_path(@item.asset_management, @item), notice: "Item atualizado com sucesso."
     else
       render :edit
     end
