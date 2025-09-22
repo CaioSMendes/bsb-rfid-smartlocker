@@ -1,0 +1,69 @@
+class LocationsController < ApplicationController
+  before_action :set_asset_management
+  before_action :set_location, only: %i[ show edit update destroy ]
+
+  # GET /locations or /locations.json
+  def index
+    if params[:asset_management_id]
+      # rota nested: /asset_managements/:asset_management_id/locations
+      @asset_management = AssetManagement.find(params[:asset_management_id])
+      @locations = @asset_management.locations.paginate(page: params[:page], per_page: 10)
+    else
+      # rota flat: /locations
+      @locations = Location.paginate(page: params[:page], per_page: 10)
+    end
+  end
+
+  # GET /locations/1 or /locations/1.json
+  def show
+  end
+
+  # GET /locations/new
+  def new
+    @location = @asset_management.locations.build
+  end
+
+  # GET /locations/1/edit
+  def edit
+  end
+
+  # POST /locations or /locations.json
+  def create
+    @location = @asset_management.locations.build(location_params)
+    if @location.save
+      redirect_to asset_management_location_path(@asset_management, @location), notice: "Localização criada."
+    else
+      render :new
+    end
+  end
+
+  # PATCH/PUT /locations/1 or /locations/1.json
+  def update
+    if @location.update(location_params)
+      redirect_to asset_management_location_path(@asset_management, @location), notice: "Localização atualizada."
+    else
+      render :edit
+    end
+  end
+
+  # DELETE /locations/1 or /locations/1.json
+   def destroy
+    @location.destroy
+    redirect_to asset_management_locations_path(@asset_management), notice: "Localização removida."
+  end
+
+  private
+    def set_asset_management
+      @asset_management = AssetManagement.find(params[:asset_management_id])
+    end
+
+    # Use callbacks to share common setup or constraints between actions.
+    def set_location
+      @location = @asset_management.locations.find(params[:id])
+    end
+
+    # Only allow a list of trusted parameters through.
+    def location_params
+      params.require(:location).permit(:name, :code, :address, :description, :asset_management_id)
+    end
+end

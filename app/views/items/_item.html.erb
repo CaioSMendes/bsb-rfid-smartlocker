@@ -1,0 +1,52 @@
+<div id="<%= dom_id item %>">
+  <p>
+    <strong>Asset management:</strong>
+    <%= item.asset_management_id %>
+  </p>
+
+  <p>
+    <strong>Categoria:</strong> 
+    <%= item.category&.name || "Sem categoria" %>
+  </p>
+
+  <p>
+    <strong>Localização:</strong> 
+    <%= item.location&.name || "Sem localização" %>
+  </p>
+
+  <p>
+    <strong>Name:</strong>
+    <%= item.name %>
+  </p>
+
+  <p>
+    <strong>Tag RFID:</strong>
+    <%= item.tagRFID %>
+  </p>
+
+  <p>
+    <strong>ID Interno:</strong>
+    <%= item.idInterno %>
+  </p>
+
+  <p>
+    <strong>Description:</strong>
+    <%= item.description %>
+  </p>
+
+  <p>
+    <strong>Image:</strong>
+    <%= item.image %>
+  </p>
+
+  <p>
+    <strong>Status:</strong>
+    <%= item.status %>
+  </p>
+
+  <p>
+    <strong>Empty:</strong>
+    <%= item.empty %>
+  </p>
+
+</div>

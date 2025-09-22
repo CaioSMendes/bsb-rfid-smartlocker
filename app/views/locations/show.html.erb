@@ -1,0 +1,82 @@
+<p style="color: green"><%= notice %></p>
+
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <ol class="breadcrumb">
+          <li class="active">
+            <h1><i class="fas fa-map-marker-alt"></i> Minhas Localidades</h1>
+          </li>
+        </ol>
+      </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <!-- Coluna da imagem -->
+    <div class="col-md-3">
+      <%= image_tag 'gps1.jpg', size: '288x288', class: "img-fluid rounded" %>
+    </div>
+    
+
+   <!-- Coluna dos detalhes -->
+    <div class="col-md-9">
+      <div class="card p-4 mb-4 shadow-sm">
+        <h3 class="mb-3"><i class="fas fa-info-circle"></i> Detalhes da Localidades</h3>
+        
+        <ul class="list-group list-group-flush">
+
+         <!-- Nome -->
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-map-marker-alt text-danger me-2"></i>
+            <div>
+              <strong>Nome da Localidade:</strong> <%= @location.name.presence || "Sem nome" %>
+            </div>
+          </li>
+
+          <!-- Código -->
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-barcode fa-lg text-primary me-3"></i>
+            <div>
+              <strong>Código da Localidade:</strong> <%= @location.code.presence || "Sem código" %>
+            </div>
+          </li>
+
+          <!-- Endereço -->
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-road text-success me-2"></i>
+            <div>
+              <strong>Endereço:</strong> <%= @location.address.presence || "Sem endereço" %>
+            </div>
+          </li>
+
+          <!-- Descrição -->
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-align-left text-muted me-2"></i>
+            <div>
+              <strong>Descrição:</strong> <%= @location.description.presence || "Sem descrição" %>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+      <!-- Botões de ações -->
+      <div class="d-flex gap-2 mb-4">
+        <%= link_to edit_asset_management_location_path(@location), class: "btn btn-primary" do %>
+          <i class="fas fa-edit"></i> Editar Localidade
+        <% end %>
+
+        <%= button_to @location, method: :delete, data: { confirm: "Tem certeza?" }, class: "btn btn-danger" do %>
+          <i class="fas fa-trash-alt"></i> Excluir
+        <% end %>
+
+        <%= link_to items_path, class: "btn btn-secondary" do %>
+          <i class="fas fa-arrow-left"></i> Voltar
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

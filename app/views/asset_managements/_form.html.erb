@@ -1,0 +1,58 @@
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <ol class="breadcrumb">
+          <li class="active">
+            <h1><i class="fas fa-list"></i> Meus Depósitos</h1>
+          </li>
+        </ol>
+      </div>
+    </div>
+    <div class="row">
+    </div>
+</div>
+
+<%= form_with(model: asset_management) do |form| %>
+  <% if asset_management.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(asset_management.errors.count, "error") %> prohibited this asset_management from being saved:</h2>
+
+      <ul>
+        <% asset_management.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+ <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-8 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header py-3">
+          <h5 class="mb-0"><i class="fas fa-list"></i> Cadastrar um novo depósito</h5>
+        </div>
+        <div class="card-body">
+
+          <!-- Nome do Depósito -->
+          <div class="form-outline mb-4">
+            <%= form.label :name, 'Nome do Depósito', class: "form-label" %>
+            <%= form.text_field :name, class: 'form-control' %>
+          </div>
+
+          <!-- Nome da Descrição -->
+          <div class="form-outline mb-4">
+            <%= form.label :description, 'Descrição', class: "form-label" %>
+            <%= form.text_field :description, class: 'form-control' %>
+          </div>
+
+          <!-- Botões -->
+          <div class="d-flex justify-content-between mt-4">
+            <%= form.submit 'Criar Depósito', class: 'btn btn-primary' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

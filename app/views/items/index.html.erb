@@ -1,0 +1,102 @@
+<p style="color: green"><%= notice %></p>
+
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <ol class="breadcrumb">
+          <li class="active">
+            <h1><i class="fas fa-warehouse"></i> Meus Ativos</h1>
+          </li>
+        </ol>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <%= link_to new_asset_management_item_path(@asset_management), class: "btn btn-primary mt-3 mb-3" do %>
+          <i class="fa fa-plus"></i> Cadastrar Ativo
+        <% end %>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12"> <!-- Linha ocupa toda a largura -->
+      <div class="right_col mt-3" role="main">
+        <div class="row">
+            <% @items.each do |item| %>
+              <div class="col-12 col-sm-6 col-md-4 col-lg-3"> <!-- 4 cards por linha -->
+                <div class="card mb-4">
+                  <div class="text-center p-2">
+                    <%= image_tag item.image.presence || 'gestao_ativo1.jpg', size: '288x288', class: "img-fluid rounded" %>
+                  </div>
+
+                  <div class="card-body">
+                  
+                   <p><i class="fas fa-box text-secondary me-2"></i>
+                    <strong>Nome:</strong> <%= item.name || "Sem nome" %>
+                  </p>
+
+                  <p><i class="fas fa-rss text-warning me-2"></i>
+                    <strong>Tag RFID:</strong> <%= item.tagRFID || "Sem tag" %>
+                  </p>
+
+                  <p><i class="fas fa-hashtag text-info me-2"></i>
+                    <strong>ID Interno:</strong> <%= item.idInterno || "Sem ID" %>
+                  </p>
+
+                  <p><i class="fas fa-align-left text-muted me-2"></i>
+                    <strong>Descrição:</strong> <%= item.description || "Sem descrição" %>
+                  </p>
+
+                  <p><i class="fas fa-info-circle text-dark me-2"></i>
+                    <strong>Status:</strong> <%= item.status || "Sem status" %>
+                  </p>
+
+                  <p><i class="fas fa-circle text-secondary me-2"></i>
+                    <strong>Vazio:</strong> <%= item.empty || "Sem status" %>
+                  </p>
+
+                  <p><i class="fas fa-list-alt text-primary me-2"></i>
+                    <strong>Categoria:</strong> <%= item.category&.name || "Sem categoria" %>
+                  </p>
+
+                  <p><i class="fas fa-map-marker-alt text-danger me-2"></i>
+                    <strong>Localização:</strong> <%= item.location&.name || "Sem localização" %>
+                  </p>
+
+                    <div class="text-center mt-3 d-flex justify-content-center">
+                      <%= link_to asset_management_item_path(item.asset_management, item), class: 'btn btn-warning mr-3' do %>
+                        <i class="fa fa-search"></i> Exibir
+                      <% end %>
+
+                      <%= link_to edit_asset_management_item_path(item.asset_management, item), class: 'btn btn-success mr-3' do %>
+                        <i class="fa fa-edit"></i> Editar
+                      <% end %>
+
+                      <%= button_to asset_management_item_path(item.asset_management, item), method: :delete, data: { confirm: "Você tem certeza que deseja excluir?" }, class: "btn btn-danger" do %>
+                        <i class="fas fa-trash-alt"></i> Excluir
+                      <% end %>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Paginação Responsiva -->
+<div class="text-center mt-3 d-flex justify-content-center">
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <%= will_paginate @items, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+    </ul>
+  </nav>
+</div>
+

@@ -1,0 +1,109 @@
+<p style="color: green"><%= notice %></p>
+
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <ol class="breadcrumb">
+          <li class="active">
+            <h1><i class="fas fa-box"></i> Meus Ativos</h1>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <!-- Coluna da imagem -->
+    <div class="col-md-3">
+      <% if @item.image.attached? %>
+        <%= image_tag @item.image, class: 'card-img-top rounded shadow-sm', alt: @item.name %>
+      <% else %>
+        <%= image_tag 'gestao_ativo1.jpg', class: 'card-img-top rounded shadow-sm', alt: 'Locker Padrão' %>
+      <% end %>
+    </div>
+
+   <!-- Coluna dos detalhes -->
+    <div class="col-md-9">
+      <div class="card p-4 mb-4 shadow-sm">
+        <h3 class="mb-3"><i class="fas fa-info-circle"></i> Detalhes do Ativo</h3>
+        
+        <ul class="list-group list-group-flush">
+
+          <!-- Nome -->
+          <li class="list-group-item">
+            <i class="fas fa-box text-secondary me-2"></i>
+            <strong>Nome:</strong> <%= @item.name %>
+          </li>
+
+          <!-- Tag RFID -->
+          <li class="list-group-item">
+            <i class="fas fa-rss text-warning me-2"></i>
+            <strong>Tag RFID:</strong> <%= @item.tagRFID %>
+          </li>
+
+          <!-- ID Interno -->
+          <li class="list-group-item">
+            <i class="fas fa-hashtag text-info me-2"></i>
+            <strong>ID Interno:</strong> <%= @item.idInterno %>
+          </li>
+
+          <!-- Descrição -->
+          <li class="list-group-item">
+            <i class="fas fa-align-left text-muted me-2"></i>
+            <strong>Descrição:</strong> <%= @item.description %>
+          </li>
+
+          <!-- Categoria -->
+          <li class="list-group-item">
+            <i class="fas fa-list-alt text-primary me-2"></i>
+            <strong>Categoria:</strong> 
+            <%= @item.category&.name || "Sem categoria" %>
+          </li>
+
+          <!-- Localização -->
+          <li class="list-group-item">
+            <i class="fas fa-map-marker-alt text-success me-2"></i>
+            <strong>Localização:</strong> 
+            <%= @item.location&.name || "Sem localização" %>
+          </li>
+
+          <!-- Status -->
+          <li class="list-group-item">
+            <i class="fas fa-info-circle text-dark me-2"></i>
+            <strong>Status:</strong>
+            <button class="btn <%= @item.status == 'bloqueado' ? 'btn-danger' : 'btn-success' %> btn-sm">
+              <i class="fas <%= @item.status == 'bloqueado' ? 'fa-lock' : 'fa-unlock' %>"></i>
+              <%= @item.status %>
+            </button>
+          </li>
+
+          <!-- Vazio -->
+          <li class="list-group-item">
+            <i class="fas fa-circle text-secondary me-2"></i>
+            <strong>Vazio:</strong> <%= @item.empty %>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+
+      <!-- Botões de ações -->
+      <div class="d-flex gap-2 mb-4">
+        <%= link_to edit_asset_management_item_path(@item), class: "btn btn-primary" do %>
+          <i class="fas fa-edit"></i> Editar Ativo
+        <% end %>
+      
+        <%= button_to @item, method: :delete, data: { confirm: "Tem certeza?" }, class: "btn btn-danger" do %>
+          <i class="fas fa-trash-alt"></i> Excluir
+        <% end %>
+
+        <%= link_to items_path, class: "btn btn-secondary" do %>
+          <i class="fas fa-arrow-left"></i> Voltar
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

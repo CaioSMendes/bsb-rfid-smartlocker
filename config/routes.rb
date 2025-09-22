@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  resources :items
+  resources :categories
+  resources :locations
+  resources :asset_managements
   resources :keylockerinfos
   resources :products
   get 'debug_logs/index'
@@ -53,6 +57,13 @@ resources :key_usages do
     delete :destroy_transaction
   end
 end
+
+  resources :asset_managements do
+    resources :locations
+    resources :categories
+    #resources :categories, only: [:index]
+    resources :items
+  end
 
   resources :employees do
     member do

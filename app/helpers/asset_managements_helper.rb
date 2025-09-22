@@ -1,0 +1,2 @@
+module AssetManagementsHelper
+end

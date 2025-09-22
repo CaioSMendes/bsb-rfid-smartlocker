@@ -1,0 +1,114 @@
+<p class="text-success"><%= notice %></p>
+
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <ol class="breadcrumb">
+          <li class="active">
+            <h1><i class="fas fa-warehouse"></i> Meus Ativos</h1>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= form_with(model: [@asset_management, @item]) do |form| %>
+  <% if @item.errors.any? %>
+    <div class="alert alert-danger">
+      <h5><%= pluralize(@item.errors.count, "erro") %> impediram o item de ser salvo:</h5>
+      <ul>
+        <% @item.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-8 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header py-3">
+          <h5 class="mb-0"><i class="fa fa-box me-2"></i> Editar um ativo</h5>
+        </div>
+        <div class="card-body">
+
+          <!-- Nome do Ativo -->
+          <div class="form-outline mb-4">
+            <%= form.label :name, 'Nome do Ativo', class: "form-label" %>
+            <%= form.text_field :name, class: 'form-control' %>
+          </div>
+
+          <!-- Tag RFID -->
+          <div class="form-outline mb-4">
+            <%= form.label :tagRFID, 'Tag RFID', class: "form-label" %>
+            <%= form.text_field :tagRFID, class: 'form-control' %>
+          </div>
+
+          <!-- ID Interno -->
+          <div class="form-outline mb-4">
+            <%= form.label :idInterno, 'ID Interno', class: "form-label" %>
+            <%= form.text_field :idInterno, class: 'form-control' %>
+          </div>
+
+          <!-- Descrição -->
+          <div class="form-outline mb-4">
+            <%= form.label :description, 'Descrição', class: "form-label" %>
+            <%= form.text_field :description, class: 'form-control' %>
+          </div>
+
+          <!-- Status -->
+          <div class="form-outline mb-4">
+            <%= form.label :status, 'Status do Ativo', class: "form-label" %>
+            <%= form.text_field :status, class: 'form-control' %>
+          </div>
+
+          <!-- Vazio -->
+          <div class="form-outline mb-4">
+            <%= form.label :empty, 'Vazio', class: "form-label" %>
+            <%= form.text_field :empty, class: 'form-control' %>
+          </div>
+
+          <!-- Categoria -->
+          <div class="form-outline mb-4">
+            <%= form.label :category_id, class: "form-label" do %>
+              <i class="fa fa-list me-1"></i> Categoria
+            <% end %>
+            <%= form.collection_select :category_id, 
+                  @asset_management.categories, 
+                  :id, :name, 
+                  { prompt: "Escolha a categoria" }, 
+                  { class: "form-select" } %>
+          </div>
+
+          <!-- Localização -->
+          <div class="form-outline mb-4">
+            <%= form.label :location_id, class: "form-label" do %>
+              <i class="fa fa-map-marker-alt me-1"></i> Localização
+            <% end %>
+            <%= form.collection_select :location_id, 
+                  @asset_management.locations, 
+                  :id, :name, 
+                  { prompt: "Escolha a localização" }, 
+                  { class: "form-select" } %>
+          </div>
+
+          <!-- Upload da Imagem -->
+          <div class="form-outline mb-4">
+            <%= form.label :image, "Imagem do Ativo", class: "form-label" %>
+            <%= form.file_field :image, class: "form-control" %>
+          </div>
+
+          <!-- Botões -->
+          <div class="d-flex justify-content-between mt-4">
+            <%= form.submit 'Editar Ativo', class: 'btn btn-primary' %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+</div>
