@@ -1,12 +1,29 @@
 class ManagerUsersController < ApplicationController
     before_action :authenticate_admin!
-    before_action :set_user, only: [:toggle_role, :toggle_finance, :set_user_role, :set_admin_role, :destroy]
+    before_action :set_user, only: [:toggle_role, :toggle_finance, :set_user_role, :set_admin_role, :toggle_asset,:destroy]
     skip_before_action :verify_authenticity_token, only: [:toggle_role, :toggle_finance]
     skip_before_action :authenticate_user!, only: [:toggle_role, :toggle_finance]
 
     def index
         @users = User.all.paginate(page: params[:page], per_page: 10)
     end
+
+      def toggle_asset
+        @user = User.find(params[:id])
+
+        if @user == current_user
+          render json: { status: 'error', message: 'Você não pode alterar seu próprio status.' }, status: :unprocessable_entity
+          return
+        end
+
+        # alterna valor booleano
+        @user.assetManagement = !@user.assetManagement
+        if @user.save
+          render json: { status: 'success', new_status: @user.asset_management_status }
+        else
+          render json: { status: 'error', message: @user.errors.full_messages.join(', ') }, status: :unprocessable_entity
+        end
+      end
 
     def toggle_role
         # Verifica se o usuário que está tentando alterar a role é diferente do usuário atual

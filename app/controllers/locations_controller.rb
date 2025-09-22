@@ -5,12 +5,11 @@ class LocationsController < ApplicationController
   # GET /locations or /locations.json
   def index
     if params[:asset_management_id]
-      # rota nested: /asset_managements/:asset_management_id/locations
       @asset_management = AssetManagement.find(params[:asset_management_id])
-      @locations = @asset_management.locations.paginate(page: params[:page], per_page: 10)
+      @locations = @asset_management.locations.order(:id).paginate(page: params[:page], per_page: 10)
     else
-      # rota flat: /locations
-      @locations = Location.paginate(page: params[:page], per_page: 10)
+      @asset_management = current_user.asset_managements.first
+      @locations = @asset_management ? @asset_management.locations.order(:id).paginate(page: params[:page], per_page: 10) : []
     end
   end
 
@@ -29,9 +28,11 @@ class LocationsController < ApplicationController
 
   # POST /locations or /locations.json
   def create
-    @location = @asset_management.locations.build(location_params)
+    @location = Location.new(location_params)
+    @location.user = current_user  # <--- garante que o usuário seja associado
+
     if @location.save
-      redirect_to asset_management_location_path(@asset_management, @location), notice: "Localização criada."
+      redirect_to locations_path, notice: 'Location criada com sucesso.'
     else
       render :new
     end
@@ -54,12 +55,16 @@ class LocationsController < ApplicationController
 
   private
     def set_asset_management
-      @asset_management = AssetManagement.find(params[:asset_management_id])
+      @asset_management = AssetManagement.find(params[:asset_management_id]) if params[:asset_management_id].present?
     end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_location
-      @location = @asset_management.locations.find(params[:id])
+      @location = if @asset_management
+                    @asset_management.locations.find(params[:id])
+                  else
+                    Location.find(params[:id])
+                  end
     end
 
     # Only allow a list of trusted parameters through.

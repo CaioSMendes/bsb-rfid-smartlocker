@@ -21,6 +21,7 @@
         <tr>
           <th>Email</th>
           <th>Perfil</th>
+          <th>Gestão de Ativos</th>
           <th>Situação Financeira</th>
         </tr>
       </thead>
@@ -32,6 +33,14 @@
                     <button id="toggle-role-btn-<%= user.id %>" class="btn <%= user.role == 'admin' ? 'btn-success' : 'btn-primary' %>" data-user-id="<%= user.id %>" data-confirm="Are you sure?">
                         <i id="role-icon-<%= user.id %>" class="<%= user.role == 'admin' ? 'fas fa-user-tie' : 'fas fa-user' %>"></i> <%= user.role %>
                     </button>
+                </td>
+                <td>
+                  <button id="toggle-asset-btn-<%= user.id %>" 
+                          class="btn <%= user.assetManagement? ? 'btn-success' : 'btn-secondary' %>" 
+                          data-user-id="<%= user.id %>">
+                    <i id="asset-icon-<%= user.id %>" class="fas <%= user.assetManagement? ? 'fa-box' : 'fa-box-open' %>"></i>
+                    <span class="asset-text"><%= user.asset_management_status %></span>
+                  </button>
                 </td>
                 <td>
                   <button id="toggle-finance-btn-<%= user.id %>" class="btn <%= user.finance == 'adimplente' ? 'btn-success' : 'btn-warning' %>" data-user-id="<%= user.id %>" data-confirm="Are you sure?">
@@ -161,4 +170,46 @@ $(document).ready(function() {
       });
     });
   });
+</script>
+
+
+<script>
+document.querySelectorAll('[id^="toggle-asset-btn"]').forEach(function(button) {
+  button.addEventListener('click', function() {
+    var userId = this.dataset.userId;
+    var btn = this;
+    var icon = document.getElementById('asset-icon-' + userId);
+    var text = btn.querySelector('.asset-text');
+
+    if (!confirm('Tem certeza que deseja alterar o status do Asset Management?')) return;
+
+    fetch('/manager_users/' + userId + '/toggle_asset', {
+      method: 'PATCH',
+      headers: {
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        if (data.new_status === 'Ativo') {
+          btn.classList.remove('btn-secondary');
+          btn.classList.add('btn-success');
+          icon.classList.remove('fa-box-open');
+          icon.classList.add('fa-box');
+        } else {
+          btn.classList.remove('btn-success');
+          btn.classList.add('btn-secondary');
+          icon.classList.remove('fa-box');
+          icon.classList.add('fa-box-open');
+        }
+        text.textContent = data.new_status;
+      } else {
+        alert(data.message || 'Erro ao atualizar status');
+      }
+    })
+    .catch(() => alert('Erro na requisição'));
+  });
+});
 </script>

@@ -11,12 +11,10 @@
     </div>
 </div>
 
-
 <%= form_with(model: [@asset_management, @location]) do |form| %>
   <% if @location.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(@location.errors.count, "error") %> prohibited this location from being saved:</h2>
-
       <ul>
         <% @location.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -25,42 +23,44 @@
     </div>
   <% end %>
 
- <div class="container-fluid">
-  <div class="row">
-    <div class="col-md-8 mb-4">
-      <div class="card shadow-sm">
-        <div class="card-header py-3">
-          <h5 class="mb-0"><i class="fas fa-map-marker-alt"></i> Cadastrar uma nova localização</h5>
-        </div>
-        <div class="card-body">
-
-          <!-- Nome da Localização -->
-          <div class="form-outline mb-4">
-            <%= form.label :name, 'Nome da Localização', class: "form-label" %>
-            <%= form.text_field :name, class: 'form-control' %>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-8 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-header py-3">
+            <h5 class="mb-0"><i class="fas fa-map-marker-alt"></i> Cadastrar uma nova localização</h5>
           </div>
+          <div class="card-body">
 
-          <!-- Endereço -->
-          <div class="form-outline mb-4">
-            <%= form.label :address, 'Endereço', class: "form-label" %>
-            <%= form.text_field :address, class: 'form-control' %>
-          </div>
+            <!-- Nome da Localização -->
+            <div class="form-outline mb-4">
+              <%= form.label :name, 'Nome da Localização', class: "form-label" %>
+              <%= form.text_field :name, class: 'form-control' %>
+            </div>
 
-          <!-- Descrição -->
-          <div class="form-outline mb-4">
-            <%= form.label :description, 'Descrição', class: "form-label" %>
-            <%= form.text_field :description, class: 'form-control' %>
-          </div>
+            <!-- Endereço -->
+            <div class="form-outline mb-4">
+              <%= form.label :address, 'Endereço', class: "form-label" %>
+              <%= form.text_field :address, class: 'form-control' %>
+            </div>
 
-          <!-- asset management id -->
-          <%= form.hidden_field :asset_management_id, value: @asset_management.id %>
-        
-          <!-- Botões -->
-          <div class="d-flex justify-content-between mt-4">
-            <%= form.submit 'Criar Localização', class: 'btn btn-primary' %>
+            <!-- Descrição -->
+            <div class="form-outline mb-4">
+              <%= form.label :description, 'Descrição', class: "form-label" %>
+              <%= form.text_field :description, class: 'form-control' %>
+            </div>
+
+            <!-- asset management id -->
+            <%= form.hidden_field :asset_management_id, value: @asset_management.id %>
+
+            <!-- Botões -->
+            <div class="d-flex justify-content-between mt-4">
+              <%= form.submit 'Criar Localização', class: 'btn btn-primary' %>
+            </div>
+
           </div>
         </div>
       </div>
     </div>
-  <% end %>
-</div>
+  </div>
+<% end %>

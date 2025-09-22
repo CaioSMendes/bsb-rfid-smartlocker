@@ -5,5 +5,6 @@ class AddFieldsToUsers < ActiveRecord::Migration[7.0]
     add_column :users, :lastname, :string
     add_column :users, :cnpj, :string
     add_column :users, :nameCompany, :string
+    add_column :users, :assetManagement, :boolean, default: false
   end
 end

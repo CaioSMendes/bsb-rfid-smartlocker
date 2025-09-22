@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :user_lockers
   has_many :keylockers, through: :user_lockers
   has_one :employee #funciona
+  has_many :asset_managements, dependent: :destroy
 
 
   has_one :keylocker  # Adicione esta linha
@@ -36,8 +37,15 @@ class User < ApplicationRecord
     self.authentication_token ||= generate_authentication_token
   end
 
-  private
+  def asset_management?
+    asset_management
+  end
 
+  def asset_management_status
+    assetManagement? ? 'Ativo' : 'Desativado'
+  end
+
+  private
   def set_default_role
     self.role ||= 'user'
   end

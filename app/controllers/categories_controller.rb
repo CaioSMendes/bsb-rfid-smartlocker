@@ -3,15 +3,16 @@ class CategoriesController < ApplicationController
   before_action :set_category, only: %i[show edit update destroy]
 
 
-  # GET /asset_managements/:asset_management_id/categories
+  # GET /asset_managements/:asset_management_id/categories 
   def index
     if params[:asset_management_id]
-      # Nested route: categorías de un AssetManagement específico
+      # Apenas categorias do depósito selecionado
       @asset_management = AssetManagement.find(params[:asset_management_id])
       @categories = @asset_management.categories.order(:id).paginate(page: params[:page], per_page: 10)
     else
-      # Flat route: todas las categorías
-      @categories = Category.order(:id).paginate(page: params[:page], per_page: 10)
+      # Se não veio nenhum depósito, pega o primeiro do usuário (ou nenhum)
+      @asset_management = current_user.asset_managements.first
+      @categories = @asset_management ? @asset_management.categories.order(:id).paginate(page: params[:page], per_page: 10) : []
     end
   end
 
@@ -30,12 +31,14 @@ class CategoriesController < ApplicationController
 
   # POST /asset_managements/:asset_management_id/categories
   def create
-    @category = @asset_management.categories.build(category_params)
+    @category = Category.new(category_params)
+    @category.user = current_user
+    @category.asset_management = current_user.asset_managements.first # garante que tem um depósito inicial
 
     if @category.save
-      redirect_to asset_management_category_path(@asset_management, @category), notice: "Category was successfully created."
+      redirect_to categories_path, notice: 'Categoria criada com sucesso.'
     else
-      render :new, status: :unprocessable_entity
+      render :new
     end
   end
 

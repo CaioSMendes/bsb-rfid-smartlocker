@@ -61,7 +61,6 @@ end
   resources :asset_managements do
     resources :locations
     resources :categories
-    #resources :categories, only: [:index]
     resources :items
   end
 
@@ -84,6 +83,7 @@ end
 
   patch 'manager_users/:id/toggle_finance', to: 'manager_users#toggle_finance', as: :toggle_finance
   patch 'manager_users/:id/toggle_role', to: 'manager_users#toggle_role', as: :toggle_role
+  patch 'manager_users/:id/toggle_asset', to: 'manager_users#toggle_asset', as: :toggle_asset
 
   resources :manager_users do
     member do
