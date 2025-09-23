@@ -48,10 +48,7 @@
           </div>
 
           <!-- asset management id -->
-          <div class="form-outline mb-4">
-            <%= form.label :asset_management_id, 'ID Interno', class: "form-label" %>
-            <%= form.text_field :asset_management_id, class: 'form-control' %>
-          </div>
+          <%= form.hidden_field :asset_management_id, value: @asset_management.id %>
         
           <!-- Botões -->
           <div class="d-flex justify-content-between mt-4">

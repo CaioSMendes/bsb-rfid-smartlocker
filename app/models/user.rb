@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_one :keylocker  # Adicione esta linha
   has_one :address
 
+  #has_secure_password
 
   #accepts_nested_attributes_for :employees
 

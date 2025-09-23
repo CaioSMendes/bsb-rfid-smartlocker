@@ -7,5 +7,6 @@ class AddFieldsToUsers < ActiveRecord::Migration[7.0]
     add_column :users, :nameCompany, :string
     add_column :users, :assetManagement, :boolean, default: false
     add_column :users, :lockerControl, :boolean, default: false
+    add_column :users, :password_digest, :string
   end
 end

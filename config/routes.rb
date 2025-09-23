@@ -136,6 +136,15 @@ end
 
   namespace :api do
     namespace :v1 do
+      post 'asset_managements/list', to: 'asset_managements#list'
+      post 'items/lookup', to: 'asset_managements#lookup_item'
+      post 'items/transfer', to: 'asset_managements#transfer_item'
+    end
+  end
+
+  
+  namespace :api do
+    namespace :v1 do
       resources :keylocker_transactions, only: [:create] do
         collection do
           get ':tagRFID', action: :show

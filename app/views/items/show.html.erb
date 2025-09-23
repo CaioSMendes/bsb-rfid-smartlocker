@@ -28,8 +28,7 @@
     <!-- Coluna dos detalhes -->
     <div class="col-md-9">
       <div class="card p-4 mb-4 shadow-sm">
-        <h3 class="mb-3"><i class="fas fa-info-circle"></i> Detalhes do Ativo</h3>
-
+      <h3 class="mb-3"><i class="fas fa-warehouse text-secondary me-2"></i> <%= @item.asset_management&.name%></h3>
         <ul class="list-group list-group-flush">
           <li class="list-group-item"><i class="fas fa-box text-secondary me-2"></i><strong>Nome:</strong> <%= @item.name %></li>
           <li class="list-group-item"><i class="fas fa-rss text-warning me-2"></i><strong>Tag RFID:</strong> <%= @item.tagRFID %></li>

@@ -50,165 +50,181 @@
           </div>
         </div> 
 
-        <!-- --------------------- CARDS --------------------- -->
-        <div class="row justify-content-center">
-          <!-- Lockers -->
-          <div class="col-lg-3 col-md-6 mb-4">
-            <%= link_to keylockers_path, class: 'panel-custom' do %>
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col-xs-3"><i class="fa fa-box fa-5x"></i></div>
-                  <div class="col-xs-9 text-right">
-                    <% if current_user.admin? %>
-                      <div class="huge"><%= @admin_lockers_count %></div>
-                      <div>Total de Lockers</div>
-                    <% else %>
-                      <div class="huge"><%= @user_keylockers_count %></div>
-                      <div>Meus Lockers</div>
-                    <% end %>
-                  </div>
-                </div>
-              </div>
-            <% end %>
-          </div>
-
-          <!-- Usuários -->
-          <% if current_user.admin? %>
-          <div class="col-lg-3 col-md-6 mb-4">
-            <%= link_to manager_users_index_path, class: 'panel-darkgreen' do %>
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col-xs-3"><i class="fa fa-user-tie fa-5x"></i></div>
-                  <div class="col-xs-9 text-right">
-                    <div class="huge"><%= @admin_users_count %></div>
-                    <div>Administradores</div>
-                  </div>
-                </div>
-              </div>
-            <% end %>
-          </div>
-          <% end %>
-
-          <!-- Colaboradores -->
-          <div class="col-lg-3 col-md-6 mb-4">
-            <%= link_to employees_path, class: 'panel-orange' do %>
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col-xs-3"><i class="fa fa-user fa-5x"></i></div>
-                  <div class="col-xs-9 text-right">
-                    <% if current_user.admin? %>
-                      <div class="huge"><%= @admin_employees_count %></div>
-                      <div>Total de Colaboradores</div>
-                    <% else %>
-                      <div class="huge"><%= @user_employees_count %></div>
-                      <div>Meus Colaboradores</div>
-                    <% end %>
-                  </div>
-                </div>
-              </div>
-            <% end %>
-          </div>
-
-          <!-- Nichos -->
-          <div class="col-lg-3 col-md-6 mb-4">
-            <%= link_to keylockers_path, class: 'panel-red' do %>
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col-xs-3"><i class="fa fa-key fa-5x custom-icon-red"></i></div>
-                  <div class="col-xs-9 text-right">
-                    <% if current_user.admin? %>
-                      <div class="huge"><%= @admin_lockers_total_qtd %></div>
-                      <div>Total de Nichos</div>
-                    <% else %>
-                      <div class="huge"><%= @user_lockers_total_qtd %></div>
-                      <div>Meus Nichos</div>
-                    <% end %>
-                  </div>
-                </div>
-              </div>
-            <% end %>
-          </div>
-
-          <!-- Depósitos -->
-          <div class="col-lg-3 col-md-6 mb-4">
-            <%= link_to keylockers_path, class: 'panel-purple' do %>
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col-xs-3"><i class="fa fa-warehouse fa-5x custom-icon-purple"></i></div>
-                  <div class="col-xs-9 text-right">
-                    <% if current_user.admin? %>
-                      <div class="huge"><%= @total_asset_management_count %></div>
-                      <div>Total de Depósitos</div>
-                    <% else %>
-                      <div class="huge"><%= @user_asset_management_count %></div>
-                      <div>Meus Depósitos</div>
-                    <% end %>
-                  </div>
-                </div>
-              </div>
-            <% end %>
-          </div>
-
-          <!-- Categorias -->
-          <div class="col-lg-3 col-md-6 mb-4">
-            <%= link_to keylockers_path, class: 'panel-pink' do %>
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col-xs-3"><i class="fa fa-tag fa-5x custom-icon-pink"></i></div>
-                  <div class="col-xs-9 text-right">
-                    <% if current_user.admin? %>
-                      <div class="huge"><%= @total_categories_count %></div>
-                      <div>Total de Categorias</div>
-                    <% else %>
-                      <div class="huge"><%= @user_categories_count %></div>
-                      <div>Minhas Categorias</div>
-                    <% end %>
-                  </div>
-                </div>
-              </div>
-            <% end %>
-          </div>
-
-          <!-- Localizações -->
-          <div class="col-lg-3 col-md-6 mb-4">
-            <%= link_to keylockers_path, class: 'panel-darkgreen' do %>
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col-xs-3"><i class="fa fa-map-marker-alt fa-5x custom-icon-darkgreen"></i></div>
-                  <div class="col-xs-9 text-right">
-                    <% if current_user.admin? %>
-                      <div class="huge"><%= @total_locations_count %></div>
-                      <div>Total de Localizações</div>
-                    <% else %>
-                      <div class="huge"><%= @user_locations_count %></div>
-                      <div>Minhas Localizações</div>
-                    <% end %>
-                  </div>
-                </div>
-              </div>
-            <% end %>
-          </div>
-
-          <!-- Itens -->
-          <div class="col-lg-3 col-md-6 mb-4">
-            <%= link_to keylockers_path, class: 'panel-orange' do %>
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col-xs-3"><i class="fa fa-cubes fa-5x custom-icon-orange"></i></div>
-                  <div class="col-xs-9 text-right">
-                    <% if current_user.admin? %>
-                      <div class="huge"><%= @total_items_count %></div>
-                      <div>Total de Itens</div>
-                    <% else %>
-                      <div class="huge"><%= @user_items_count %></div>
-                      <div>Meus Itens</div>
-                    <% end %>
-                  </div>
-                </div>
-              </div>
-            <% end %>
+       <div class="row justify-content-center">
+  <!-- Lockers -->
+  <% if current_user.admin? || current_user.lockerControl? %>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <%= link_to keylockers_path, class: 'panel-custom' do %>
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3"><i class="fa fa-box fa-5x"></i></div>
+            <div class="col-xs-9 text-right">
+              <% if current_user.admin? %>
+                <div class="huge"><%= @admin_lockers_count %></div>
+                <div>Total de Lockers</div>
+              <% else %>
+                <div class="huge"><%= @user_keylockers_count %></div>
+                <div>Meus Lockers</div>
+              <% end %>
+            </div>
           </div>
         </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Usuários (somente admin) -->
+  <% if current_user.admin? %>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <%= link_to manager_users_index_path, class: 'panel-darkgreen' do %>
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3"><i class="fa fa-user-tie fa-5x"></i></div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"><%= @admin_users_count %></div>
+              <div>Administradores</div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Colaboradores -->
+  <% if current_user.admin? || current_user.lockerControl? %>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <%= link_to employees_path, class: 'panel-orange' do %>
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3"><i class="fa fa-user fa-5x"></i></div>
+            <div class="col-xs-9 text-right">
+              <% if current_user.admin? %>
+                <div class="huge"><%= @admin_employees_count %></div>
+                <div>Total de Colaboradores</div>
+              <% else %>
+                <div class="huge"><%= @user_employees_count %></div>
+                <div>Meus Colaboradores</div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Nichos -->
+  <% if current_user.admin? || current_user.lockerControl? %>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <%= link_to keylockers_path, class: 'panel-red' do %>
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3"><i class="fa fa-key fa-5x custom-icon-red"></i></div>
+            <div class="col-xs-9 text-right">
+              <% if current_user.admin? %>
+                <div class="huge"><%= @admin_lockers_total_qtd %></div>
+                <div>Total de Nichos</div>
+              <% else %>
+                <div class="huge"><%= @user_lockers_total_qtd %></div>
+                <div>Meus Nichos</div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+
+          <div class="row justify-content-center">
+  <!-- Depósitos -->
+  <% if current_user.admin? || current_user.assetManagement? %>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <%= link_to keylockers_path, class: 'panel-purple' do %>
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3"><i class="fa fa-warehouse fa-5x custom-icon-purple"></i></div>
+            <div class="col-xs-9 text-right">
+              <% if current_user.admin? %>
+                <div class="huge"><%= @total_asset_management_count %></div>
+                <div>Total de Depósitos</div>
+              <% else %>
+                <div class="huge"><%= @user_asset_management_count %></div>
+                <div>Meus Depósitos</div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Categorias -->
+  <% if current_user.admin? || current_user.assetManagement? %>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <%= link_to keylockers_path, class: 'panel-pink' do %>
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3"><i class="fa fa-tag fa-5x custom-icon-pink"></i></div>
+            <div class="col-xs-9 text-right">
+              <% if current_user.admin? %>
+                <div class="huge"><%= @total_categories_count %></div>
+                <div>Total de Categorias</div>
+              <% else %>
+                <div class="huge"><%= @user_categories_count %></div>
+                <div>Minhas Categorias</div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Localizações -->
+  <% if current_user.admin? || current_user.assetManagement? %>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <%= link_to keylockers_path, class: 'panel-darkgreen' do %>
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3"><i class="fa fa-map-marker-alt fa-5x custom-icon-darkgreen"></i></div>
+            <div class="col-xs-9 text-right">
+              <% if current_user.admin? %>
+                <div class="huge"><%= @total_locations_count %></div>
+                <div>Total de Localizações</div>
+              <% else %>
+                <div class="huge"><%= @user_locations_count %></div>
+                <div>Minhas Localizações</div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Itens -->
+  <% if current_user.admin? || current_user.assetManagement? %>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <%= link_to keylockers_path, class: 'panel-orange' do %>
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3"><i class="fa fa-cubes fa-5x custom-icon-orange"></i></div>
+            <div class="col-xs-9 text-right">
+              <% if current_user.admin? %>
+                <div class="huge"><%= @total_items_count %></div>
+                <div>Total de Itens</div>
+              <% else %>
+                <div class="huge"><%= @user_items_count %></div>
+                <div>Meus Itens</div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
 
         <!-- --------------------- GRÁFICOS --------------------- -->
         <div class="row mt-4">
