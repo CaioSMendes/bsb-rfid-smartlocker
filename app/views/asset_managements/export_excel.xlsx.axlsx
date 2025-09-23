@@ -1,0 +1,30 @@
+# app/views/asset_managements/export_excel.xlsx.axlsx
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Depósitos e Itens") do |sheet|
+  # Cabeçalho
+  sheet.add_row [
+    "Depósito", "Serial", "Descrição do Depósito",
+    "Item", "Categoria", "Local",
+    "Tag RFID", "ID Interno", "Descrição Item",
+    "Status", "Disponível"
+  ]
+
+  @asset_managements.each do |deposito|
+    deposito.items.each do |item|
+      sheet.add_row [
+        deposito.name,
+        deposito.serial,
+        deposito.description,
+        item.name,
+        item.category&.name,
+        item.location&.name,
+        item.tagRFID,
+        item.idInterno,
+        item.description,
+        item.status,
+        item.empty == 0 ? "Sim" : "Não"
+      ]
+    end
+  end
+end

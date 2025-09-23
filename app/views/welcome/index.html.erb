@@ -4,26 +4,42 @@
   color: white;
   text-decoration: none;
 }
+.panel-custom:hover { background-color: #495057 !important; color: white !important; }
+.panel-custom .panel-heading { background-color: #495057; }
+.custom-icon { color: #f8f9fa; }
 
-.panel-custom:hover {
-  background-color: #6c757d !important; 
-  color: white !important; 
-}
+.panel-red { background-color: #dc3545; color: white; text-decoration: none; }
+.panel-red:hover { background-color: #b52b37 !important; color: white !important; }
+.panel-red .panel-heading { background-color: #c82333; }
+.custom-icon-red { color: #f8f9fa; }
 
-.panel-custom .panel-heading {
-  background-color: #495057;
-}
+.panel-purple { background-color: #6f42c1; color: white; text-decoration: none; }
+.panel-purple:hover { background-color: #5936a2 !important; color: white !important; }
+.panel-purple .panel-heading { background-color: #5a2ea0; }
+.custom-icon-purple { color: #f8f9fa; }
 
-.custom-icon {
-  color: #f8f9fa;
-}
+.panel-orange { background-color: #fd7e14; color: white; text-decoration: none; }
+.panel-orange:hover { background-color: #e36a0d !important; color: white !important; }
+.panel-orange .panel-heading { background-color: #d65c00; }
+.custom-icon-orange { color: #f8f9fa; }
+
+.panel-darkgreen { background-color: #28a745; color: white; text-decoration: none; }
+.panel-darkgreen:hover { background-color: #218838 !important; color: white !important; }
+.panel-darkgreen .panel-heading { background-color: #1e7e34; }
+.custom-icon-darkgreen { color: #f8f9fa; }
+
+.panel-pink { background-color: #e83e8c; color: white; text-decoration: none; }
+.panel-pink:hover { background-color: #d63384 !important; color: white !important; }
+.panel-pink .panel-heading { background-color: #c2185b; }
+.custom-icon-pink { color: #f8f9fa; }
 </style>
 
 <div class="wrapper d-flex align-items-stretch">
   <div id="content" class="p-4 p-md-5">
     <div id="page-wrapper">
       <div class="container-fluid">
-        <!-- Page Heading -->
+
+        <!-- Cabeçalho -->
         <div class="row">
           <div class="col-lg-12">
             <ol class="breadcrumb">
@@ -33,17 +49,15 @@
             </ol>
           </div>
         </div> 
-        
-        <!-- Adicionando row para garantir que as colunas se alinhem corretamente -->
+
+        <!-- --------------------- CARDS --------------------- -->
         <div class="row justify-content-center">
-          
+          <!-- Lockers -->
           <div class="col-lg-3 col-md-6 mb-4">
-            <%= link_to keylockers_path, class: 'panel-primary' do %>
+            <%= link_to keylockers_path, class: 'panel-custom' do %>
               <div class="panel-heading">
                 <div class="row">
-                  <div class="col-xs-3">
-                    <i class="fa fa-box fa-5x"></i>
-                  </div>
+                  <div class="col-xs-3"><i class="fa fa-box fa-5x"></i></div>
                   <div class="col-xs-9 text-right">
                     <% if current_user.admin? %>
                       <div class="huge"><%= @admin_lockers_count %></div>
@@ -55,54 +69,52 @@
                   </div>
                 </div>
               </div>
-            <% end %> <!-- Fechamento do bloco link_to -->
+            <% end %>
           </div>
 
+          <!-- Usuários -->
           <% if current_user.admin? %>
-            <div class="col-lg-3 col-md-6 mb-4">
-              <%= link_to manager_users_index_path, class: 'panel-green' do %>
-                <div class="panel-heading">
-                  <div class="row">
-                    <div class="col-xs-3">
-                      <i class="fa fa-user-tie fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                      <div class="huge"><%= @admin_users_count %></div>
-                      <div>Administradores do Sistema</div>
-                    </div>
-                  </div>
-                </div>
-              <% end %> <!-- Fechamento do bloco link_to -->
-            </div>
-          <% end %>
-
           <div class="col-lg-3 col-md-6 mb-4">
-            <%= link_to employees_path, class: 'panel-yellow' do %>
+            <%= link_to manager_users_index_path, class: 'panel-darkgreen' do %>
               <div class="panel-heading">
                 <div class="row">
-                  <div class="col-xs-3">
-                    <i class="fa fa-user fa-5x"></i>
-                  </div>
+                  <div class="col-xs-3"><i class="fa fa-user-tie fa-5x"></i></div>
                   <div class="col-xs-9 text-right">
-                    <% if current_user.admin? %>
-                      <div class="huge"><%= @admin_employees_count %></div>
-                    <% else %>
-                      <div class="huge"><%= @user_employees_count %></div>
-                    <% end %>
-                    <div>Meus Colaboradores</div>
+                    <div class="huge"><%= @admin_users_count %></div>
+                    <div>Administradores</div>
                   </div>
                 </div>
               </div>
-            <% end %> <!-- Fechamento do bloco link_to -->
+            <% end %>
           </div>
+          <% end %>
 
+          <!-- Colaboradores -->
           <div class="col-lg-3 col-md-6 mb-4">
-            <%= link_to keylockers_path, class: 'panel-custom' do %>
+            <%= link_to employees_path, class: 'panel-orange' do %>
               <div class="panel-heading">
                 <div class="row">
-                  <div class="col-xs-3">
-                    <i class="fa fa-key fa-5x custom-icon"></i> <!-- Ícone de chave com cor personalizada -->
+                  <div class="col-xs-3"><i class="fa fa-user fa-5x"></i></div>
+                  <div class="col-xs-9 text-right">
+                    <% if current_user.admin? %>
+                      <div class="huge"><%= @admin_employees_count %></div>
+                      <div>Total de Colaboradores</div>
+                    <% else %>
+                      <div class="huge"><%= @user_employees_count %></div>
+                      <div>Meus Colaboradores</div>
+                    <% end %>
                   </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Nichos -->
+          <div class="col-lg-3 col-md-6 mb-4">
+            <%= link_to keylockers_path, class: 'panel-red' do %>
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3"><i class="fa fa-key fa-5x custom-icon-red"></i></div>
                   <div class="col-xs-9 text-right">
                     <% if current_user.admin? %>
                       <div class="huge"><%= @admin_lockers_total_qtd %></div>
@@ -114,17 +126,305 @@
                   </div>
                 </div>
               </div>
-            <% end %> <!-- Fechamento do bloco link_to -->
+            <% end %>
           </div>
 
-         
+          <!-- Depósitos -->
+          <div class="col-lg-3 col-md-6 mb-4">
+            <%= link_to keylockers_path, class: 'panel-purple' do %>
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3"><i class="fa fa-warehouse fa-5x custom-icon-purple"></i></div>
+                  <div class="col-xs-9 text-right">
+                    <% if current_user.admin? %>
+                      <div class="huge"><%= @total_asset_management_count %></div>
+                      <div>Total de Depósitos</div>
+                    <% else %>
+                      <div class="huge"><%= @user_asset_management_count %></div>
+                      <div>Meus Depósitos</div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
 
-        </div> <!-- Fechamento da row -->
-      </div> <!-- Fechamento da container-fluid -->
-    </div> <!-- Fechamento da page-wrapper -->
-  </div> <!-- Fechamento do content -->
-</div> <!-- Fechamento do wrapper -->
+          <!-- Categorias -->
+          <div class="col-lg-3 col-md-6 mb-4">
+            <%= link_to keylockers_path, class: 'panel-pink' do %>
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3"><i class="fa fa-tag fa-5x custom-icon-pink"></i></div>
+                  <div class="col-xs-9 text-right">
+                    <% if current_user.admin? %>
+                      <div class="huge"><%= @total_categories_count %></div>
+                      <div>Total de Categorias</div>
+                    <% else %>
+                      <div class="huge"><%= @user_categories_count %></div>
+                      <div>Minhas Categorias</div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
 
- 
+          <!-- Localizações -->
+          <div class="col-lg-3 col-md-6 mb-4">
+            <%= link_to keylockers_path, class: 'panel-darkgreen' do %>
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3"><i class="fa fa-map-marker-alt fa-5x custom-icon-darkgreen"></i></div>
+                  <div class="col-xs-9 text-right">
+                    <% if current_user.admin? %>
+                      <div class="huge"><%= @total_locations_count %></div>
+                      <div>Total de Localizações</div>
+                    <% else %>
+                      <div class="huge"><%= @user_locations_count %></div>
+                      <div>Minhas Localizações</div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Itens -->
+          <div class="col-lg-3 col-md-6 mb-4">
+            <%= link_to keylockers_path, class: 'panel-orange' do %>
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3"><i class="fa fa-cubes fa-5x custom-icon-orange"></i></div>
+                  <div class="col-xs-9 text-right">
+                    <% if current_user.admin? %>
+                      <div class="huge"><%= @total_items_count %></div>
+                      <div>Total de Itens</div>
+                    <% else %>
+                      <div class="huge"><%= @user_items_count %></div>
+                      <div>Meus Itens</div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- --------------------- GRÁFICOS --------------------- -->
+        <div class="row mt-4">
+          <!-- Itens por Categoria -->
+          <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card">
+              <div class="card-header bg-primary text-white">Itens por Categoria</div>
+              <div class="card-body">
+                <canvas id="itemsCategoryChart" style="width:100%; height:250px;"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lockers por Tipo -->
+          <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card">
+              <div class="card-header bg-success text-white">Lockers por Tipo</div>
+              <div class="card-body">
+                <canvas id="lockersTypeChart" style="width:100%; height:250px;"></canvas>
+              </div>
+            </div>
+          </div>
+          <!-- Itens por Localização -->
+          <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card">
+              <div class="card-header bg-info text-white">Itens por Localização</div>
+              <div class="card-body">
+                <canvas id="itemsLocationChart" style="width:100%; height:250px;"></canvas>
+              </div>
+            </div>
+          </div>
+          <!-- Itens por Localização -->
+          <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card">
+              <div class="card-header bg-info text-white">Itens por Localização</div>
+              <div class="card-body">
+                <canvas id="lockerTransactionsChart" style="width:100%; height:300px;"></canvas>
+              </div>
+            </div>
+          </div>
+          <!-- Itens por Usuário (apenas admin) -->
+          <% if current_user.admin? %>
+          <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card">
+              <div class="card-header bg-warning text-white">Itens por Usuário</div>
+              <div class="card-body">
+                <canvas id="itemsUserChart" style="width:100%; height:250px;"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
+
+
+
+<!-- Ativos por Mês -->
+<div class="col-lg-12 col-md-12 mb-4">
+  <div class="card">
+    <div class="card-header bg-secondary text-white">Ativos Criados nos Últimos 12 Meses</div>
+    <div class="card-body">
+      <canvas id="itemsMonthChart" style="width:100%; height:250px;"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Lockers por Categoria -->
+<div class="col-lg-12 col-md-12 mb-4">
+  <div class="card">
+    <div class="card-header bg-danger text-white">Lockers por Categoria</div>
+    <div class="card-body">
+      <canvas id="lockersCategoryChart"></canvas>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<script>
+  // Itens por Localização
+  new Chart(document.getElementById('itemsLocationChart'), {
+    type: 'bar',
+    data: {
+      labels: <%= raw @items_per_location.keys.to_json %>,
+      datasets: [{ label: 'Itens', data: <%= raw @items_per_location.values.to_json %>, backgroundColor: '#36A2EB' }]
+    },
+    options: { responsive: true }
+  });
+
+  // Itens por Usuário
+  <% if current_user.admin? %>
+  const itemsUserCtx = document.getElementById('itemsUserChart').getContext('2d');
+  new Chart(itemsUserCtx, {
+    type: 'pie',
+    data: {
+      labels: <%= raw((@items_per_user || {}).keys.to_json) %>,
+      datasets: [{
+        data: <%= raw((@items_per_user || {}).values.to_json) %>,
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#6c757d', '#fd7e14', '#28a745']
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false // Permite que o gráfico encolha ou aumente com o container
+    }
+  });
+
+  // Garante que nunca seja nil
+  const itemsPerMonth = <%= raw((@items_per_month || {}).to_json) %>;
+
+  new Chart(document.getElementById('itemsMonthChart'), {
+    type: 'line',
+    data: {
+      labels: Object.keys(itemsPerMonth), // já são strings
+      datasets: [{
+        label: 'Ativos Criados',
+        data: Object.values(itemsPerMonth),
+        backgroundColor: '#6f42c1',
+        borderColor: '#5936a2',
+        fill: false,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top' },
+        tooltip: { mode: 'index', intersect: false }
+      },
+      scales: {
+        x: { title: { display: true, text: 'Mês' } },
+        y: { title: { display: true, text: 'Quantidade' }, beginAtZero: true }
+      }
+    }
+  });
+
+
+  <% end %>
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Itens por Categoria
+  const itemsCategoryCtx = document.getElementById('itemsCategoryChart').getContext('2d');
+  new Chart(itemsCategoryCtx, {
+      type: 'pie',
+      data: {
+          labels: <%= raw @items_per_category.keys.to_json %>,
+          datasets: [{
+              data: <%= raw @items_per_category.values.to_json %>,
+              backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#6c757d', '#fd7e14', '#28a745']
+          }]
+      },
+      options: { 
+          responsive: true,
+          maintainAspectRatio: false
+      }
+  });
+
+  // Lockers por Tipo
+  const lockersTypeCtx = document.getElementById('lockersTypeChart').getContext('2d');
+  new Chart(lockersTypeCtx, {
+      type: 'bar',
+      data: {
+          labels: <%= raw @lockers_per_type.keys.to_json %>,
+          datasets: [{
+              label: 'Quantidade',
+              data: <%= raw @lockers_per_type.values.to_json %>,
+              backgroundColor: '#fd7e14'
+          }]
+      },
+      options: { 
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+              y: {
+                  beginAtZero: true,
+                  ticks: { stepSize: 1 }
+              }
+          }
+      }
+  });
+</script>
+
+<script>
+const userActivityCtx = document.getElementById('userActivityChart').getContext('2d');
+new Chart(userActivityCtx, {
+  type: 'bar',
+  data: {
+    labels: <%= raw((@user_activity || {}).keys.to_json) %>,
+    datasets: [{
+      label: 'Movimentações',
+      data: <%= raw((@user_activity || {}).values.to_json) %>,
+      backgroundColor: '#36A2EB'
+    }]
+  },
+  options: { responsive: true, maintainAspectRatio: false }
+});
+</script>
+
+
+<script>
+const lockerTransactionsCtx = document.getElementById('lockerTransactionsChart').getContext('2d');
+new Chart(lockerTransactionsCtx, {
+  type: 'bar',
+  data: {
+    labels: <%= raw((@lockers_transactions_status || {}).keys.to_json) %>,
+    datasets: [{
+      label: 'Transações',
+      data: <%= raw((@lockers_transactions_status || {}).values.to_json) %>,
+      backgroundColor: '#fd7e14'
+    }]
+  },
+  options: { responsive: true, maintainAspectRatio: false }
+});
+</script

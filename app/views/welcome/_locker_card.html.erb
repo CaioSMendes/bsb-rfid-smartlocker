@@ -1,0 +1,22 @@
+<div class="col-lg-3 col-md-6 mb-4">
+  <%= link_to keylockers_path, class: 'panel-custom' do %>
+    <div class="panel-heading">
+      <div class="row">
+        <div class="col-xs-3"><i class="fa fa-box fa-5x"></i></div>
+        <div class="col-xs-9 text-right">
+          <% if current_user.admin? %>
+            <div class="huge"><%= admin_count %></div>
+            <div>Total de Lockers</div>
+            <div class="huge"><%= admin_total_qtd %></div>
+            <div>Total de Nichos</div>
+          <% else %>
+            <div class="huge"><%= user_count %></div>
+            <div>Meus Lockers</div>
+            <div class="huge"><%= user_total_qtd %></div>
+            <div>Meus Nichos</div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

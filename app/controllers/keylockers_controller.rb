@@ -4,6 +4,7 @@ class KeylockersController < ApplicationController
   #before_action :authenticate_admin_user! # Certifique-se de ter um método de autenticação de admin
   skip_before_action :verify_authenticity_token, only: [:toggle_and_save_status, :update]
   skip_before_action :authenticate_user!, only: [:toggle_and_save_status]
+  #before_action :check_asset_management_status
 
   # GET /keylockers or /keylockers.json
   def index
@@ -133,6 +134,14 @@ end
   end
   
   private
+
+    def check_asset_management_status
+      unless current_user.lockerControl?
+        flash[:alert] = "Você não tem permissão para acessar esta seção."
+        redirect_to root_path # ou outra página segura
+      end
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_keylocker
       @keylocker = Keylocker.find(params[:id])

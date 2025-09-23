@@ -1,5 +1,6 @@
 class KeylockerinfosController < ApplicationController
     before_action :set_keylockerinfo, only: [:show, :edit, :update, :destroy]
+    before_action :check_asset_management_status
 
  
   def index
@@ -53,6 +54,13 @@ class KeylockerinfosController < ApplicationController
   end
 
   private
+
+  def check_asset_management_status
+    unless current_user.lockerControl?
+      flash[:alert] = "Você não tem permissão para acessar esta seção."
+      redirect_to root_path # ou outra página segura
+    end
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_keylockerinfo

@@ -16,6 +16,9 @@
         <%= link_to new_asset_management_item_path(@asset_management), class: "btn btn-primary mt-3 mb-3" do %>
           <i class="fa fa-plus"></i> Cadastrar Ativo
         <% end %>
+        <%= link_to export_excel_asset_management_items_path(@asset_management, format: :xlsx), class: "btn btn-success" do %>
+          <i class="fas fa-chart-bar"></i> Gerar Excel
+        <% end %>
         </div>
       </div>
     </div>

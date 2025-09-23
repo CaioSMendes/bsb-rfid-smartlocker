@@ -45,6 +45,10 @@ class User < ApplicationRecord
     assetManagement? ? 'Ativo' : 'Desativado'
   end
 
+  def locker_control_status
+    lockerControl ? 'Ativo' : 'Desativado'
+  end
+
   private
   def set_default_role
     self.role ||= 'user'

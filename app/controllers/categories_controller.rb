@@ -1,6 +1,7 @@
 class CategoriesController < ApplicationController
   before_action :set_asset_management, only: %i[show edit update destroy new create]
   before_action :set_category, only: %i[show edit update destroy]
+  before_action :check_asset_management_status
 
 
   # GET /asset_managements/:asset_management_id/categories 
@@ -58,6 +59,13 @@ class CategoriesController < ApplicationController
   end
 
   private
+
+  def check_asset_management_status
+    unless current_user.assetManagement?
+      flash[:alert] = "Você não tem permissão para acessar esta seção."
+      redirect_to root_path # ou outra página segura
+    end
+  end
 
   def set_asset_management
     @asset_management = AssetManagement.find(params[:asset_management_id])

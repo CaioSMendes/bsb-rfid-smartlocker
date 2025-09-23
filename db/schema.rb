@@ -337,6 +337,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_09_22_212326) do
     t.string "cnpj"
     t.string "nameCompany"
     t.boolean "assetManagement", default: false
+    t.boolean "lockerControl", default: false
     t.string "street"
     t.string "city"
     t.string "state"

@@ -3,6 +3,7 @@ class KeyUsagesController < ApplicationController
   before_action :set_employee, only: [:entrada, :transactions_by_serial]
   before_action :set_log, only: [:destroy_log]
   before_action :set_transaction, only: [:destroy_transaction]
+  before_action :check_asset_management_status
 
   # GET /key_usages
   def index
@@ -60,6 +61,13 @@ class KeyUsagesController < ApplicationController
   end
 
   private
+
+  def check_asset_management_status
+    unless current_user.lockerControl?
+      flash[:alert] = "Você não tem permissão para acessar esta seção."
+      redirect_to root_path # ou outra página segura
+    end
+  end
 
   # --- Helpers Logs ---
   def filtered_logs

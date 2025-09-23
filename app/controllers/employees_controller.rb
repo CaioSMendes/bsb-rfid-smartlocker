@@ -4,6 +4,7 @@ class EmployeesController < ApplicationController
   before_action :set_employee, only: %i[ show edit update destroy ]
   before_action :authenticate_user!
   before_action :set_mailer_settings
+  before_action :check_asset_management_status
 
 
   # GET /employees or /employees.json
@@ -167,6 +168,13 @@ class EmployeesController < ApplicationController
   end
 
   private
+
+    def check_asset_management_status
+      unless current_user.lockerControl?
+        flash[:alert] = "Você não tem permissão para acessar esta seção."
+        redirect_to root_path # ou outra página segura
+      end
+    end
 
     def generate_unique_pin
       loop do

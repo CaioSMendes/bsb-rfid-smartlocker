@@ -1,19 +1,18 @@
 class ItemsController < ApplicationController
   before_action :set_asset_management
-  before_action :set_item, only: %i[show edit update destroy]
+  before_action :set_item, only: %i[show edit update destroy] # export_excel NÃO entra aqui
   before_action :load_lookup_data, only: %i[new create edit update]
+  before_action :check_asset_management_status
 
-  # GET /items or /items.json
+  # GET /asset_managements/:asset_management_id/items
   def index
     @items = @asset_management.items
                               .includes(:category, :location)
                               .paginate(page: params[:page], per_page: 10)
   end
 
-  # GET /items/1 or /items/1.json
+  # GET /asset_managements/:asset_management_id/items/:id
   def show
-    @item = Item.find(params[:id])
-    
     HistoricManagement.create(
       item: @item,
       user: current_user,
@@ -23,16 +22,16 @@ class ItemsController < ApplicationController
     )
   end
 
-  # GET /items/new
+  # GET /asset_managements/:asset_management_id/items/new
   def new
     @item = @asset_management.items.build
   end
 
-  # GET /items/1/edit
+  # GET /asset_managements/:asset_management_id/items/:id/edit
   def edit
   end
 
-  # POST /items or /items.json
+  # POST /asset_managements/:asset_management_id/items
   def create
     @item = @asset_management.items.build(item_params)
     if @item.save
@@ -42,49 +41,66 @@ class ItemsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /items/1 or /items/1.json
+  # PATCH/PUT /asset_managements/:asset_management_id/items/:id
   def update
-    @item = current_user.asset_managements.find(params[:asset_management_id]).items.find(params[:id])
-
     if @item.update(item_params)
-      # Cria histórico
       HistoricManagement.create(
         item: @item,
-        user: current_user,        # <-- use current_user aqui
+        user: current_user,
         action: "Edição",
         description: "Item atualizado",
         action_time: Time.current
       )
-
-      redirect_to asset_management_item_path(@item.asset_management, @item), notice: "Item atualizado com sucesso."
+      redirect_to asset_management_item_path(@asset_management, @item), notice: "Item atualizado com sucesso."
     else
       render :edit
     end
   end
 
-  # DELETE /items/1 or /items/1.json
+  # DELETE /asset_managements/:asset_management_id/items/:id
   def destroy
     @item.destroy
     redirect_to asset_management_items_path(@asset_management), notice: "Item removido."
   end
 
+  # GET /asset_managements/:asset_management_id/items/export_excel
+  def export_excel
+    Rails.logger.debug "Entrou no export_excel"
+    @items = @asset_management.items.includes(:category, :location)
+    Rails.logger.debug "Itens carregados: #{@items.count}"
+
+    respond_to do |format|
+      format.xlsx do
+        Rails.logger.debug "Gerando Excel"
+        response.headers['Content-Disposition'] =
+          "attachment; filename=itens_deposito_#{@asset_management.name.parameterize}.xlsx"
+      end
+    end
+  end
+
   private
-    def set_asset_management
-      @asset_management = AssetManagement.find(params[:asset_management_id])
-    end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_item
-      @item = @asset_management.items.find(params[:id])
+  def check_asset_management_status
+    unless current_user.assetManagement?
+      flash[:alert] = "Você não tem permissão para acessar esta seção."
+      redirect_to root_path # ou outra página segura
     end
+  end
 
-    def load_lookup_data
-      @categories = @asset_management.categories
-      @locations = @asset_management.locations
-    end
+  def set_asset_management
+    @asset_management = current_user.asset_managements.find(params[:asset_management_id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def item_params
-      params.require(:item).permit(:asset_management_id, :category_id, :location_id, :name, :tagRFID, :idInterno, :description, :image, :status, :empty)
-    end
+  def set_item
+    @item = @asset_management.items.find(params[:id])
+  end
+
+  def load_lookup_data
+    @categories = @asset_management.categories
+    @locations = @asset_management.locations
+  end
+
+  def item_params
+    params.require(:item).permit(:category_id, :location_id, :name, :tagRFID, :idInterno, :description, :image, :status, :empty)
+  end
 end

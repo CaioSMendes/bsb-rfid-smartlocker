@@ -1,0 +1,19 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Itens do Depósito") do |sheet|
+  sheet.add_row ["Nome do Depósito", "Item", "Categoria", "Local", "Tag RFID", "ID Interno", "Descrição", "Status", "Disponível"]
+
+  @items.each do |item|
+    sheet.add_row [
+      @asset_management.name,
+      item.name,
+      item.category&.name,
+      item.location&.name,
+      item.tagRFID,
+      item.idInterno,
+      item.description,
+      item.status,
+      item.empty == 0 ? "Sim" : "Não"
+    ]
+  end
+end

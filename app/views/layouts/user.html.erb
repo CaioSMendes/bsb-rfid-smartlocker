@@ -24,45 +24,74 @@
     <div class="wrapper d-flex align-items-stretch">
       <nav id="sidebar" class="active">
         <h1><a href="index.html" class="logo"></a></h1>
-        <ul class="list-unstyled components mb-5">
-          <li class="active">
-            <%= link_to root_path do %>
-              <span class="fa fa-home"></span> Home
-            <% end %>
-          </li>
-
-          <li class="active">
-            <%= link_to keylockers_path do %>
-              <span class="fas fa-box"></span> Meus Lockers
-            <% end %>
-          </li>
-
-          <li class="active">
-            <%= link_to employees_path do %>
-              <span class="fa fa-user-tie"></span> Meus Colab.
-            <% end %>
-          </li>
-
-          <li class="active">
-            <%= link_to keylockerinfos_path do %>
-              <span class="fa fa-archive"></span> Meu Inventário
-            <% end %>
-          </li>
-
-          <% if current_user.assetManagement? %>
+          <ul class="list-unstyled components mb-5">
+            <!-- Link para Home -->
             <li class="active">
-              <%= link_to asset_managements_path do %>
-                <span class="fa fa-warehouse"></span> Meus Depósitos
+              <%= link_to root_path do %>
+                <span class="fa fa-home"></span> Home
               <% end %>
             </li>
-          <% end %>
 
-          <li class="active">
-            <%= link_to entrada_key_usages_path do %>
-              <span class="fa fa-history"></span> Histórico
+            <!-- Menu Locker Control -->
+            <% if current_user.lockerControl? %>
+              <li class="active">
+                <%= link_to keylockers_path do %>
+                  <span class="fas fa-box"></span> Meus Lockers
+                <% end %>
+              </li>
+
+              <li class="active">
+                <%= link_to employees_path do %>
+                  <span class="fa fa-user-tie"></span> Meus Colab.
+                <% end %>
+              </li>
+
+              <li class="active">
+                <%= link_to keylockerinfos_path do %>
+                  <span class="fa fa-archive"></span> Meu Inventário
+                <% end %>
+              </li>
+
+              <li class="active">
+                <%= link_to entrada_key_usages_path do %>
+                  <span class="fa fa-history"></span> Histórico
+                <% end %>
+              </li>
             <% end %>
-          </li> 
-        </ul>
+
+            <!-- Menu Asset Management -->
+            <% if current_user.assetManagement? %>
+              <!-- Sempre mostrar Meus Depósitos, mesmo se não houver nenhum ainda -->
+              <li class="active">
+                <%= link_to asset_managements_path do %>
+                  <span class="fa fa-warehouse"></span> Meus Depósitos
+                <% end %>
+              </li>
+
+              <!-- Só mostrar links dependentes se houver pelo menos um depósito -->
+              <% if current_user.asset_managements.exists? %>
+                <% asset = current_user.asset_managements.first %>
+
+                <li class="active">
+                  <%= link_to asset_management_categories_path(asset) do %>
+                    <span class="fa fa-tags"></span> Minhas Categorias
+                  <% end %>
+                </li>
+
+                <li class="active">
+                  <%= link_to asset_management_locations_path(asset) do %>
+                    <span class="fa fa-map-marker-alt"></span> Meus Locais
+                  <% end %>
+                </li>
+
+                <li class="active">
+                  <%= link_to asset_management_items_path(asset) do %>
+                    <span class="fa fa-cubes"></span> Meus Ativos
+                  <% end %>
+                </li>
+              <% end %>
+            <% end %>
+          </ul>
         <div class="footer">
           <p>
             Copyright &copy; All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>

@@ -68,6 +68,14 @@ end
     end
   end
 
+  resources :asset_managements do
+    resources :items do
+      collection do
+        get :export_excel
+      end
+    end
+  end
+
   resources :employees do
     member do
       patch 'toggle_and_save_status'
@@ -88,6 +96,8 @@ end
   patch 'manager_users/:id/toggle_finance', to: 'manager_users#toggle_finance', as: :toggle_finance
   patch 'manager_users/:id/toggle_role', to: 'manager_users#toggle_role', as: :toggle_role
   patch 'manager_users/:id/toggle_asset', to: 'manager_users#toggle_asset', as: :toggle_asset
+  patch 'manager_users/:id/toggle_locker', to: 'manager_users#toggle_locker', as: :toggle_locker
+
 
   resources :manager_users do
     member do

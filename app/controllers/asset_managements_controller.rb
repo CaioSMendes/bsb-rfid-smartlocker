@@ -1,6 +1,7 @@
 class AssetManagementsController < ApplicationController
   before_action :authenticate_user!  # só usuários logados
-  before_action :set_asset_management, only: %i[ show edit update destroy ]
+  before_action :set_asset_management, only: %i[ show edit update destroy ] 
+  before_action :check_asset_management_status
 
   # GET /asset_managements or /asset_managements.json
   def index
@@ -56,7 +57,54 @@ class AssetManagementsController < ApplicationController
     end
   end
 
+  def export_excel
+    @asset_managements = current_user.asset_managements.includes(:items, :categories, :locations)
+
+    respond_to do |format|
+      format.xlsx {
+        xlsx_package = Axlsx::Package.new
+        wb = xlsx_package.workbook
+
+        wb.add_worksheet(name: "Depósitos e Itens") do |sheet|
+          # Cabeçalho
+          sheet.add_row ["Depósito", "Serial", "Descrição do Depósito", "Item", "Categoria", "Local", "Tag RFID", "ID Interno", "Descrição Item", "Status", "Disponível"]
+
+          # Percorre todos os depósitos e itens
+          @asset_managements.each do |deposito|
+            deposito.items.each do |item|
+              sheet.add_row [
+                deposito.name,
+                deposito.serial,
+                deposito.description,
+                item.name,
+                item.category&.name,
+                item.location&.name,
+                item.tagRFID,
+                item.idInterno,
+                item.description,
+                item.status,
+                item.empty == 0 ? "Sim" : "Não"
+              ]
+            end
+          end
+        end
+
+        # Envia o arquivo
+        send_data xlsx_package.to_stream.read,
+                  filename: "relatorio_depositos.xlsx",
+                  type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      }
+    end
+  end
+
   private
+  def check_asset_management_status
+    unless current_user.assetManagement?
+      flash[:alert] = "Você não tem permissão para acessar esta seção."
+      redirect_to root_path # ou outra página segura
+    end
+  end
+  
   # Use callbacks to share common setup or constraints between actions.
   def set_asset_management
     @asset_management = current_user.asset_managements.find(params[:id])
