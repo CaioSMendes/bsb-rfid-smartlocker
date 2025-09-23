@@ -51,7 +51,7 @@
 
       <!-- Botões de ações -->
       <div class="d-flex gap-2 mb-4">
-        <%= link_to edit_asset_management_item_path(@item), class: "btn btn-primary" do %>
+        <%= link_to edit_asset_management_item_path(@item.asset_management, @item), class: "btn btn-primary" do %>
           <i class="fas fa-edit"></i> Editar Ativo
         <% end %>
 

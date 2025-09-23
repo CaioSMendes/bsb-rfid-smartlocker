@@ -1,3 +1,11 @@
+<head>
+  <!-- CSS Select2 -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <!-- JS (depende do jQuery) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+
 <%= form_with(model: [@asset_management, @item]) do |form| %>
   <% if @item.errors.any? %>
     <div class="alert alert-danger">
@@ -10,88 +18,111 @@
     </div>
   <% end %>
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-8 mb-4">
-      <div class="card shadow-sm">
-        <div class="card-header py-3">
-          <h5 class="mb-0"><i class="fa fa-box me-2"></i> Cadastrar um novo ativo</h5>
-        </div>
-        <div class="card-body">
-
-          <!-- Nome do Ativo -->
-          <div class="form-outline mb-4">
-            <%= form.label :name, 'Nome do Ativo', class: "form-label" %>
-            <%= form.text_field :name, class: 'form-control' %>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-8 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-header py-3">
+            <h5 class="mb-0"><i class="fa fa-box me-2"></i> Cadastrar um novo ativo</h5>
           </div>
+          <div class="card-body">
 
-          <!-- Tag RFID -->
-          <div class="form-outline mb-4">
-            <%= form.label :tagRFID, 'Tag RFID', class: "form-label" %>
-            <%= form.text_field :tagRFID, class: 'form-control' %>
-          </div>
+            <!-- Nome do Ativo -->
+            <div class="form-outline mb-4">
+              <%= form.label :name, 'Nome do Ativo', class: "form-label" %>
+              <%= form.text_field :name, class: 'form-control' %>
+            </div>
 
-          <!-- ID Interno -->
-          <div class="form-outline mb-4">
-            <%= form.label :idInterno, 'ID Interno', class: "form-label" %>
-            <%= form.text_field :idInterno, class: 'form-control' %>
-          </div>
+            <!-- Tag RFID -->
+            <div class="form-outline mb-4">
+              <%= form.label :tagRFID, 'Tag RFID', class: "form-label" %>
+              <%= form.text_field :tagRFID, class: 'form-control' %>
+            </div>
 
-          <!-- Descrição -->
-          <div class="form-outline mb-4">
-            <%= form.label :description, 'Descrição', class: "form-label" %>
-            <%= form.text_field :description, class: 'form-control' %>
-          </div>
+            <!-- ID Interno -->
+            <div class="form-outline mb-4">
+              <%= form.label :idInterno, 'ID Interno', class: "form-label" %>
+              <%= form.text_field :idInterno, class: 'form-control' %>
+            </div>
 
-          <!-- Status -->
-          <div class="form-outline mb-4">
-            <%= form.label :status, 'Status do Ativo', class: "form-label" %>
-            <%= form.text_field :status, class: 'form-control' %>
-          </div>
+            <!-- Descrição -->
+            <div class="form-outline mb-4">
+              <%= form.label :description, 'Descrição', class: "form-label" %>
+              <%= form.text_field :description, class: 'form-control' %>
+            </div>
 
-          <!-- Vazio -->
-          <div class="form-outline mb-4">
-            <%= form.label :empty, 'Vazio', class: "form-label" %>
-            <%= form.text_field :empty, class: 'form-control' %>
-          </div>
+            <!-- Status -->
+            <div class="form-outline mb-4">
+              <%= form.label :status, class: "form-label d-flex align-items-center" do %>
+                <i class="fa fa-toggle-on me-2"></i> Status do Ativo
+              <% end %>
+              <%= form.select :status, [['Ativo','Ativo'], ['Inativo','Inativo']], {}, class: 'form-control' %>
+            </div>
 
-          <!-- Categoria -->
-          <div class="form-outline mb-4">
-            <%= form.label :category_id, class: "form-label" do %>
-              <i class="fa fa-list me-1"></i> Categoria
-            <% end %>
-            <%= form.collection_select :category_id, 
-                  @asset_management.categories, 
-                  :id, :name, 
-                  { prompt: "Escolha a categoria" }, 
-                  { class: "form-select" } %>
-          </div>
+            <!-- Vazio -->
+            <%= form.hidden_field :empty %>
 
-          <!-- Localização -->
-          <div class="form-outline mb-4">
-            <%= form.label :location_id, class: "form-label" do %>
-              <i class="fa fa-map-marker-alt me-1"></i> Localização
-            <% end %>
-            <%= form.collection_select :location_id, 
-                  @asset_management.locations, 
-                  :id, :name, 
-                  { prompt: "Escolha a localização" }, 
-                  { class: "form-select" } %>
-          </div>
+            <!-- Categoria -->
+            <div class="form-outline mb-4">
+              <%= form.label :category_id, class: "form-label" do %>
+                <i class="fa fa-list me-1"></i> Categoria
+              <% end %>
 
-          <!-- Upload da Imagem -->
-          <div class="form-outline mb-4">
-            <%= form.label :image, "Imagem do Ativo", class: "form-label" %>
-            <%= form.file_field :image, class: "form-control" %>
-          </div>
+              <%= form.select :category_id, options_for_select(@categories.map { |c| [c.name, c.id] }),
+                    { prompt: "Escolha categoria" },
+                    { class: "form-control", id: "category_select" } %>
+            </div>
 
-          <!-- Botões -->
-          <div class="d-flex justify-content-between mt-4">
-            <%= form.submit 'Cadastrar Ativo', class: 'btn btn-primary' %>
+            <!-- Categoria -->
+            <div class="form-outline mb-4">
+              <%= form.label :category_name, class: "form-label" do %>
+                <i class="fa fa-list me-1"></i> Categoria
+              <% end %>
+
+              <%= form.text_field :category_name, id: "category_input", class: "form-control", placeholder: "Digite a categoria" %>
+            </div>
+
+            <!-- Localização -->
+            <div class="form-outline mb-4">
+              <%= form.label :location_id, class: "form-label" do %>
+                <i class="fa fa-map-marker-alt me-1"></i> Localização
+              <% end %>
+              <%= form.select :location_id, 
+                    @asset_management.locations.map { |l| [l.name, l.id] },
+                    { prompt: "Escolha ou digite a localização" },
+                    { class: "form-select", id: "location_select" } %>
+            </div>
+
+            <!-- Upload da Imagem -->
+            <div class="form-outline mb-4">
+              <%= form.label :image, "Imagem do Ativo", class: "form-label" %>
+              <%= form.file_field :image, class: "form-control" %>
+            </div>
+
+            <!-- Botão -->
+            <div class="d-flex justify-content-between mt-4">
+              <%= form.submit 'Cadastrar Ativo', class: 'btn btn-primary' %>
+            </div>
+
           </div>
         </div>
       </div>
     </div>
   </div>
 <% end %>
-</div>
+
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+<script>
+$(document).ready(function() {
+  var availableCategories = <%= raw(@categories.pluck(:name).to_json) %>;
+
+  $("#category_input").autocomplete({
+    source: availableCategories,
+    minLength: 0
+  }).focus(function(){
+    $(this).autocomplete("search", "");
+  });
+});
+</script>

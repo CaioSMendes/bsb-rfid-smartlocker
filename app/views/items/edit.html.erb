@@ -61,27 +61,34 @@
 
           <!-- Status -->
           <div class="form-outline mb-4">
-            <%= form.label :status, 'Status do Ativo', class: "form-label" %>
-            <%= form.text_field :status, class: 'form-control' %>
+            <%= form.label :status, class: "form-label d-flex align-items-center" do %>
+              <i class="fa fa-toggle-on me-2"></i> Status do Ativo
+            <% end %>
+            <%= form.select :status, [['Ativo', 'Ativo'], ['Inativo', 'Inativo']], {}, class: 'form-control' %>
           </div>
 
           <!-- Vazio -->
-          <div class="form-outline mb-4">
-            <%= form.label :empty, 'Vazio', class: "form-label" %>
-            <%= form.text_field :empty, class: 'form-control' %>
-          </div>
+          <%= form.hidden_field :empty %>
 
-          <!-- Categoria -->
-          <div class="form-outline mb-4">
-            <%= form.label :category_id, class: "form-label" do %>
-              <i class="fa fa-list me-1"></i> Categoria
-            <% end %>
-            <%= form.collection_select :category_id, 
-                  @asset_management.categories, 
-                  :id, :name, 
-                  { prompt: "Escolha a categoria" }, 
-                  { class: "form-select" } %>
-          </div>
+            <!-- Categoria -->
+            <div class="form-outline mb-4">
+              <%= form.label :category_id, class: "form-label" do %>
+                <i class="fa fa-list me-1"></i> Categoria
+              <% end %>
+
+              <%= form.select :category_id, options_for_select(@categories.map { |c| [c.name, c.id] }),
+                    { prompt: "Escolha categoria" },
+                    { class: "form-control", id: "category_select" } %>
+            </div>
+
+            <!-- Categoria -->
+            <div class="form-outline mb-4">
+              <%= form.label :category_name, class: "form-label" do %>
+                <i class="fa fa-list me-1"></i> Categoria
+              <% end %>
+
+              <%= form.text_field :category_name, id: "category_input", class: "form-control", placeholder: "Digite a categoria" %>
+            </div>
 
           <!-- Localização -->
           <div class="form-outline mb-4">
@@ -112,3 +119,20 @@
   </div>
 <% end %>
 </div>
+
+
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+<script>
+$(document).ready(function() {
+  var availableCategories = <%= raw(@categories.pluck(:name).to_json) %>;
+
+  $("#category_input").autocomplete({
+    source: availableCategories,
+    minLength: 0
+  }).focus(function(){
+    $(this).autocomplete("search", "");
+  });
+});
+</script>

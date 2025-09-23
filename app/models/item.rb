@@ -1,12 +1,16 @@
 class Item < ApplicationRecord
   belongs_to :asset_management
-  belongs_to :category
+  belongs_to :category, optional: true  # se quiser permitir nulo em algumas situações
   belongs_to :location
   has_one_attached :image
   has_many :historic_managements, dependent: :destroy
 
   validates :tagRFID, presence: true, uniqueness: true
-  validate :category_and_location_belong_to_same_asset_management
+  validates :category, presence: true  # garante que sempre tenha uma categoria
+  
+  attr_accessor :category_name, :location_name
+
+  before_validation :assign_category_and_location
 
   after_create :log_create
   after_update :log_update
@@ -44,12 +48,17 @@ class Item < ApplicationRecord
 
   private
 
-  def category_and_location_belong_to_same_asset_management
-    if category && category.asset_management_id != asset_management_id
-      errors.add(:category_id, "must belong to the same Asset Management")
+   def assign_category_and_location
+    # Categoria
+    if category_name.present? && category_id.blank?
+      cat = asset_management.categories.find_or_create_by(name: category_name)
+      self.category = cat
     end
-    if location && location.asset_management_id != asset_management_id
-      errors.add(:location_id, "must belong to the same Asset Management")
+
+    # Localização
+    if location_name.present? && location_id.blank?
+      loc = asset_management.locations.find_or_create_by(name: location_name)
+      self.location = loc
     end
   end
 end
