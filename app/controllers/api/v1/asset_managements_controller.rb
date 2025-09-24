@@ -158,6 +158,7 @@ def compare
     idInterno: item.idInterno,
     description: item.description,
     asset_management_id: item.asset_management_id,
+    asset_management_name: item.asset_management&.name,
     status: item.status,
     vazio: item.empty,
     fora_do_deposito: item.asset_management_id != deposito.id
