@@ -99,85 +99,69 @@ def compare
   user = authenticate_user
   return unless user
 
-  puts "=== Compare iniciado ==="
-  puts "Usuário autenticado: #{user.id} - #{user.email}"
+  tag_lida = params[:tagRfid].to_s.strip
+  deposito_id = params[:deposito_id]
 
-  tag_lidas = Array(params[:tagRfid]) # aceita string ou array
-  deposito_id = params[:deposito_id] # agora usa deposito_id enviado no JSON
-
-  puts "Tags lidas recebidas: #{tag_lidas.inspect}"
-  puts "Depósito ID recebido: #{deposito_id}"
-
-  # Busca o depósito do usuário
   deposito = user.asset_managements.find_by(id: deposito_id)
-  unless deposito
-    puts "Depósito inválido!"
-    return render json: { error: "Depósito inválido" }, status: :not_found
+  return render json: { error: "Depósito inválido" }, status: :not_found unless deposito
+
+  # Reset automático na primeira leitura da sessão
+  @@reset_done ||= {}
+  @@reset_done[deposito.id] ||= false
+  unless @@reset_done[deposito.id]
+    deposito.items.update_all(empty: 0) # todos não lidos inicialmente
+    @@reset_done[deposito.id] = true
   end
 
-  puts "Depósito encontrado: #{deposito.name} (ID: #{deposito.id})"
+  # Procura a tag
+  item = Item.find_by(tagRFID: tag_lida)
 
-  # Todos os itens cadastrados no depósito
-  itens_cadastrados = deposito.items
-  puts "Itens cadastrados no depósito: #{itens_cadastrados.pluck(:tagRFID).inspect}"
-
-  # Presentes: tags lidas que pertencem ao depósito
-  presentes = itens_cadastrados.where(tagRFID: tag_lidas)
-  puts "Presentes: #{presentes.pluck(:tagRFID).inspect}"
-
-  # Faltando: itens cadastrados no depósito mas não foram lidos
-  faltando = itens_cadastrados.where.not(tagRFID: tag_lidas)
-  puts "Faltando: #{faltando.pluck(:tagRFID).inspect}"
-
-  # Extras: tags lidas que não pertencem a esse depósito, mas existem em outros depósitos
-  extras = Item.where(tagRFID: tag_lidas)
-               .where.not(asset_management_id: deposito.id)
-               .map do |i|
-                 { tagRFID: i.tagRFID, deposito_id: i.asset_management_id, status: i.status || "Desconhecido" }
-               end
-  puts "Extras iniciais: #{extras.inspect}"
-
-  # Adiciona tags lidas que não existem em nenhum lugar
-  tag_lidas.each do |tag|
-    unless presentes.map(&:tagRFID).include?(tag) || extras.map { |e| e[:tagRFID] }.include?(tag)
-      extras << { tagRFID: tag, deposito_id: nil, status: "Desconhecido" }
-    end
+  if item.nil?
+    # Tag desconhecida
+    HistoricManagement.create(
+      item: nil,
+      user: user,
+      action: "Leitura",
+      description: "Tag desconhecida: #{tag_lida}",
+      action_time: Time.current
+    )
+    render json: { tagRFID: tag_lida, desconhecida: true }
+    return
   end
-  puts "Extras finais após inclusão de desconhecidos: #{extras.inspect}"
 
-  # Formata o JSON de saída
+  # Marca como lida se pertence ao depósito atual
+  if item.asset_management_id == deposito.id
+    item.update(empty: 1) # marca como lida
+
+    HistoricManagement.create(
+      item: item,
+      user: user,
+      action: "Leitura",
+      description: "Item lido no inventário",
+      action_time: Time.current
+    )
+  else
+    # Tag fora do depósito
+    HistoricManagement.create(
+      item: item,
+      user: user,
+      action: "Leitura",
+      description: "Item lido fora do depósito",
+      action_time: Time.current
+    )
+  end
+
   render json: {
-    presentes: presentes.map do |i|
-      {
-        id: i.id,
-        name: i.name,
-        tagRFID: i.tagRFID,
-        idInterno: i.idInterno,
-        description: i.description,
-        asset_management_id: i.asset_management_id,
-        status: i.status,
-        vazio: i.empty,
-        criado_em: i.created_at.strftime("%d/%m/%Y %H:%M"),
-        editado_em: i.updated_at.strftime("%d/%m/%Y %H:%M")
-      }
-    end,
-    faltando: faltando.map do |i|
-      {
-        id: i.id,
-        name: i.name,
-        tagRFID: i.tagRFID,
-        idInterno: i.idInterno,
-        description: i.description,
-        asset_management_id: i.asset_management_id,
-        status: i.status,
-        vazio: i.empty,
-        criado_em: i.created_at.strftime("%d/%m/%Y %H:%M"),
-        editado_em: i.updated_at.strftime("%d/%m/%Y %H:%M")
-      }
-    end,
-    extras: extras
+    id: item.id,
+    name: item.name,
+    tagRFID: item.tagRFID,
+    idInterno: item.idInterno,
+    description: item.description,
+    asset_management_id: item.asset_management_id,
+    status: item.status,
+    vazio: item.empty,
+    fora_do_deposito: item.asset_management_id != deposito.id
   }
-  puts "=== Compare finalizado ==="
 end
 
       private

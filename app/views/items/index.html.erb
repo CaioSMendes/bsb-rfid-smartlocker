@@ -59,8 +59,14 @@
                     <strong>Status:</strong> <%= item.status || "Sem status" %>
                   </p>
 
-                  <p><i class="fas fa-circle text-secondary me-2"></i>
-                    <strong>Vazio:</strong> <%= item.empty || "Sem status" %>
+                  <p>
+                    <% if item.empty == 1 %>
+                      <i class="fas fa-circle text-success me-2"></i> <!-- verde -->
+                      <strong>Lido</strong>
+                    <% else %>
+                      <i class="fas fa-circle text-danger me-2"></i> <!-- vermelho -->
+                      <strong>Não lido</strong>
+                    <% end %>
                   </p>
 
                   <p><i class="fas fa-list-alt text-primary me-2"></i>

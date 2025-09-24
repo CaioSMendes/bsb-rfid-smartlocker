@@ -45,6 +45,12 @@
               <%= form.text_field :idInterno, class: 'form-control' %>
             </div>
 
+            <!-- Qtd Dígito -->
+            <div class="form-outline mb-4">
+              <%= form.label :qtdDigito, 'Quantidade de Dígitos', class: "form-label" %>
+              <%= form.number_field :qtdDigito, class: 'form-control' %>
+            </div>
+
             <!-- Descrição -->
             <div class="form-outline mb-4">
               <%= form.label :description, 'Descrição', class: "form-label" %>

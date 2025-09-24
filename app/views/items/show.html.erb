@@ -45,7 +45,15 @@
               <i class="fas <%= @item.status == 'bloqueado' ? 'fa-lock' : 'fa-unlock' %>"></i> <%= @item.status %>
             </button>
           </li>
-          <li class="list-group-item"><i class="fas fa-circle text-secondary me-2"></i><strong>Vazio:</strong> <%= @item.empty %></li>
+           <li class="list-group-item">
+              <% if @item.empty == 1 %>
+                <i class="fas fa-circle text-success me-2"></i> <!-- verde -->
+                <strong>Lido</strong>
+              <% else %>
+                <i class="fas fa-circle text-danger me-2"></i> <!-- vermelho -->
+                <strong>Não lido</strong>
+              <% end %>
+            </li>
           <li class="list-group-item"><i class="fas fa-calendar-plus text-info me-2"></i><strong>Criado em:</strong> <%= @item.created_at.strftime("%d/%m/%Y %H:%M") %></li>
           <li class="list-group-item"><i class="fas fa-edit text-warning me-2"></i><strong>Editado em:</strong> <%= @item.updated_at.strftime("%d/%m/%Y %H:%M") %></li>
         </ul>
