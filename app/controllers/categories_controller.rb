@@ -37,7 +37,7 @@ class CategoriesController < ApplicationController
     @category.asset_management = current_user.asset_managements.first # garante que tem um depósito inicial
 
     if @category.save
-      redirect_to categories_path, notice: 'Categoria criada com sucesso.'
+      redirect_to asset_management_categories_path(@asset_management), notice: 'Categoria criada com sucesso.'
     else
       render :new
     end

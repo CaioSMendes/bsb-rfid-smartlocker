@@ -4,7 +4,7 @@ class KeylockersController < ApplicationController
   #before_action :authenticate_admin_user! # Certifique-se de ter um método de autenticação de admin
   skip_before_action :verify_authenticity_token, only: [:toggle_and_save_status, :update]
   skip_before_action :authenticate_user!, only: [:toggle_and_save_status]
-  #before_action :check_asset_management_status
+  before_action :check_asset_management_status
 
   # GET /keylockers or /keylockers.json
   def index

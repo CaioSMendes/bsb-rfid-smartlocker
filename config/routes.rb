@@ -139,6 +139,7 @@ end
       post 'asset_managements/list', to: 'asset_managements#list'
       post 'items/lookup', to: 'asset_managements#lookup_item'
       post 'items/transfer', to: 'asset_managements#transfer_item'
+      post 'items/compare', to: 'asset_managements#compare'
     end
   end
 

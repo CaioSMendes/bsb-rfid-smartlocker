@@ -1,6 +1,8 @@
 require 'faker'
 
-# Crie um usuário administrador
+# =========================
+# Usuários administradores
+# =========================
 admin1 = User.create!(
   email: 'admin@admin.com',
   name: "Caio",
@@ -58,9 +60,11 @@ admin3 = User.create!(
   password_confirmation: 'Rfid!@#'
 )
 
-puts 'Admins criados'
+puts '✅ Admins criados'
 
-# Crie um usuário regular
+# =========================
+# Usuários comuns
+# =========================
 user1 = User.create!(
   email: 'user@user.com',
   name: "Caio",
@@ -79,9 +83,8 @@ user1 = User.create!(
   password: 'user123',
   password_confirmation: 'user123'
 )
-puts 'User criado'
+puts '✅ User1 criado'
 
-# Crie um usuário regular
 user2 = User.create!(
   email: 'bope@caveira.com',
   name: "Major",
@@ -92,7 +95,7 @@ user2 = User.create!(
   street: "SPS",
   city: "Brasilia",
   state: "Distrito Federal",
-  zip_code: "71200-240 ",
+  zip_code: "71200-240",
   neighborhood: "Brazil",
   finance: "adimplente",
   role: 'user',
@@ -100,7 +103,56 @@ user2 = User.create!(
   password: 'caveira123',
   password_confirmation: 'caveira123'
 )
-puts 'User criado'
+puts '✅ User2 criado'
+
+# =========================
+# Criando depósito/categoria/localização para user1
+# =========================
+deposito = AssetManagement.create!(
+  name: "Depósito Central",
+  user: user1
+)
+puts "🏢 Depósito criado: #{deposito.name}"
+
+categoria = Category.create!(
+  name: "Equipamentos Táticos",
+  asset_management: deposito,
+  user: user1
+)
+puts "📂 Categoria criada: #{categoria.name}"
+
+location = Location.create!(
+  name: "Sala Principal",
+  asset_management: deposito,
+  user: user1
+)
+puts "📍 Localização criada: #{location.name}"
+
+# =========================
+# Criando itens fixos com tags RFID
+# =========================
+itens_fixos = [
+  { name: 'Capacete Tático', tagRFID: '144730000000000000000000', idInterno: 'ID-001', description: 'Capacete tático reforçado para proteção da cabeça em operações policiais e militares.' },
+  { name: 'Escudo Antitumulto', tagRFID: '000467000000000000000000', idInterno: 'ID-002', description: 'Escudo utilizado para proteção em situações de distúrbios e controle de multidões.' },
+  { name: 'Spray de Pimenta', tagRFID: '000469000000000000000000', idInterno: 'ID-003', description: 'Dispositivo de spray de pimenta para imobilização não letal em confrontos.' },
+  { name: 'Submetralhadora MP5', tagRFID: '000468000000000000000000', idInterno: 'ID-004', description: 'Arma de fogo compacta ideal para combate próximo e operações especiais.' },
+  { name: 'Pistola IMBEL 9 GC MD1', tagRFID: '000473000000000000000000', idInterno: 'ID-005', description: 'Pistola semi-automática de padrão militar para defesa e segurança.' }
+]
+
+itens_fixos.each do |attrs|
+  item = Item.create!(
+    name: attrs[:name],
+    tagRFID: attrs[:tagRFID],
+    idInterno: attrs[:idInterno],
+    description: attrs[:description],
+    asset_management: deposito,
+    category: categoria,
+    location: location,
+    status: "ativo",
+    empty: 0
+  )
+  puts "🔑 Item criado: #{item.name} (tag: #{item.tagRFID})"
+end
 
 # Admin criando o Keylocker
 locker = user1.keylockers.create!(

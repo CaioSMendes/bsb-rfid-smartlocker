@@ -7,6 +7,7 @@ class CreateItems < ActiveRecord::Migration[7.0]
       t.string :name
       t.string :tagRFID
       t.string :idInterno
+      t.integer :qtdDigito
       t.string :description
       t.string :image
       t.string :status

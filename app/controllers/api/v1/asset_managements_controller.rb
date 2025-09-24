@@ -65,6 +65,12 @@ def transfer_item
   end
   puts "Depósito de destino: #{new_deposit.name}"
 
+  # 🚫 Impede transferir para o mesmo depósito
+  if item.asset_management_id == new_deposit.id
+    puts "Tentativa de transferir para o mesmo depósito"
+    return render json: { error: "Item já está nesse depósito" }, status: :unprocessable_entity
+  end
+
   # Guarda o depósito antigo
   old_deposit_name = item.asset_management.name
 
@@ -88,7 +94,91 @@ def transfer_item
   end
 end
 
+# POST /items/compare
+def compare
+  user = authenticate_user
+  return unless user
 
+  puts "=== Compare iniciado ==="
+  puts "Usuário autenticado: #{user.id} - #{user.email}"
+
+  tag_lidas = Array(params[:tagRfid]) # aceita string ou array
+  deposito_id = params[:deposito_id] # agora usa deposito_id enviado no JSON
+
+  puts "Tags lidas recebidas: #{tag_lidas.inspect}"
+  puts "Depósito ID recebido: #{deposito_id}"
+
+  # Busca o depósito do usuário
+  deposito = user.asset_managements.find_by(id: deposito_id)
+  unless deposito
+    puts "Depósito inválido!"
+    return render json: { error: "Depósito inválido" }, status: :not_found
+  end
+
+  puts "Depósito encontrado: #{deposito.name} (ID: #{deposito.id})"
+
+  # Todos os itens cadastrados no depósito
+  itens_cadastrados = deposito.items
+  puts "Itens cadastrados no depósito: #{itens_cadastrados.pluck(:tagRFID).inspect}"
+
+  # Presentes: tags lidas que pertencem ao depósito
+  presentes = itens_cadastrados.where(tagRFID: tag_lidas)
+  puts "Presentes: #{presentes.pluck(:tagRFID).inspect}"
+
+  # Faltando: itens cadastrados no depósito mas não foram lidos
+  faltando = itens_cadastrados.where.not(tagRFID: tag_lidas)
+  puts "Faltando: #{faltando.pluck(:tagRFID).inspect}"
+
+  # Extras: tags lidas que não pertencem a esse depósito, mas existem em outros depósitos
+  extras = Item.where(tagRFID: tag_lidas)
+               .where.not(asset_management_id: deposito.id)
+               .map do |i|
+                 { tagRFID: i.tagRFID, deposito_id: i.asset_management_id, status: i.status || "Desconhecido" }
+               end
+  puts "Extras iniciais: #{extras.inspect}"
+
+  # Adiciona tags lidas que não existem em nenhum lugar
+  tag_lidas.each do |tag|
+    unless presentes.map(&:tagRFID).include?(tag) || extras.map { |e| e[:tagRFID] }.include?(tag)
+      extras << { tagRFID: tag, deposito_id: nil, status: "Desconhecido" }
+    end
+  end
+  puts "Extras finais após inclusão de desconhecidos: #{extras.inspect}"
+
+  # Formata o JSON de saída
+  render json: {
+    presentes: presentes.map do |i|
+      {
+        id: i.id,
+        name: i.name,
+        tagRFID: i.tagRFID,
+        idInterno: i.idInterno,
+        description: i.description,
+        asset_management_id: i.asset_management_id,
+        status: i.status,
+        vazio: i.empty,
+        criado_em: i.created_at.strftime("%d/%m/%Y %H:%M"),
+        editado_em: i.updated_at.strftime("%d/%m/%Y %H:%M")
+      }
+    end,
+    faltando: faltando.map do |i|
+      {
+        id: i.id,
+        name: i.name,
+        tagRFID: i.tagRFID,
+        idInterno: i.idInterno,
+        description: i.description,
+        asset_management_id: i.asset_management_id,
+        status: i.status,
+        vazio: i.empty,
+        criado_em: i.created_at.strftime("%d/%m/%Y %H:%M"),
+        editado_em: i.updated_at.strftime("%d/%m/%Y %H:%M")
+      }
+    end,
+    extras: extras
+  }
+  puts "=== Compare finalizado ==="
+end
 
       private
 

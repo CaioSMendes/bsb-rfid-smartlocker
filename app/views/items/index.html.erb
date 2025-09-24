@@ -40,11 +40,15 @@
                   </p>
 
                   <p><i class="fas fa-rss text-warning me-2"></i>
-                    <strong>Tag RFID:</strong> <%= item.tagRFID || "Sem tag" %>
+                    <strong>Tag RFID:</strong> <%= item.tagRFID ? item.tagRFID.slice(0, item.qtdDigito) : 'Não disponível' %>
                   </p>
 
                   <p><i class="fas fa-hashtag text-info me-2"></i>
                     <strong>ID Interno:</strong> <%= item.idInterno || "Sem ID" %>
+                  </p>
+
+                  <p><i class="fas fa-sort-numeric-up text-info me-2"></i></i>
+                    <strong>Quantidade de Dígitos:</strong> <%= item.qtdDigito || "Sem quantidade" %>
                   </p>
 
                   <p><i class="fas fa-align-left text-muted me-2"></i>

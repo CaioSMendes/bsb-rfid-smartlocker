@@ -136,7 +136,7 @@ class ItemsController < ApplicationController
   end
 
   def item_params
-    params.require(:item).permit(:category_id, :category_name, :location_id, :name, :tagRFID, :idInterno, :description, :image, :status, :empty)
+    params.require(:item).permit(:category_id, :category_name, :location_id, :name, :qtdDigito, :tagRFID, :idInterno, :description, :image, :status, :empty)
   end
 
   def handle_dynamic_location_and_category

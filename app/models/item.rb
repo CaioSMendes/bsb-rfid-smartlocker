@@ -7,14 +7,17 @@ class Item < ApplicationRecord
 
   validates :tagRFID, presence: true, uniqueness: true
   validates :category, presence: true  # garante que sempre tenha uma categoria
+  before_validation :set_default_qtd_digito, on: :create  # ✅ Aqui
+
+  validates :qtdDigito, numericality: { greater_than_or_equal_to: 6, only_integer: true, message: "deve ser igual ou maior do que 6" }
   
   attr_accessor :category_name, :location_name
 
   before_validation :assign_category_and_location
 
-  after_create :log_create
-  after_update :log_update
-  after_destroy :log_destroy
+  #after_create :log_create
+  #after_update :log_update
+  #after_destroy :log_destroy
 
   def log_create
     HistoricManagement.create(
@@ -47,6 +50,10 @@ class Item < ApplicationRecord
   end
 
   private
+
+    def set_default_qtd_digito
+      self.qtdDigito ||= 6
+    end
 
    def assign_category_and_location
     # Categoria

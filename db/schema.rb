@@ -166,6 +166,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_09_22_212326) do
     t.string "name"
     t.string "tagRFID"
     t.string "idInterno"
+    t.integer "qtdDigito"
     t.string "description"
     t.string "image"
     t.string "status"

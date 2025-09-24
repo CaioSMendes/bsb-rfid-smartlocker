@@ -136,11 +136,11 @@
 </div>
 
 
-          <div class="row justify-content-center">
+<div class="row justify-content-center">
   <!-- Depósitos -->
   <% if current_user.admin? || current_user.assetManagement? %>
     <div class="col-lg-3 col-md-6 mb-4">
-      <%= link_to keylockers_path, class: 'panel-purple' do %>
+      <%= link_to asset_managements_path, class: 'panel-purple' do %>
         <div class="panel-heading">
           <div class="row">
             <div class="col-xs-3"><i class="fa fa-warehouse fa-5x custom-icon-purple"></i></div>
@@ -162,7 +162,7 @@
   <!-- Categorias -->
   <% if current_user.admin? || current_user.assetManagement? %>
     <div class="col-lg-3 col-md-6 mb-4">
-      <%= link_to keylockers_path, class: 'panel-pink' do %>
+      <%= link_to asset_managements_path, class: 'panel-pink' do %>
         <div class="panel-heading">
           <div class="row">
             <div class="col-xs-3"><i class="fa fa-tag fa-5x custom-icon-pink"></i></div>
@@ -184,7 +184,7 @@
   <!-- Localizações -->
   <% if current_user.admin? || current_user.assetManagement? %>
     <div class="col-lg-3 col-md-6 mb-4">
-      <%= link_to keylockers_path, class: 'panel-darkgreen' do %>
+      <%= link_to asset_managements_path, class: 'panel-darkgreen' do %>
         <div class="panel-heading">
           <div class="row">
             <div class="col-xs-3"><i class="fa fa-map-marker-alt fa-5x custom-icon-darkgreen"></i></div>
@@ -206,7 +206,7 @@
   <!-- Itens -->
   <% if current_user.admin? || current_user.assetManagement? %>
     <div class="col-lg-3 col-md-6 mb-4">
-      <%= link_to keylockers_path, class: 'panel-orange' do %>
+      <%= link_to asset_managements_path, class: 'panel-orange' do %>
         <div class="panel-heading">
           <div class="row">
             <div class="col-xs-3"><i class="fa fa-cubes fa-5x custom-icon-orange"></i></div>
